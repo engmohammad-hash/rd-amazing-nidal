@@ -3,6 +3,8 @@
 موقع مطبعة **RD Amazing** للمطبوعات الفاخرة في المملكة العربية السعودية.
 المرحلة الحالية: موقع ثابت (HTML/CSS/JS)، وبعدها يتحوّل إلى PHP + MySQL مع لوحة تحكم.
 
+**الموقع مباشر:** https://engmohammad-hash.github.io/rd-amazing-nidal/
+
 ## الهوية
 
 | العنصر | القيمة |
@@ -16,13 +18,18 @@
 ## المحتوى
 
 ```
+index.html       صفحة GitHub Pages الرئيسية (مولَّدة، لا تعدّلها يدوياً)
 demo/
-  index.html     الصفحة الرئيسية التجريبية (نسخة Claude Artifact، بدون <!doctype>)
-  local.html     نفس الصفحة كمستند كامل للتشغيل المحلي أو الاستضافة
+  index.html     المصدر: الصفحة الرئيسية التجريبية (نسخة Claude Artifact، بدون <!doctype>)
+  local.html     نفس الصفحة كمستند كامل للتشغيل المحلي (مولَّدة)
   assets/        اللوغو مقصوص بخلفية شفافة (ملوّن، وبيج للخلفيات الغامقة)
 logo/            نسخ اللوغو بالألوان التي جرّبناها، وصور المقارنة
+tools/
+  build_site.py  يولّد index.html و demo/local.html من demo/index.html
 run-demo.bat     يشغّل الديمو على ويندوز ويفتحه بالمتصفح
 ```
+
+بعد أي تعديل على `demo/index.html` شغّل `python tools/build_site.py` ثم ارفع التغييرات.
 
 ## التشغيل محلياً
 
