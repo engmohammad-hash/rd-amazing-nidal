@@ -1,0 +1,6 @@
+# local tool settings
+.claude/
+
+# Windows clutter
+Thumbs.db
+desktop.ini
