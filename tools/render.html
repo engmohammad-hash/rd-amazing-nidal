@@ -14,7 +14,7 @@
 <pre id="log">loading…</pre>
 <canvas id="c"></canvas>
 <script type="module">
-  /* Renders the story to numbered WebP frames and posts each to tools/frame_server.py, which saves it under demo/frames/.
+  /* Renders the story to numbered JPEG frames and posts each to tools/frame_server.py, which saves it under demo/frames/.
      Open http://localhost:8766/tools/render.html (add ?set=desktop or ?set=mobile for one set only). */
   import { createStory } from './scene.js';
 
@@ -46,10 +46,11 @@
         ms.draw += performance.now() - t;
         if (i < startAt) continue;
         t = performance.now();
-        const blob = await new Promise(r => story.canvas.toBlob(r, 'image/webp', 0.82));
+        // JPEG, not WebP: it decodes several times faster, which is what keeps scrolling smooth on old machines
+        const blob = await new Promise(r => story.canvas.toBlob(r, 'image/jpeg', 0.86));
         ms.encode += performance.now() - t;
         t = performance.now();
-        const res = await fetch(`/save/${s.name}/${String(i).padStart(3, '0')}.webp`, { method: 'POST', body: blob });
+        const res = await fetch(`/save/${s.name}/${String(i).padStart(3, '0')}.jpg`, { method: 'POST', body: blob });
         if (!res.ok) throw new Error(`saving ${s.name} frame ${i} failed: ${res.status}`);
         ms.save += performance.now() - t;
         bytes += blob.size;

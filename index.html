@@ -84,17 +84,17 @@
       radial-gradient(115vmax 85vmax at var(--wx) var(--wy), #5E0C36 0%, #3B0322 24%, #22020F 55%, var(--maroon-950) 100%);
   }
   /* the story itself is a film of pre-rendered frames; the browser only shows one image per scroll step */
-  #film {
+  .film {
     position: absolute; inset: 0; width: 100%; height: 100%; display: block;
-    object-fit: cover; opacity: 0; transition: opacity .5s ease;
+    object-fit: cover; opacity: 0; transition: opacity .5s ease; pointer-events: none;
   }
-  #film.ready { opacity: 1; }
+  .film.ready { opacity: 1; }
   .fallback {
     display: none; position: absolute; left: var(--wx); top: var(--wy);
     width: min(36vmin, 340px); transform: translate(-50%, -50%); opacity: .9;
   }
   .no-film .fallback { display: block; }
-  .no-film #film { display: none; }
+  .no-film .film { display: none; }
 
   .copy-wrap {
     position: absolute; top: 0; bottom: 0; right: 0; z-index: 4;
@@ -199,7 +199,7 @@
   }
   @media (prefers-reduced-motion: reduce) {
     .cue .line { animation: none; }
-    #film { transition: none; }
+    .film { transition: none; }
   }
 </style>
 
@@ -227,7 +227,7 @@
 
   <section class="story" id="story" aria-label="رحلة المطبوعة">
     <div class="stage" id="stage">
-      <canvas id="film" aria-hidden="true"></canvas>
+      <canvas id="film" class="film" aria-hidden="true"></canvas>
       <img class="fallback" src="demo/assets/logo-beige.png" alt="">
 
       <div class="copy-wrap">
@@ -364,9 +364,10 @@
     function travel() { return Math.max(1, story.offsetHeight - window.innerHeight); }
 
     /* ---------- the film ----------
-       Frames arrive as compressed files and are decoded off the main thread into bitmaps, only around
-       the reader's position. Drawing a decoded frame is cheap; decoding one at draw time froze old laptops
-       for 150 ms per frame, which is why nothing is ever drawn before it is decoded. */
+       Frames arrive as JPEG files and are decoded off the main thread into bitmaps, only around the
+       reader's position, and a frame is never drawn before it is decoded. Measured on a 2011 laptop
+       (tools/bench.js): WebP frames caused stalls of up to 400 ms; JPEG frames scroll exactly as fast
+       as the page does with no film at all. */
     var fctx = film.getContext('2d', { alpha: false });
     var BEHIND = 10, AHEAD = 22, DECODERS = Math.max(2, Math.min(4, (navigator.hardwareConcurrency || 4) - 1)), FETCHERS = 6;
     var set = '', files = [], queue = [], fetching = 0, fetched = 0;
@@ -411,7 +412,7 @@
     function fetchFrame(i) {
       var forSet = set;
       files[i] = null; fetching++;
-      fetch(FRAME_BASE + forSet + '/' + pad(i) + '.webp')
+      fetch(FRAME_BASE + forSet + '/' + pad(i) + '.jpg')
         .then(function (r) { if (!r.ok) throw new Error(r.status); return r.blob(); })
         .then(function (blob) {
           if (forSet !== set) return;
@@ -458,13 +459,22 @@
       decoded.forEach(function (b, i) { var g = Math.abs(i - c); if (g < gap) { gap = g; best = i; } });
       if (best < 0 || best === drawn) return;
       fctx.drawImage(decoded.get(best), 0, 0, film.width, film.height);
-      drawn = best;
+      drawn = best; S.filmShown = (S.filmShown || 0) + 1;
       if (!film.classList.contains('ready')) film.classList.add('ready');
     }
+
+    S.filmMode = 'jpg';
     chooseSet();
     window.addEventListener('resize', chooseSet);
+    S.filmSet = set;
     // if no frame arrives at all (offline, blocked), show the logo instead of an empty stage
     setTimeout(function () { if (!fetched) site.classList.add('no-film'); }, 10000);
+    // #bench runs the automatic scrolling speed test from tools/bench.js
+    if (location.hash === '#bench') {
+      var bench = document.createElement('script');
+      bench.src = (FRAME_BASE === 'frames/' ? '../' : '') + 'tools/bench.js';
+      document.body.appendChild(bench);
+    }
 
     // open the page with #debug to see the frame rate and how much of the film has arrived
     if (location.hash === '#debug') {

@@ -4,3 +4,6 @@
 # Windows clutter
 Thumbs.db
 desktop.ini
+
+# speed test results
+tools/bench.log
