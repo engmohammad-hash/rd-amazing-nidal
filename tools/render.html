@@ -1,0 +1,70 @@
+<!doctype html>
+<html lang="ar">
+<head>
+<meta charset="utf-8">
+<title>RD Amazing frame renderer</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Aref+Ruqaa:wght@400;700&family=Cormorant+Garamond:ital,wght@0,500;0,600;1,500&family=IBM+Plex+Sans+Arabic:wght@300;400;500;600&display=swap">
+<style>
+  body { margin: 0; background: #111; color: #ddd; font: 13px/1.5 Consolas, monospace; }
+  canvas { display: block; max-width: 100%; height: auto; }
+  pre { padding: 8px 12px; margin: 0; }
+</style>
+</head>
+<body>
+<pre id="log">loading…</pre>
+<canvas id="c"></canvas>
+<script type="module">
+  /* Renders the story to numbered WebP frames and posts each to tools/frame_server.py, which saves it under demo/frames/.
+     Open http://localhost:8766/tools/render.html (add ?set=desktop or ?set=mobile for one set only). */
+  import { createStory } from './scene.js';
+
+  const N = 200;
+  const SETS = [
+    { name: 'desktop', outW: 1600, outH: 900, cssW: 1440, cssH: 810 },
+    { name: 'mobile', outW: 720, outH: 1440, cssW: 360, cssH: 720 },
+  ];
+  const logEl = document.getElementById('log');
+  const log = m => { logEl.textContent = m; document.title = m; };
+
+  try {
+    const story = await createStory(document.getElementById('c'));
+    const gl = story.canvas.getContext('webgl2');
+    const dbg = gl.getExtension('WEBGL_debug_renderer_info');
+    const gpu = dbg ? gl.getParameter(dbg.UNMASKED_RENDERER_WEBGL) : 'unknown GPU';
+    const only = new URLSearchParams(location.search).get('set');
+    const startAt = Number(new URLSearchParams(location.search).get('from') || 0);
+    let bytes = 0;
+    for (const s of SETS) {
+      if (only && only !== s.name) continue;
+      story.resize(s.outW, s.outH, s.cssW, s.cssH);
+      const ms = { draw: 0, encode: 0, save: 0 };
+      // the sheet's sketch is drawn incrementally, so frames before startAt are still drawn, just not saved
+      for (let i = 0; i < N; i++) {
+        let t = performance.now();
+        story.frame(i / (N - 1));
+        gl.finish();
+        ms.draw += performance.now() - t;
+        if (i < startAt) continue;
+        t = performance.now();
+        const blob = await new Promise(r => story.canvas.toBlob(r, 'image/webp', 0.82));
+        ms.encode += performance.now() - t;
+        t = performance.now();
+        const res = await fetch(`/save/${s.name}/${String(i).padStart(3, '0')}.webp`, { method: 'POST', body: blob });
+        if (!res.ok) throw new Error(`saving ${s.name} frame ${i} failed: ${res.status}`);
+        ms.save += performance.now() - t;
+        bytes += blob.size;
+        if (i % 5 === 0) {
+          const n = i + 1 - startAt;
+          log(`${s.name} ${i}/${N} · ${(bytes / 1048576).toFixed(1)} MB · draw ${(ms.draw / (i + 1)).toFixed(0)} encode ${(ms.encode / n).toFixed(0)} save ${(ms.save / n).toFixed(0)} ms · ${gpu}`);
+        }
+      }
+    }
+    log(`ALL DONE · ${(bytes / 1048576).toFixed(1)} MB`);
+    window.__done = { ok: true, bytes };
+  } catch (e) {
+    log('FAILED: ' + e.message);
+    window.__done = { ok: false, error: String(e) };
+  }
+</script>
+</body>
+</html>

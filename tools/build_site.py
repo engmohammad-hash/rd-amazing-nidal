@@ -1,4 +1,4 @@
-"""Build the full-document pages from demo/index.html (the Claude Artifact source, which has no <!doctype>).
+"""Build the full-document pages from demo/index.html (the page source, written without <!doctype>).
 
 Writes:
   demo/local.html   for run-demo.bat and local testing (assets next to it)
@@ -38,9 +38,10 @@ def page(head_extra: str, html: str) -> str:
 
 (ROOT / "demo" / "local.html").write_text(page("", body), encoding="utf-8")
 
-# the root page loads the same files from demo/assets/
-root_body = body.replace('src="assets/', 'src="demo/assets/').replace("loadImg('assets/", "loadImg('demo/assets/")
-assert root_body.count("demo/assets/") >= 5, "asset paths were not rewritten"
+# the root page loads the same files from demo/assets/ and demo/frames/
+root_body = body.replace('src="assets/', 'src="demo/assets/').replace("var FRAME_BASE = 'frames/'", "var FRAME_BASE = 'demo/frames/'")
+assert root_body.count('src="demo/assets/') >= 3, "asset paths were not rewritten"
+assert "var FRAME_BASE = 'demo/frames/'" in root_body, "frame path was not rewritten"
 (ROOT / "index.html").write_text(page(PREVIEW_HEAD, root_body), encoding="utf-8")
 
 print("wrote demo/local.html and index.html")
