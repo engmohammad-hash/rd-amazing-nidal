@@ -343,7 +343,7 @@
 
     var FRAME_BASE = 'frames/';
     var FRAMES = 200;
-    var SIZES = { desktop: [1600, 900], mobile: [720, 1440] };
+    var SIZES = { desktop: [1280, 720], mobile: [720, 1440] };
 
     var site = document.querySelector('.site');
     var story = document.getElementById('story');
@@ -363,15 +363,23 @@
     function windowAmt(p, a, b, f) { return smooth(clamp((p - a) / f, 0, 1)) * smooth(clamp((b - p) / f, 0, 1)); }
     function travel() { return Math.max(1, story.offsetHeight - window.innerHeight); }
 
-    /* ---------- the film ---------- */
+    /* ---------- the film ----------
+       Frames arrive as compressed files and are decoded off the main thread into bitmaps, only around
+       the reader's position. Drawing a decoded frame is cheap; decoding one at draw time froze old laptops
+       for 150 ms per frame, which is why nothing is ever drawn before it is decoded. */
     var fctx = film.getContext('2d', { alpha: false });
-    var set = '', imgs = [], ready = [], queue = [], loading = 0, loaded = 0, drawn = -1;
+    var BEHIND = 10, AHEAD = 22, DECODERS = Math.max(2, Math.min(4, (navigator.hardwareConcurrency || 4) - 1)), FETCHERS = 6;
+    var set = '', files = [], queue = [], fetching = 0, fetched = 0;
+    var decoded = new Map(), decoding = new Set(), drawn = -1, dir = 1, lastC = 0;
 
     function pad(i) { return ('00' + i).slice(-3); }
+    function current() { return Math.round(S.p * (FRAMES - 1)); }
     function chooseSet() {
       var next = window.innerWidth / window.innerHeight < 0.85 ? 'mobile' : 'desktop';
       if (next === set) return;
-      set = next; imgs = new Array(FRAMES); ready = new Uint8Array(FRAMES); loading = 0; loaded = 0; drawn = -1;
+      set = next;
+      decoded.forEach(function (b) { if (b.close) b.close(); });
+      decoded = new Map(); decoding = new Set(); files = new Array(FRAMES); fetching = 0; fetched = 0; drawn = -1;
       film.width = SIZES[set][0]; film.height = SIZES[set][1];
       // coarse to fine: every 32nd frame first, then every 16th, 8th ... so any scroll position has a close frame early
       queue = [];
@@ -381,55 +389,82 @@
       });
       pump();
     }
-    function nextFrame() {
-      // the frames right around the reader always come first
-      var c = Math.round(S.p * (FRAMES - 1));
-      for (var d = 0; d <= 10; d++) {
-        if (c + d < FRAMES && !imgs[c + d]) return c + d;
-        if (c - d >= 0 && !imgs[c - d]) return c - d;
+    function nextFetch() {
+      // files around the reader come first, ahead of them before behind
+      var c = current();
+      for (var d = 0; d <= AHEAD; d++) {
+        var a = c + d * dir, b = c - d * dir;
+        if (a >= 0 && a < FRAMES && files[a] === undefined) return a;
+        if (d <= BEHIND && b >= 0 && b < FRAMES && files[b] === undefined) return b;
       }
-      while (queue.length) { var i = queue.shift(); if (!imgs[i]) return i; }
+      while (queue.length) { var i = queue.shift(); if (files[i] === undefined) return i; }
       return -1;
     }
     function pump() {
-      while (loading < 6) {
-        var i = nextFrame();
-        if (i < 0) return;
-        load(i);
+      while (fetching < FETCHERS) {
+        var i = nextFetch();
+        if (i < 0) break;
+        fetchFrame(i);
+      }
+      decodeAround();
+    }
+    function fetchFrame(i) {
+      var forSet = set;
+      files[i] = null; fetching++;
+      fetch(FRAME_BASE + forSet + '/' + pad(i) + '.webp')
+        .then(function (r) { if (!r.ok) throw new Error(r.status); return r.blob(); })
+        .then(function (blob) {
+          if (forSet !== set) return;
+          files[i] = blob; fetched++;
+          site.classList.remove('no-film');   // a slow connection may bring the first frame after the logo took over
+        }, function () { if (forSet === set) files[i] = false; })
+        .then(function () { if (forSet === set) { fetching--; pump(); } });
+    }
+    function toBitmap(blob) {
+      if (window.createImageBitmap) return createImageBitmap(blob);
+      return new Promise(function (resolve, reject) {
+        var url = URL.createObjectURL(blob), im = new Image();
+        im.onload = function () {
+          URL.revokeObjectURL(url);
+          (im.decode ? im.decode() : Promise.resolve()).then(function () { resolve(im); }, function () { resolve(im); });
+        };
+        im.onerror = function () { URL.revokeObjectURL(url); reject(); };
+        im.src = url;
+      });
+    }
+    function decodeAround() {
+      var c = current();
+      var lo = c - (dir > 0 ? BEHIND : AHEAD), hi = c + (dir > 0 ? AHEAD : BEHIND);
+      // let go of frames far from the reader so memory stays small
+      decoded.forEach(function (b, i) {
+        if ((i < lo - 4 || i > hi + 4) && i !== drawn) { if (b.close) b.close(); decoded.delete(i); }
+      });
+      for (var d = 0; d <= AHEAD && decoding.size < DECODERS; d++) {
+        [c + d * dir, c - d * dir].forEach(function (i) {
+          if (decoding.size >= DECODERS || i < lo || i > hi || decoded.has(i) || decoding.has(i) || !files[i]) return;
+          var forSet = set;
+          decoding.add(i);
+          toBitmap(files[i]).then(function (bmp) {
+            decoding.delete(i);
+            if (forSet !== set) { if (bmp.close) bmp.close(); return; }
+            decoded.set(i, bmp); drawn = -1;
+          }, function () { decoding.delete(i); });
+        });
       }
     }
-    function load(i) {
-      var forSet = set, im = new Image();
-      im.decoding = 'async';
-      imgs[i] = im; loading++;
-      im.onload = function () {
-        if (forSet !== set) return;
-        ready[i] = 1; loaded++; loading--; drawn = -1; pump();
-        site.classList.remove('no-film');   // a slow connection may bring the first frame after the logo took over
-        if (im.decode) im.decode().catch(function () {});   // decode ahead of the first draw where the browser allows it
-      };
-      im.onerror = function () { if (forSet !== set) return; loading--; pump(); };
-      im.src = FRAME_BASE + forSet + '/' + pad(i) + '.webp';
-    }
-    function nearestReady(c) {
-      if (ready[c]) return c;
-      for (var d = 1; d < FRAMES; d++) {
-        if (c - d >= 0 && ready[c - d]) return c - d;
-        if (c + d < FRAMES && ready[c + d]) return c + d;
-      }
-      return -1;
-    }
-    function drawFilm(p) {
-      var j = nearestReady(Math.round(p * (FRAMES - 1)));
-      if (j < 0 || j === drawn) return;
-      fctx.drawImage(imgs[j], 0, 0, film.width, film.height);
-      drawn = j;
+    function drawFilm() {
+      var c = current(), best = -1, gap = 1e9;
+      if (c !== lastC) { dir = c > lastC ? 1 : -1; lastC = c; }
+      decoded.forEach(function (b, i) { var g = Math.abs(i - c); if (g < gap) { gap = g; best = i; } });
+      if (best < 0 || best === drawn) return;
+      fctx.drawImage(decoded.get(best), 0, 0, film.width, film.height);
+      drawn = best;
       if (!film.classList.contains('ready')) film.classList.add('ready');
     }
     chooseSet();
     window.addEventListener('resize', chooseSet);
     // if no frame arrives at all (offline, blocked), show the logo instead of an empty stage
-    setTimeout(function () { if (!loaded) site.classList.add('no-film'); }, 10000);
+    setTimeout(function () { if (!fetched) site.classList.add('no-film'); }, 10000);
 
     // open the page with #debug to see the frame rate and how much of the film has arrived
     if (location.hash === '#debug') {
@@ -441,7 +476,7 @@
         hudFrames++;
         var n = performance.now();
         if (n - hudSince < 500) return;
-        hud.textContent = 'FPS ' + Math.round(hudFrames * 1000 / (n - hudSince)) + '\nframes ' + loaded + '/' + FRAMES + ' (' + set + ')';
+        hud.textContent = 'FPS ' + Math.round(hudFrames * 1000 / (n - hudSince)) + '\nframes ' + fetched + '/' + FRAMES + ' (' + set + ') · ready ' + decoded.size;
         hudFrames = 0; hudSince = n;
       };
     }
@@ -483,8 +518,8 @@
       }
       hdr.classList.toggle('light', rect.bottom < 70);
 
-      if (rect.bottom > 0) drawFilm(p);
-      if (loading < 6) pump();
+      if (rect.bottom > 0) drawFilm();
+      pump();
       if (S.hud) S.hud();
       requestAnimationFrame(tick);
     }
