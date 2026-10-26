@@ -13,9 +13,12 @@ ROOT = Path(__file__).resolve().parent.parent
 LOG = ROOT / "tools" / "bench.log"
 EDGE = r"C:\Program Files (x86)\Microsoft\Edge\Application\msedge.exe"
 
+# one profile for every run: a brand-new Edge profile spends its first minute on setup work that
+# competes with the page, which a visitor's everyday browser does not do
+profile = str(Path(tempfile.gettempdir()) / "rd-bench-profile")
+
 for run in range(int(sys.argv[1]) if len(sys.argv) > 1 else 1):
     before = LOG.read_text(encoding="utf-8").count("\n") if LOG.exists() else 0
-    profile = tempfile.mkdtemp(prefix="rd-bench-")
     edge = subprocess.Popen([
         EDGE, "--no-first-run", "--no-default-browser-check", "--disable-extensions", "--disable-sync",
         "--disable-backgrounding-occluded-windows", "--disable-renderer-backgrounding",
