@@ -1,0 +1,48 @@
+<!doctype html>
+<!-- Baseline for tools/run_bench.py: how fast can this browser scroll a page with nothing on it?
+     ?v=idle    no scrolling, only counts frames
+     ?v=plain   scrolls a tall page of flat coloured blocks
+     ?v=text    the same with paragraphs of Arabic text
+     The result goes to document.title in the same form as tools/bench.js. -->
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>baseline</title>
+<style>
+  html, body { margin: 0; background: #14000B; color: #EADCC2; font: 18px/1.9 "Segoe UI", Tahoma, sans-serif; }
+  section { height: 100vh; padding: 3rem; box-sizing: border-box; }
+  section:nth-child(odd) { background: #4B0129; }
+  p { max-width: 60ch; }
+</style>
+</head>
+<body>
+<main id="m"></main>
+<script>
+  var q = new URLSearchParams(location.search), v = q.get('v') || 'plain';
+  var m = document.getElementById('m'), html = '';
+  for (var i = 0; i < 8; i++) {
+    html += '<section>' + (v === 'text' ? new Array(7).join('<p>نطبع الفخامة: تصميم وطباعة وتشطيب وتغليف تحت سقف واحد في الدمام، لمطبوعات تحمل اسمك وتبقى في يد عميلك. كروت شخصية وبوكسات بخور وحلويات وأكياس فاخرة.</p>') : '') + '</section>';
+  }
+  m.innerHTML = html;
+  setTimeout(function () {
+    var gaps = [], start = performance.now(), last = start, dur = 10000, total = document.documentElement.scrollHeight - innerHeight;
+    function step(now) {
+      gaps.push(now - last); last = now;
+      var k = Math.min(1, (now - start) / dur);
+      if (v !== 'idle') window.scrollTo({ top: total * (k < .8 ? k / .8 : 1 - (k - .8) / .2 * .3) * .97, behavior: 'instant' });
+      if (k < 1) requestAnimationFrame(step); else done();
+    }
+    function done() {
+      gaps.shift();
+      var sorted = gaps.slice().sort(function (a, b) { return a - b; });
+      var mean = gaps.reduce(function (a, b) { return a + b; }, 0) / gaps.length;
+      document.title = 'BENCH DONE ' + JSON.stringify({ run: q.get('run') || '', variant: v, fps: +(1000 / mean).toFixed(1),
+        p95ms: +sorted[Math.floor(sorted.length * .95)].toFixed(1), worstMs: +sorted[sorted.length - 1].toFixed(1),
+        viewport: innerWidth + 'x' + innerHeight + '@' + devicePixelRatio });
+    }
+    requestAnimationFrame(step);
+  }, 2500);
+</script>
+</body>
+</html>
