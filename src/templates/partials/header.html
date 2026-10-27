@@ -1,0 +1,22 @@
+<header class="hdr" id="hdr">
+  <div class="hdr-in">
+    <a class="brand" href="{{ link('') }}" aria-label="{{ b.name }}، الصفحة الرئيسية">
+      <span class="brand-mark">
+        <img class="on-dark" src="{{ root }}assets/img/logo-beige.png" alt="" width="46" height="50">
+        <img class="on-light" src="{{ root }}assets/img/logo-color.png" alt="" width="46" height="50">
+      </span>
+      <span class="brand-name"><b>{{ b.name }}</b><small>{{ b.tagline }} · {{ b.city }}</small></span>
+    </a>
+    <nav class="nav" aria-label="الأقسام">
+      {% for n in nav %}<a href="{{ link(n.href) }}"{% if n.href == section %} aria-current="page"{% endif %}>{{ n.label }}</a>
+      {% endfor %}
+    </nav>
+    <a class="btn btn-line" href="{{ wa('مرحباً، أود طلب عرض سعر.') }}" target="_blank" rel="noopener">اطلب عرض سعر</a>
+    <button class="menu-btn" id="menu-btn" type="button" aria-label="القائمة" aria-expanded="false" aria-controls="drawer"><span></span><span></span><span></span></button>
+  </div>
+</header>
+<nav class="drawer" id="drawer" aria-label="القائمة">
+  {% for n in nav %}<a href="{{ link(n.href) }}">{{ n.label }}</a>
+  {% endfor %}
+  <a class="btn btn-fill" href="{{ wa('مرحباً، أود طلب عرض سعر.') }}" target="_blank" rel="noopener">اطلب عرض سعر عبر واتساب</a>
+</nav>

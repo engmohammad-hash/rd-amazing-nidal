@@ -1,0 +1,14 @@
+{% extends "base.html" %}
+{% import "partials/macros.html" as m %}
+{% block main %}
+{{ m.band('الصفحة غير موجودة', 'ربما تغيّر الرابط أو حُذفت الصفحة. يمكنك العودة إلى الرئيسية أو تصفّح منتجاتنا.', none, link) }}
+<section class="light-zone section" aria-label="روابط مقترحة">
+  <div class="wrap">
+    <div class="order-row">
+      <a class="btn btn-maroon" href="{{ link('') }}">الصفحة الرئيسية</a>
+      <a class="btn btn-outline" href="{{ link('products/') }}">منتجاتنا</a>
+      <a class="btn btn-outline" href="{{ link('contact/') }}">تواصل معنا</a>
+    </div>
+  </div>
+</section>
+{% endblock %}

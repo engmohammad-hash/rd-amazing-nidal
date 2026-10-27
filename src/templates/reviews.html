@@ -1,0 +1,19 @@
+{% extends "base.html" %}
+{% import "partials/macros.html" as m %}
+{% block main %}
+{{ m.band('آراء العملاء', 'ما يقوله أصحاب المقاهي والمتاجر والعائلات بعد استلام مطبوعاتهم.', [('الرئيسية', ''), ('آراء العملاء', none)], link) }}
+<section class="light-zone section" aria-label="آراء العملاء">
+  <div class="wrap">
+    <ul class="reviews">
+      {% for r in reviews %}
+      <li class="review"><span class="stars" aria-label="{{ r.stars }} من ٥">{{ '★' * r.stars }}</span><blockquote>{{ r.text }}</blockquote><footer><b>{{ r.name }}</b><span>{{ r.role }}</span></footer></li>
+      {% endfor %}
+    </ul>
+    <p class="note">{{ reviews_note }}</p>
+    <div class="order-row">
+      <a class="btn btn-maroon" href="https://www.instagram.com/{{ b.instagram }}/" target="_blank" rel="noopener">شاهد أعمالنا على إنستغرام</a>
+      <a class="btn btn-outline" href="{{ wa('مرحباً، أود مشاركة رأيي في طلبي.') }}" target="_blank" rel="noopener">شاركنا رأيك</a>
+    </div>
+  </div>
+</section>
+{% endblock %}

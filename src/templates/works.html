@@ -1,0 +1,20 @@
+{% extends "base.html" %}
+{% import "partials/macros.html" as m %}
+{% block main %}
+{{ m.band('أعمالنا', 'نماذج من الكروت والعلب والأكياس والدعوات والأكواب والملصقات التي ننفّذها. اختر القسم، واضغط على أي صورة لعرضها كاملة.', [('الرئيسية', ''), ('أعمالنا', none)], link) }}
+<section class="light-zone section" aria-label="معرض الأعمال">
+  <div class="wrap">
+    <div class="filters" role="group" aria-label="تصفية الأعمال">
+      <button type="button" data-filter="all" aria-pressed="true">الكل</button>
+      {% for p in products %}<button type="button" data-filter="{{ p.scene }}" aria-pressed="false">{{ p.name }}</button>
+      {% endfor %}
+    </div>
+    <ul class="gallery">
+      {% for i in range(1, 7) %}{% set n = '%02d'|format(i) %}{% for p in products %}
+      <li data-cat="{{ p.scene }}"><button type="button" data-full="{{ root }}gallery/{{ p.scene }}/{{ n }}.jpg" data-cap="{{ p.name }} · {{ i }}"><img src="{{ root }}gallery/{{ p.scene }}/{{ n }}-thumb.jpg" alt="{{ p.name }} من مطابع روعة التصاميم، صورة {{ i }}" width="720" height="540" loading="lazy"></button></li>
+      {% endfor %}{% endfor %}
+    </ul>
+    <p class="note">صور توضيحية مرسومة للتصميم، وستُستبدل بصور أعمالنا الفعلية.</p>
+  </div>
+</section>
+{% endblock %}

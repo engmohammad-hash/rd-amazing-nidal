@@ -1,0 +1,53 @@
+{# The sticky scroll film with its copy panels. `hero` is the opening panel, `acts` the panels that follow. #}
+{% macro story(scene, frames, height, starts, labels, hero, acts, label, root, cta_html='') %}
+<section class="story" id="story" data-hero data-scene="{{ scene }}" data-frames="{{ frames }}" data-starts="{{ starts | join(',') }}" style="--len:{{ height }}" aria-label="{{ label }}">
+  <div class="stage" id="stage">
+    <canvas id="film" class="film" aria-hidden="true"></canvas>
+    <img class="fallback" src="{{ root }}assets/img/logo-beige.png" alt="">
+    <div class="copy-wrap">
+      <article class="copy" data-copy data-a="-9" data-b="{{ acts[0].a - 0.01 }}">
+        <p class="eyebrow"><span>{{ hero.eyebrow }}</span><span class="rule"></span></p>
+        <h1>{{ hero.title }}</h1>
+        <p>{{ hero.lead }}</p>
+        {% if hero.actions %}<div class="actions">{{ hero.actions | safe }}</div>{% endif %}
+      </article>
+      {% for act in acts %}
+      <article class="copy" data-copy data-a="{{ act.a }}" data-b="{{ act.b }}">
+        <p class="eyebrow"><span>{{ act.num }}</span><span class="rule"></span><span>{{ act.label }}</span></p>
+        <h2>{{ act.title }}</h2>
+        <p>{{ act.text }}</p>
+        {% if act.chips is defined %}<ul class="chips">{% for c in act.chips %}<li>{{ c }}</li>{% endfor %}</ul>{% endif %}
+        {% if act.cta is defined and act.cta %}<div class="actions">{{ cta_html | safe }}</div>{% endif %}
+      </article>
+      {% endfor %}
+    </div>
+    <ol class="dots" id="dots" aria-label="المراحل">
+      {% for l in labels %}<li><button type="button"><span class="num">{{ ['٠١','٠٢','٠٣','٠٤','٠٥'][loop.index0] }}</span><span class="bar"></span><span class="lbl">{{ l }}</span></button></li>
+      {% endfor %}
+    </ol>
+    <div class="cue" id="cue" aria-hidden="true"><span>مرّر لتبدأ</span><span class="line"></span></div>
+  </div>
+</section>
+{% endmacro %}
+
+{% macro product_card(p, link, root, heading='h3') %}
+<li class="product">
+  <a href="{{ link('products/' ~ p.slug ~ '/') }}">
+    <span class="ph"><img src="{{ root }}gallery/{{ p.scene }}/01-thumb.jpg" alt="{{ p.name }} من مطابع روعة التصاميم" width="720" height="540" loading="lazy"></span>
+    <span class="tag">{{ p.tag }}</span>
+    <{{ heading }}>{{ p.name }}</{{ heading }}>
+    <p>{{ p.short }}</p>
+    <span class="more">اكتشف المنتج ←</span>
+  </a>
+</li>
+{% endmacro %}
+
+{% macro band(title, lead, crumbs, link) %}
+<section class="band" data-hero>
+  <div class="wrap">
+    {% if crumbs %}<ol class="crumbs">{% for c in crumbs %}<li>{% if c[1] is not none %}<a href="{{ link(c[1]) }}">{{ c[0] }}</a>{% else %}{{ c[0] }}{% endif %}</li>{% endfor %}</ol>{% endif %}
+    <h1>{{ title }}</h1>
+    {% if lead %}<p>{{ lead }}</p>{% endif %}
+  </div>
+</section>
+{% endmacro %}

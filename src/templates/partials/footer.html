@@ -1,0 +1,44 @@
+{% if cta is not defined or cta %}
+<section class="cta" aria-labelledby="cta-title">
+  <div class="wrap">
+    <h2 id="cta-title">جاهز لمطبوعتك القادمة؟</h2>
+    <p>أرسل لنا فكرتك أو ملفك عبر واتساب، ونرد عليك بعرض سعر واضح خلال ساعات العمل.</p>
+    <div class="actions">
+      <a class="btn btn-fill" href="{{ wa('مرحباً، أود طلب عرض سعر.') }}" target="_blank" rel="noopener">{% include "partials/wa-icon.svg" %} تواصل عبر واتساب</a>
+      <a class="btn btn-line" href="{{ link('products/') }}">تصفّح منتجاتنا</a>
+    </div>
+  </div>
+</section>
+{% endif %}
+<footer class="foot">
+  <div class="wrap foot-grid">
+    <div class="about">
+      <a class="brand" href="{{ link('') }}"><span class="brand-mark" style="width:52px;height:56px"><img class="on-dark" src="{{ root }}assets/img/logo-beige.png" alt="" width="52" height="56"></span><span class="brand-name"><b>{{ b.name }}</b><small>{{ b.tagline }}</small></span></a>
+      <p style="margin:0">{{ b.about_short }}</p>
+      <span class="vision-line">ندعم رؤية المملكة العربية السعودية ٢٠٣٠</span>
+    </div>
+    <div>
+      <h3>الموقع</h3>
+      <ul>{% for n in nav %}<li><a href="{{ link(n.href) }}">{{ n.label }}</a></li>{% endfor %}</ul>
+    </div>
+    <div>
+      <h3>منتجاتنا</h3>
+      <ul>{% for p in products %}<li><a href="{{ link('products/' ~ p.slug ~ '/') }}">{{ p.name }}</a></li>{% endfor %}</ul>
+    </div>
+    <div>
+      <h3>تواصل معنا</h3>
+      <ul>
+        <li><a href="{{ wa('مرحباً') }}" target="_blank" rel="noopener">واتساب: <span class="ltr">{{ b.phone_display }}</span></a></li>
+        <li><a href="tel:{{ b.phone }}">اتصال: <span class="ltr">{{ b.phone_display }}</span></a></li>
+        <li><a href="mailto:{{ b.email }}"><span class="ltr">{{ b.email }}</span></a></li>
+        <li><a href="https://www.instagram.com/{{ b.instagram }}/" target="_blank" rel="noopener">إنستغرام: <span class="ltr">@{{ b.instagram }}</span></a></li>
+        <li><a href="{{ b.maps }}" target="_blank" rel="noopener">{{ b.city }}، {{ b.region }}</a></li>
+        <li>{{ b.hours.label }}</li>
+      </ul>
+    </div>
+  </div>
+  <div class="wrap foot-bottom">
+    <span>© ٢٠٢٦ {{ b.name }} · {{ b.tagline }}</span>
+    <span>{{ b.city }} · {{ b.country }}</span>
+  </div>
+</footer>

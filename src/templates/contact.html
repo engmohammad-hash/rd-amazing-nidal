@@ -1,0 +1,68 @@
+{% extends "base.html" %}
+{% import "partials/macros.html" as m %}
+{% block main %}
+{{ m.band('تواصل معنا', 'أرسل لنا فكرتك أو ملفك، ونرد عليك بعرض سعر واضح خلال ساعات العمل.', [('الرئيسية', ''), ('تواصل معنا', none)], link) }}
+
+<section class="light-zone section" aria-label="طرق التواصل">
+  <div class="wrap">
+    <div class="contact-grid">
+      <a class="contact-card" href="{{ wa('مرحباً، أود الاستفسار عن خدماتكم.') }}" target="_blank" rel="noopener"><span class="k">واتساب</span><span class="v">{{ b.phone_display }}</span><small>الأسرع للرد وإرسال الملفات</small></a>
+      <a class="contact-card" href="tel:{{ b.phone }}"><span class="k">اتصال</span><span class="v">{{ b.phone_display }}</span><small>{{ b.hours.label }}</small></a>
+      <a class="contact-card" href="mailto:{{ b.email }}"><span class="k">البريد الإلكتروني</span><span class="v">{{ b.email }}</span><small>للملفات الكبيرة والعروض الرسمية</small></a>
+      <a class="contact-card" href="https://www.instagram.com/{{ b.instagram }}/" target="_blank" rel="noopener"><span class="k">إنستغرام</span><span class="v">@{{ b.instagram }}</span><small>أحدث أعمالنا</small></a>
+      <a class="contact-card" href="{{ b.maps }}" target="_blank" rel="noopener"><span class="k">الموقع</span><span class="v rtl">{{ b.city }}، {{ b.region }}</span><small>افتح في خرائط Google</small></a>
+      <a class="contact-card" href="#quote"><span class="k">عرض سعر</span><span class="v rtl">نموذج الطلب</span><small>املأ التفاصيل وأرسلها عبر واتساب</small></a>
+    </div>
+  </div>
+</section>
+
+<section class="light-zone alt section" id="quote" aria-labelledby="quote-title">
+  <div class="wrap split" style="align-items:start">
+    <form class="quote-form" id="quote-form" data-wa="{{ b.whatsapp }}" aria-labelledby="quote-title">
+      <h2 id="quote-title" style="margin:0;font-size:1.5rem;color:var(--maroon)">اطلب عرض سعر</h2>
+      <p class="hint">املأ ما تعرفه، وستُفتح رسالة واتساب جاهزة بطلبك.</p>
+      <label>المنتج
+        <select name="product" required>
+          <option value="">اختر المنتج</option>
+          {% for p in products %}<option>{{ p.name }}</option>{% endfor %}
+          <option>منتج آخر</option>
+        </select>
+      </label>
+      <div class="row">
+        <label>الكمية<input name="qty" inputmode="numeric" placeholder="مثلاً ٥٠٠"></label>
+        <label>المقاس<input name="size" placeholder="مثلاً ٩ × ٥ سم"></label>
+      </div>
+      <label>التشطيب<input name="finish" placeholder="بصمة حرارية، سلوفان مطفي…"></label>
+      <label>الاسم<input name="name" autocomplete="name"></label>
+      <label>ملاحظات<textarea name="notes" placeholder="الألوان، موعد التسليم، أي تفاصيل أخرى"></textarea></label>
+      <button class="btn btn-maroon" type="submit" style="justify-self:start">{% include "partials/wa-icon.svg" %} أرسل عبر واتساب</button>
+    </form>
+    <div class="prose">
+      <h2 style="margin:0;font-size:1.5rem;color:var(--maroon)">ساعات العمل</h2>
+      <p style="margin:0"><span class="status" data-status>{{ b.hours.label }}</span></p>
+      <table class="hours">
+        <caption class="sr-only">ساعات العمل بتوقيت السعودية</caption>
+        <tbody>
+          {% for d in [(6, 'السبت'), (0, 'الأحد'), (1, 'الاثنين'), (2, 'الثلاثاء'), (3, 'الأربعاء'), (4, 'الخميس'), (5, 'الجمعة')] %}
+          <tr data-day="{{ d[0] }}"><td>{{ d[1] }}</td><td>{% if d[0] == b.hours.closed_day %}إجازة{% else %}٩ صباحاً – ٩ مساءً{% endif %}</td></tr>
+          {% endfor %}
+        </tbody>
+      </table>
+      <p class="note" style="margin:0">بتوقيت المملكة العربية السعودية.</p>
+    </div>
+  </div>
+</section>
+
+<section class="light-zone section" aria-labelledby="faq-title">
+  <div class="wrap">
+    <header class="head">
+      <p class="eyebrow"><span>أسئلة شائعة</span><span class="rule"></span></p>
+      <h2 id="faq-title">قبل أن تطلب</h2>
+    </header>
+    <div class="faq">
+      {% for f in faq %}<details{% if loop.first %} open{% endif %}><summary>{{ f.q }}</summary><p>{{ f.a }}</p></details>
+      {% endfor %}
+    </div>
+  </div>
+</section>
+{% endblock %}

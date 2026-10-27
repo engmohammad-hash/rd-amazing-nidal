@@ -1,0 +1,77 @@
+{% extends "base.html" %}
+{% import "partials/macros.html" as m %}
+{% block main %}
+{% set cta_html %}<a class="btn btn-fill" href="{{ wa('مرحباً، أود طلب عرض سعر.') }}" target="_blank" rel="noopener">اطلب عرض سعر ←</a><a class="btn btn-line" href="{{ link('products/') }}">تصفّح منتجاتنا</a>{% endset %}
+{% set hero = {'eyebrow': home.hero.eyebrow, 'title': home.hero.title, 'lead': home.hero.lead, 'actions': cta_html} %}
+{{ m.story(home.scene, home.frames, home.height, home.dot_starts, home.dots, hero, home.acts, 'رحلة المطبوعة', root, cta_html) }}
+
+<section class="light-zone section" id="products" aria-labelledby="products-title">
+  <div class="wrap">
+    <div class="head-row">
+      <header class="head">
+        <p class="eyebrow"><span>ماذا نطبع</span><span class="rule"></span></p>
+        <h2 id="products-title">مطبوعات تُصنع لتُحفظ</h2>
+        <p>اختر المنتج، ونقترح عليك الورق والتشطيب المناسبين لذوقك وميزانيتك.</p>
+      </header>
+      <a class="btn btn-outline" href="{{ link('products/') }}">كل المنتجات</a>
+    </div>
+    <ul class="products">
+      {% for p in products[:6] %}{{ m.product_card(p, link, root) }}{% endfor %}
+    </ul>
+  </div>
+</section>
+
+<section class="light-zone alt section" aria-labelledby="why-title">
+  <div class="wrap">
+    <header class="head">
+      <p class="eyebrow"><span>لماذا روعة التصاميم</span><span class="rule"></span></p>
+      <h2 id="why-title">كل ما تحتاجه مطبوعتك، في مكان واحد</h2>
+    </header>
+    <ul class="reasons">
+      {% for r in home.why %}<li><h3>{{ r.title }}</h3><p>{{ r.text }}</p></li>{% endfor %}
+    </ul>
+  </div>
+</section>
+
+<section class="dark-zone section" aria-labelledby="steps-title">
+  <div class="wrap">
+    <header class="head">
+      <p class="eyebrow"><span>كيف نعمل</span><span class="rule"></span></p>
+      <h2 id="steps-title">من فكرتك إلى يدك بأربع خطوات</h2>
+    </header>
+    <ol class="steps">
+      {% for s in home.steps %}<li><h3>{{ s.title }}</h3><p>{{ s.text }}</p></li>{% endfor %}
+    </ol>
+  </div>
+</section>
+
+<section class="light-zone section" aria-labelledby="vision-title">
+  <div class="wrap split">
+    <div class="prose">
+      <p class="eyebrow" style="color:var(--beige-deep)"><span>رؤية ٢٠٣٠</span><span class="rule"></span></p>
+      <h2 id="vision-title" style="margin:0;font-family:var(--font-display);font-size:clamp(2.2rem,4.5vw,3.6rem);line-height:1.2;color:var(--maroon)">{{ vision.title }}</h2>
+      <p>{{ vision.text }}</p>
+      <a class="btn btn-outline" style="justify-self:start" href="{{ link('about/') }}#vision">اقرأ المزيد</a>
+    </div>
+    <div class="ph"><img src="{{ root }}gallery/incense/01.jpg" alt="بوكس بخور فاخر بنقش إسلامي من مطابع روعة التصاميم" width="1600" height="1200" loading="lazy"></div>
+  </div>
+</section>
+
+<section class="light-zone alt section" aria-labelledby="reviews-title">
+  <div class="wrap">
+    <div class="head-row">
+      <header class="head">
+        <p class="eyebrow"><span>آراء العملاء</span><span class="rule"></span></p>
+        <h2 id="reviews-title">ما يقوله عملاؤنا</h2>
+      </header>
+      <a class="btn btn-outline" href="{{ link('reviews/') }}">كل الآراء</a>
+    </div>
+    <ul class="reviews">
+      {% for r in reviews[:3] %}
+      <li class="review"><span class="stars" aria-label="{{ r.stars }} من ٥">{{ '★' * r.stars }}</span><blockquote>{{ r.text }}</blockquote><footer><b>{{ r.name }}</b><span>{{ r.role }}</span></footer></li>
+      {% endfor %}
+    </ul>
+    <p class="note">{{ reviews_note }}</p>
+  </div>
+</section>
+{% endblock %}

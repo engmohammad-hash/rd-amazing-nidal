@@ -1,0 +1,54 @@
+{% extends "base.html" %}
+{% import "partials/macros.html" as m %}
+{% block main %}
+{{ m.band('من نحن', b.about_short, [('الرئيسية', ''), ('من نحن', none)], link) }}
+
+<section class="light-zone section" aria-labelledby="story-title">
+  <div class="wrap split">
+    <div class="prose">
+      <p class="eyebrow" style="color:var(--beige-deep)"><span>قصتنا</span><span class="rule"></span></p>
+      <h2 id="story-title" style="margin:0;font-family:var(--font-display);font-size:clamp(2.2rem,4.5vw,3.6rem);line-height:1.2;color:var(--maroon)">طباعة شاملة تحت سقف واحد</h2>
+      <p>في {{ b.name }} نؤمن أن المطبوعة جزء من هوية صاحبها. لذلك نتابع كل طلب من الفكرة الأولى حتى التسليم: نصمّم، ونطبع، ونشطّب، ونغلّف في مكان واحد في {{ b.city }}.</p>
+      <p>نطبع على الورق والكرتون والبلاستيك، ونصنّع الأكواب الورقية ونطبعها، ونعمل مع المقاهي والمتاجر والشركات والعائلات في مناسباتها.</p>
+    </div>
+    <div class="ph"><img src="{{ root }}gallery/cards/01.jpg" alt="كروت شخصية بتشطيب فاخر من مطابع روعة التصاميم" width="1600" height="1200" loading="lazy"></div>
+  </div>
+</section>
+
+<section class="light-zone alt section" aria-labelledby="values-title">
+  <div class="wrap">
+    <header class="head">
+      <p class="eyebrow"><span>ما يميّزنا</span><span class="rule"></span></p>
+      <h2 id="values-title">لماذا يعود إلينا عملاؤنا</h2>
+    </header>
+    <ul class="reasons">
+      {% for r in home.why %}<li><h3>{{ r.title }}</h3><p>{{ r.text }}</p></li>{% endfor %}
+    </ul>
+  </div>
+</section>
+
+<section class="dark-zone section vision-band" id="vision" aria-labelledby="vision-title">
+  <div class="wrap">
+    <header class="head">
+      <p class="eyebrow"><span>رؤية ٢٠٣٠</span><span class="rule"></span></p>
+      <h2 id="vision-title">{{ vision.title }}</h2>
+      <p>{{ vision.text }}</p>
+    </header>
+    <ul class="vision-points">
+      {% for v in vision.points %}<li><h3>{{ v.title }}</h3><p>{{ v.text }}</p></li>{% endfor %}
+    </ul>
+  </div>
+</section>
+
+<section class="light-zone section" aria-labelledby="steps-title">
+  <div class="wrap">
+    <header class="head">
+      <p class="eyebrow"><span>كيف نعمل</span><span class="rule"></span></p>
+      <h2 id="steps-title">من فكرتك إلى يدك بأربع خطوات</h2>
+    </header>
+    <ol class="steps">
+      {% for s in home.steps %}<li><h3>{{ s.title }}</h3><p>{{ s.text }}</p></li>{% endfor %}
+    </ol>
+  </div>
+</section>
+{% endblock %}

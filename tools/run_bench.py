@@ -23,7 +23,7 @@ BROWSERS = {
 }
 PORT = 9334
 runs = int(sys.argv[1]) if len(sys.argv) > 1 else 1
-url = (sys.argv[2] if len(sys.argv) > 2 else "http://localhost:8766/demo/local.html").split("#")[0] + "#bench"
+url = (sys.argv[2] if len(sys.argv) > 2 else "http://localhost:8766/docs/").split("#")[0] + "#bench"
 browser = sys.argv[3] if len(sys.argv) > 3 else "edge"
 EDGE = BROWSERS[browser]
 

@@ -1,0 +1,97 @@
+<!doctype html>
+<html lang="ar">
+<head>
+<meta charset="utf-8">
+<title>RD Amazing renderer</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Aref+Ruqaa:wght@400;700&family=Cormorant+Garamond:ital,wght@0,500;0,600;1,500&family=IBM+Plex+Sans+Arabic:wght@300;400;500;600&display=swap">
+<style>
+  body { margin: 0; background: #111; color: #ddd; font: 13px/1.5 Consolas, monospace; }
+  canvas { display: block; max-width: 100%; height: auto; }
+  pre { padding: 8px 12px; margin: 0; }
+</style>
+</head>
+<body>
+<pre id="log">loading…</pre>
+<canvas id="gl"></canvas>
+<canvas id="out"></canvas>
+<script type="module">
+  /* Renders one scene to JPEG frames (the scroll film) and gallery stills, posting each to tools/frame_server.py.
+     http://localhost:8766/src/render.html?scene=cards[&what=film|stills][&set=desktop|mobile]
+     Every image is drawn at 1.5x and scaled down, for clean edges. */
+  import { createStage } from './scenes/common.js';
+
+  const q = new URLSearchParams(location.search);
+  const sceneId = q.get('scene') || 'story';
+  const what = q.get('what') || 'both';
+  const only = q.get('set');
+  const sample = Number(q.get('sample') || 0);   // render only this many evenly spaced frames, for a quick look
+  const SS = 1.5;
+  const SETS = [
+    { name: 'desktop', outW: 1600, outH: 900, cssW: 1440, cssH: 810 },
+    { name: 'mobile', outW: 810, outH: 1620, cssW: 360, cssH: 720 },
+  ];
+  const STILL = { outW: 1600, outH: 1200, cssW: 1440, cssH: 1080 };
+  const logEl = document.getElementById('log');
+  const log = m => { logEl.textContent = m; document.title = m; };
+  const gl = document.getElementById('gl'), out = document.getElementById('out'), octx = out.getContext('2d', { alpha: false });
+
+  async function save(url, w, h, quality) {
+    out.width = w; out.height = h;
+    octx.imageSmoothingQuality = 'high';
+    octx.drawImage(gl, 0, 0, w, h);
+    const blob = await new Promise(r => out.toBlob(r, 'image/jpeg', quality));
+    // a busy local server can refuse a connection now and then; try again before giving up
+    for (let attempt = 1; ; attempt++) {
+      try {
+        const res = await fetch(url, { method: 'POST', body: blob });
+        if (res.ok) return blob.size;
+        throw new Error(`saving ${url} failed: ${res.status}`);
+      } catch (e) {
+        if (attempt === 5) throw e;
+        await new Promise(r => setTimeout(r, 400 * attempt));
+      }
+    }
+  }
+
+  try {
+    const mod = await import(`./scenes/${sceneId}.js`);
+    const stage = await createStage(gl, { assets: 'static/img/' });
+    stage.setWords(mod.words || []);
+    const scene = await mod.default(stage);
+    const N = mod.frames || 120;
+    let bytes = 0;
+
+    if (what !== 'stills') {
+      for (const s of SETS) {
+        if (only && only !== s.name) continue;
+        stage.resize(s.outW * SS, s.outH * SS, s.cssW, s.cssH, 'film');
+        for (let i = 0; i < N; i++) {
+          if (sample && i % Math.ceil(N / sample) !== 0) continue;
+          const p = i / (N - 1);
+          stage.updateCommon(p); scene.update(p); stage.render();
+          bytes += await save(`/save/${sceneId}/${s.name}/${String(i).padStart(3, '0')}.jpg`, s.outW, s.outH, .84);
+          if (i % 5 === 0) log(`${sceneId} ${s.name} ${i}/${N} · ${(bytes / 1048576).toFixed(1)} MB`);
+        }
+      }
+    }
+    if (what !== 'film' && scene.stills) {
+      for (let k = 0; k < scene.stills.length; k++) {
+        const def = scene.stills[k];
+        stage.resize(STILL.outW * SS, STILL.outH * SS, STILL.cssW, STILL.cssH, 'still', def.look || 'maroon');
+        stage.updateCommon(def.p ?? .5);
+        scene.still(k);
+        stage.render();
+        bytes += await save(`/save-still/${sceneId}/${String(k + 1).padStart(2, '0')}.jpg`, STILL.outW, STILL.outH, .88);
+        log(`${sceneId} still ${k + 1}/${scene.stills.length}`);
+      }
+    }
+    log(`ALL DONE ${sceneId} · ${(bytes / 1048576).toFixed(1)} MB`);
+    window.__done = { ok: true, bytes };
+  } catch (e) {
+    console.error(e);
+    log('FAILED: ' + (e && e.message || e));
+    window.__done = { ok: false, error: String(e) };
+  }
+</script>
+</body>
+</html>
