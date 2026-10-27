@@ -364,17 +364,18 @@
     function travel() { return Math.max(1, story.offsetHeight - window.innerHeight); }
 
     /* ---------- the film ----------
-       Two layers of the same 200 frames. The small layer is two sheets of 100 tiles each (even frames, odd
-       frames), about 260 KB apiece: two requests bring the motion of the whole story, so the picture never
-       waits on the network. The sharp layer is one JPEG per frame; each replaces its tile as soon as it is
+       Two layers of the same 200 frames. The small layer is four sheets of 50 tiles each, about 100 KB apiece:
+       the first request already brings the motion of the whole story (every 4th frame) and four requests bring
+       all of it, so the picture never waits on the network. The sharp layer is one JPEG per frame; each replaces its tile as soon as it is
        decoded. Decoding happens off the main thread (createImageBitmap), only around the reader. Measured on a
        2011 laptop (tools/bench.js): WebP frames stalled the page up to 400 ms; these JPEGs cost nothing beyond
        the page itself, and one request per tiny frame was too slow over a high-latency connection. */
     var fctx = film.getContext('2d', { alpha: false });
     fctx.imageSmoothingQuality = 'high';
-    var TILES = { desktop: [320, 180], mobile: [180, 360] }, COLS = 10;
+    // sheet n holds frames n, n+4, n+8 ...: the first sheet alone already covers the whole story
+    var TILES = { desktop: [288, 162], mobile: [162, 324] }, COLS = 10, SHEETS = 4, SHEET_ORDER = [0, 2, 1, 3];
     var BEHIND = 10, AHEAD = 22, DECODERS = Math.max(2, Math.min(4, (navigator.hardwareConcurrency || 4) - 1)), FETCHERS = 12;
-    var set = '', sheets = [null, null], sheetRequested = [false, false], sharp = [], sharpQueue = [];
+    var set = '', sheets = [], sheetRequested = [], sharp = [], sharpQueue = [];
     var fetching = 0, fetched = 0, arrived = 0;
     var decoded = new Map(), decoding = new Set(), drawnKey = '', dir = 1, lastC = 0;
 
@@ -394,7 +395,7 @@
       set = next;
       decoded.forEach(function (b) { if (b.close) b.close(); });
       sheets.forEach(function (b) { if (b && b.close) b.close(); });
-      decoded = new Map(); decoding = new Set(); sheets = [null, null]; sheetRequested = [false, false];
+      decoded = new Map(); decoding = new Set(); sheets = new Array(SHEETS); sheetRequested = new Array(SHEETS);
       sharp = new Array(FRAMES); sharpQueue = coarseToFine();
       fetching = 0; fetched = 0; arrived = 0; drawnKey = '';
       film.width = SIZES[set][0]; film.height = SIZES[set][1];
@@ -426,7 +427,7 @@
       get(FRAME_BASE + set + '-small-' + parity + '.jpg', function (blob) {
         toBitmap(blob).then(function (bmp) {
           if (forSet !== set) { if (bmp.close) bmp.close(); return; }
-          sheets[parity] = bmp; arrived++; S.filmSmall = (S.filmSmall || 0) + 100;
+          sheets[parity] = bmp; arrived++; S.filmSmall = (S.filmSmall || 0) + FRAMES / SHEETS;
           site.classList.remove('no-film');   // a slow connection may bring the first frame after the logo took over
         });
       }, 'high');
@@ -442,11 +443,10 @@
       var c = current(), d, i;
       // 1. the sharp frames the reader is looking at right now
       for (d = 0; d <= 2 && fetching < FETCHERS; d++) { i = c + d * dir; if (i >= 0 && i < FRAMES && sharp[i] === undefined) loadSharp(i); }
-      // 2. both small sheets: the motion of the whole story
-      if (!sheetRequested[0]) loadSheet(0);
-      if (!sheetRequested[1]) loadSheet(1);
-      // on a slow line the sheets must not share it with sharp frames: wait until both have landed
-      if (!sheets[0] || !sheets[1]) { decodeAround(c); return; }
+      // 2. the small sheets: the motion of the whole story, coarse first
+      SHEET_ORDER.forEach(function (n) { if (!sheetRequested[n]) loadSheet(n); });
+      // on a slow line the sheets must not share it with sharp frames: wait until all have landed
+      for (i = 0; i < SHEETS; i++) if (!sheets[i]) { decodeAround(c); return; }
       // 3. sharp frames around the reader, ahead of them before behind, then all the rest
       for (d = 0; d <= AHEAD && fetching < FETCHERS; d++) {
         var a = c + d * dir, b = c - d * dir;
@@ -478,9 +478,9 @@
       if (i < 0 || i >= FRAMES) return null;
       var bmp = decoded.get(i);
       if (bmp) return { key: i + 's', bmp: bmp, sharp: true };
-      var sheet = sheets[i % 2];
+      var sheet = sheets[i % SHEETS];
       if (!sheet) return null;
-      var t = TILES[set], k = i >> 1;
+      var t = TILES[set], k = Math.floor(i / SHEETS);
       return { key: i + 't', bmp: sheet, sharp: false, sx: (k % COLS) * t[0], sy: Math.floor(k / COLS) * t[1], sw: t[0], sh: t[1] };
     }
     function drawFilm() {
