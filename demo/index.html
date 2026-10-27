@@ -416,7 +416,7 @@
         .then(function (r) { if (!r.ok) throw new Error(r.status); return r.blob(); })
         .then(function (blob) {
           if (forSet !== set) return;
-          files[i] = blob; fetched++;
+          files[i] = blob; fetched++; S.filmFetched = fetched;
           site.classList.remove('no-film');   // a slow connection may bring the first frame after the logo took over
         }, function () { if (forSet === set) files[i] = false; })
         .then(function () { if (forSet === set) { fetching--; pump(); } });
@@ -457,6 +457,7 @@
       var c = current(), best = -1, gap = 1e9;
       if (c !== lastC) { dir = c > lastC ? 1 : -1; lastC = c; }
       decoded.forEach(function (b, i) { var g = Math.abs(i - c); if (g < gap) { gap = g; best = i; } });
+      S.filmGap = best < 0 ? FRAMES : gap;   // how many frames the picture trails the scroll (read by tools/bench.js)
       if (best < 0 || best === drawn) return;
       fctx.drawImage(decoded.get(best), 0, 0, film.width, film.height);
       drawn = best; S.filmShown = (S.filmShown || 0) + 1;

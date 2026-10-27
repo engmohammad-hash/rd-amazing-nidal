@@ -1,6 +1,8 @@
 /* Scrolling speed test, loaded by the home page when its address ends in #bench.
-   Waits for the film, scrolls through the story like a reader (down, then a little back up)
-   while timing every frame, and posts the result to tools/frame_server.py, which appends it to tools/bench.log. */
+   Starts scrolling soon after the film appears, the way an eager visitor would, and scrolls through
+   the story (down, then a little back up) while timing every frame and how far the picture trails
+   the scroll. The result goes to document.title (read by tools/run_bench.py) and, when served by
+   tools/frame_server.py, to tools/bench.log. */
 (function () {
   var S = window.__story;
   var story = document.getElementById('story');
@@ -8,19 +10,21 @@
 
   async function run() {
     var t0 = performance.now();
-    while (!document.querySelector('.film.ready') && performance.now() - t0 < 30000) await wait(200);
-    await wait(6000);   // let the first frames arrive, as a visitor reading the hero would
+    while (!document.querySelector('.film.ready') && performance.now() - t0 < 30000) await wait(100);
+    var readyAfter = performance.now() - t0;
+    await wait(2000);
 
     var long = [];
     var po = new PerformanceObserver(function (l) { l.getEntries().forEach(function (e) { long.push(e.duration); }); });
     try { po.observe({ type: 'longtask' }); } catch (e) {}
 
     var top = story.offsetTop, total = story.offsetHeight - innerHeight;
-    var gaps = [], shown0 = S.filmShown || 0, dur = 14000;
+    var gaps = [], trail = [], shown0 = S.filmShown || 0, fetchedAtStart = S.filmFetched || 0, dur = 14000;
     await new Promise(function (resolve) {
       var start = performance.now(), last = start;
       function step(now) {
         gaps.push(now - last); last = now;
+        trail.push(S.filmGap || 0);
         var k = Math.min(1, (now - start) / dur);
         var pos = k < .8 ? k / .8 : 1 - (k - .8) / .2 * .3;
         window.scrollTo(0, top + total * pos * .97);
@@ -32,21 +36,26 @@
     gaps.shift();
 
     var sorted = gaps.slice().sort(function (a, b) { return a - b; });
-    var mean = gaps.reduce(function (a, b) { return a + b; }, 0) / gaps.length;
+    var mean = function (a) { return a.reduce(function (x, y) { return x + y; }, 0) / a.length; };
     var result = {
-      mode: S.filmMode, set: S.filmSet,
-      fps: +(1000 / mean).toFixed(1),
+      where: location.host,
+      fps: +(1000 / mean(gaps)).toFixed(1),
       p95ms: +sorted[Math.floor(sorted.length * .95)].toFixed(1),
       worstMs: +sorted[sorted.length - 1].toFixed(1),
-      jankyFrames: gaps.filter(function (g) { return g > 34; }).length,
-      framesTimed: gaps.length,
-      filmFramesShown: (S.filmShown || 0) - shown0,
       longTasks: long.length,
       longestTaskMs: Math.round(Math.max.apply(null, [0].concat(long))),
+      filmReadyAfterMs: Math.round(readyAfter),
+      framesLoadedAtStart: fetchedAtStart,
+      framesLoadedAtEnd: S.filmFetched || 0,
+      pictureTrailsByFrames: +mean(trail).toFixed(1),
+      ticksMoreThan3Behind: Math.round(trail.filter(function (g) { return g > 3; }).length / trail.length * 100) + '%',
+      filmFramesShown: (S.filmShown || 0) - shown0,
       viewport: innerWidth + 'x' + innerHeight + '@' + devicePixelRatio,
     };
-    await fetch('/bench', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(result) }).catch(function () {});
     document.title = 'BENCH DONE ' + JSON.stringify(result);
+    if (/^(localhost|127\.0\.0\.1)/.test(location.host)) {
+      await fetch('/bench', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(result) }).catch(function () {});
+    }
   }
   run();
 })();
