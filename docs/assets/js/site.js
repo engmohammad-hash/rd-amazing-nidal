@@ -45,11 +45,13 @@
      fetched first: the first ~100 KB already moves the whole story, so the picture never waits on the network.
      The sharp layer is one JPEG per frame, fetched around the reader and decoded off the main thread, each
      replacing its tile once ready. Measured on a 2011 laptop over a slow VPN (tools/bench.js): the picture never
-     trails the scroll by more than a frame, with no long tasks. */
+     trails the scroll by more than a frame, with no long tasks.
+     The sheets also time the line. On a slow one only a few sharp frames are fetched at once, the frame on screen
+     first: twelve at once split ~100 KB/s twelve ways, and the frame a reader stopped on took seconds to sharpen. */
   var FRAMES = 0, BASE = '', set = '';
   var SIZES = { desktop: [1600, 900], mobile: [810, 1620] };
   var TILES = { desktop: [288, 162], mobile: [162, 324] }, COLS = 10, SHEETS = 4, SHEET_ORDER = [0, 2, 1, 3];
-  var BEHIND = 10, AHEAD = 22, DECODERS = Math.max(2, Math.min(4, (navigator.hardwareConcurrency || 4) - 1)), FETCHERS = 12;
+  var BEHIND = 10, AHEAD = 22, DECODERS = Math.max(2, Math.min(4, (navigator.hardwareConcurrency || 4) - 1)), FETCHERS = 12, sheetBytes = 0, sheetsIn = 0, sheetsFrom = 0;
   var sheets = [], sheetRequested = [], sharp = [], sharpQueue = [], fetching = 0, fetched = 0, arrived = 0;
   var decoded = new Map(), decoding = new Set(), drawnKey = '', dir = 1, lastC = 0, fctx = null;
 
@@ -68,7 +70,7 @@
     sheets.forEach(function (b) { if (b && b.close) b.close(); });
     decoded = new Map(); decoding = new Set(); sheets = new Array(SHEETS); sheetRequested = new Array(SHEETS);
     sharp = new Array(FRAMES); sharpQueue = coarseToFine();
-    fetching = 0; fetched = 0; arrived = 0; drawnKey = '';
+    fetching = 0; fetched = 0; arrived = 0; drawnKey = ''; sheetBytes = 0; sheetsIn = 0; sheetsFrom = performance.now();
     film.width = SIZES[set][0]; film.height = SIZES[set][1];
     pump();
   }
@@ -93,6 +95,12 @@
     var forSet = set;
     sheetRequested[n] = true;
     get(BASE + set + '-small-' + n + '.jpg', function (blob) {
+      sheetBytes += blob.size;
+      if (++sheetsIn === SHEETS) {
+        // the last sheet: bytes per millisecond is KB/s
+        var rate = sheetBytes / Math.max(1, performance.now() - sheetsFrom);
+        FETCHERS = rate > 800 ? 12 : rate > 300 ? 6 : 3; S.lineKBps = Math.round(rate);
+      }
       toBitmap(blob).then(function (bmp) {
         if (forSet !== set) { if (bmp.close) bmp.close(); return; }
         sheets[n] = bmp; arrived++; S.filmSmall = (S.filmSmall || 0) + Math.ceil(FRAMES / SHEETS);
@@ -100,17 +108,17 @@
       });
     }, 'high');
   }
-  function loadSharp(i) {
+  function loadSharp(i, priority) {
     sharp[i] = null;
     get(BASE + set + '/' + pad(i) + '.jpg', function (blob) {
       sharp[i] = blob; fetched++; arrived++; S.filmFetched = fetched;
       body.classList.remove('no-film');
-    });
+    }, priority || 'low');
   }
   function pump() {
     if (!FRAMES) return;
     var c = current(), d, i;
-    for (d = 0; d <= 2 && fetching < FETCHERS; d++) { i = c + d * dir; if (i >= 0 && i < FRAMES && sharp[i] === undefined) loadSharp(i); }
+    if (sharp[c] === undefined) loadSharp(c, 'high');
     SHEET_ORDER.forEach(function (n) { if (!sheetRequested[n]) loadSheet(n); });
     // on a slow line the sheets must not share it with sharp frames: wait until all have landed
     for (i = 0; i < SHEETS; i++) if (!sheets[i]) { decodeAround(c); return; }

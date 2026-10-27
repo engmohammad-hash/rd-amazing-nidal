@@ -11,6 +11,8 @@
   async function run() {
     var t0 = performance.now(), loadedAt = t0, fontsAt = -1, scrollAt = 0;
     if (document.fonts) document.fonts.ready.then(function () { fontsAt = performance.now(); });
+    var firstSharpAt = -1;
+    (function watch() { if (S.filmSharp) firstSharpAt = performance.now(); else requestAnimationFrame(watch); })();
     while (!document.querySelector('.film.ready') && performance.now() - t0 < 30000) await wait(100);
     var readyAfter = performance.now() - t0;
     await wait(2000);
@@ -37,6 +39,10 @@
     });
     po.disconnect();
     gaps.shift();
+    // a reader who stops: how long until the frame on screen is the sharp one
+    var stopAt = performance.now();
+    while (!S.filmSharp && performance.now() - stopAt < 15000) await wait(50);
+    var sharpAfterStop = performance.now() - stopAt;
 
     var sorted = gaps.slice().sort(function (a, b) { return a - b; });
     var mean = function (a) { return a.reduce(function (x, y) { return x + y; }, 0) / a.length; };
@@ -58,6 +64,9 @@
       ticksMoreThan3Behind: Math.round(trail.filter(function (g) { return g > 3; }).length / trail.length * 100) + '%',
       filmFramesShown: (S.filmShown || 0) - shown0,
       fontsReadyAtMs: Math.round(fontsAt),
+      firstSharpAtMs: Math.round(firstSharpAt),
+      sharpAfterStopMs: Math.round(sharpAfterStop),
+      lineKBps: S.lineKBps || 0,
       scrollStartAtMs: Math.round(scrollAt),
       viewport: innerWidth + 'x' + innerHeight + '@' + devicePixelRatio,
     };
