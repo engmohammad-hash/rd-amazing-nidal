@@ -1,14 +1,18 @@
 <!doctype html>
-<html lang="ar" dir="rtl">
+<html lang="{{ lang }}" dir="{{ dir }}">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>{{ title }}</title>
 <meta name="description" content="{{ description }}">
 <link rel="canonical" href="{{ b.base_url }}{{ path }}">
-<meta name="theme-color" content="#14000B">
+{% if path != '404.html' %}<link rel="alternate" hreflang="ar" href="{{ alternates.ar }}">
+<link rel="alternate" hreflang="en" href="{{ alternates.en }}">
+<link rel="alternate" hreflang="x-default" href="{{ alternates.ar }}">
+{% endif %}<meta name="theme-color" content="#14000B">
+<meta name="color-scheme" content="light dark">
 <meta property="og:type" content="website">
-<meta property="og:locale" content="ar_SA">
+<meta property="og:locale" content="{{ t.locale }}">
 <meta property="og:site_name" content="{{ b.name }}">
 <meta property="og:title" content="{{ title }}">
 <meta property="og:description" content="{{ description }}">
@@ -17,21 +21,30 @@
 <meta name="twitter:card" content="summary_large_image">
 <link rel="icon" type="image/png" href="{{ root }}assets/img/logo-color.png">
 <link rel="apple-touch-icon" href="{{ root }}assets/img/logo-color.png">
-<link rel="preload" as="font" type="font/woff2" crossorigin href="{{ root }}assets/fonts/aref-ruqaa-700-arabic.woff2">
+{# the visitor's theme, set before anything paints so the page never flashes the other one #}
+<script>(function () { var d = document.documentElement, t = null; try { t = localStorage.getItem('theme'); } catch (e) {} if (t !== 'dark' && t !== 'light') t = matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light'; d.setAttribute('data-theme', t); })();</script>
+{% if lang == 'ar' %}<link rel="preload" as="font" type="font/woff2" crossorigin href="{{ root }}assets/fonts/aref-ruqaa-700-arabic.woff2">
 <link rel="preload" as="font" type="font/woff2" crossorigin href="{{ root }}assets/fonts/ibm-plex-sans-arabic-400-arabic.woff2">
 <link rel="preload" as="font" type="font/woff2" crossorigin href="{{ root }}assets/fonts/ibm-plex-sans-arabic-500-arabic.woff2">
-<link rel="stylesheet" href="{{ root }}assets/css/site.css?v={{ version }}">
-{% for f in preload %}<link rel="preload" as="fetch" crossorigin href="{{ root }}{{ f.href }}" media="{{ f.media }}" fetchpriority="high">
+{% else %}<link rel="preload" as="font" type="font/woff2" crossorigin href="{{ root }}assets/fonts/cormorant-garamond-600-latin.woff2">
+<link rel="preload" as="font" type="font/woff2" crossorigin href="{{ root }}assets/fonts/ibm-plex-sans-arabic-400-latin.woff2">
+<link rel="preload" as="font" type="font/woff2" crossorigin href="{{ root }}assets/fonts/ibm-plex-sans-arabic-500-latin.woff2">
+{% endif %}<link rel="stylesheet" href="{{ root }}assets/css/site.css?v={{ version }}">
+{% if preload %}<script type="importmap">{ "imports": { "three": "{{ root or './' }}assets/vendor/three.module.min.js" } }</script>
+{% endif %}{% for f in preload %}<link rel="preload" as="fetch" crossorigin href="{{ root }}{{ f.href }}" media="{{ f.media }}" fetchpriority="high">
 {% endfor %}<script type="application/ld+json">{{ jsonld | safe }}</script>
 </head>
 <body data-root="{{ root }}">
-<a class="skip" href="#main">تخطَّ إلى المحتوى</a>
+{% import "partials/icons.html" as ic %}
+<a class="skip" href="#main">{{ t.skip }}</a>
 {% include "partials/header.html" %}
 <main id="main">
 {% block main %}{% endblock %}
 </main>
 {% include "partials/footer.html" %}
-<a class="wa-float" href="{{ wa('مرحباً، أود الاستفسار عن خدماتكم.') }}" target="_blank" rel="noopener" aria-label="تواصل عبر واتساب">{% include "partials/wa-icon.svg" %}</a>
+<a class="wa-float" href="{{ wa(t.wa_float_msg) }}" target="_blank" rel="noopener" aria-label="{{ t.wa_float }}">{% include "partials/wa-icon.svg" %}</a>
+<button class="to-top" id="to-top" type="button" aria-label="{{ t.to_top }}" tabindex="-1">{{ ic.icon('up') }}</button>
+<script>window.__T = {{ t.js | tojson }};</script>
 <script src="{{ root }}assets/js/site.js?v={{ version }}" defer></script>
 </body>
 </html>

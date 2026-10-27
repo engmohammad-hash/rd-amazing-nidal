@@ -1,5 +1,7 @@
 /* مطابع روعة التصاميم — page behaviour: the scroll film, header, menu, gallery lightbox, opening hours, quote form.
-   The film is the 3D story pre-rendered to frames (src/render.html); no 3D runs in the visitor's browser. */
+   The film is the 3D story pre-rendered to frames (src/render.html), which plays on every device. Devices that
+   prove fast enough then switch to the same scene drawn live (live.js): sharp at any screen size, and smooth
+   at 120 Hz instead of stepping between frames. */
 (function () {
   var doc = document.documentElement, body = document.body;
   var ROOT = body.getAttribute('data-root') || '';
@@ -7,7 +9,37 @@
   var hero = document.querySelector('[data-hero]');
   var reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
   var S = window.__story = { p: 0, target: 0, t: 0, reduce: reduce };
+  var T = window.__T || {}, rtl = doc.dir === 'rtl';   // the page's words for script-made text, from base.html
   function clamp(v, a, b) { return Math.min(b, Math.max(a, v)); }
+
+  /* ---------- light and dark theme (set before paint by base.html; this only switches and remembers it) ---------- */
+  var themeBtns = document.querySelectorAll('[data-theme-toggle]');
+  function labelThemeButtons() {
+    var dark = doc.getAttribute('data-theme') === 'dark';
+    themeBtns.forEach(function (b) { b.setAttribute('aria-label', dark ? b.dataset.labelLight : b.dataset.labelDark); });
+  }
+  themeBtns.forEach(function (b) {
+    b.addEventListener('click', function () {
+      var next = doc.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';
+      doc.setAttribute('data-theme', next);
+      try { localStorage.setItem('theme', next); } catch (e) {}
+      labelThemeButtons();
+    });
+  });
+  labelThemeButtons();
+
+  /* ---------- back to top: shown once the reader is a screen down ---------- */
+  var toTop = document.getElementById('to-top'), topShown = false;
+  if (toTop) {
+    toTop.addEventListener('click', function () { window.scrollTo({ top: 0, behavior: reduce ? 'auto' : 'smooth' }); });
+    window.addEventListener('scroll', function () {
+      var show = window.scrollY > window.innerHeight * 1.2;
+      if (show === topShown) return;
+      topShown = show;
+      toTop.classList.toggle('show', show);
+      toTop.tabIndex = show ? 0 : -1;
+    }, { passive: true });
+  }
 
   /* ---------- menu ---------- */
   var menuBtn = document.getElementById('menu-btn');
@@ -122,13 +154,15 @@
     });
   }
   function pump() {
-    if (!FRAMES) return;
+    if (!FRAMES || S.live) return;
     var c = current(), d, i;
     // the frame on screen may take one slot beyond the cap, never more: while scrolling, every tick has a new one
     if (sharp[c] === undefined && fetching <= FETCHERS) loadSharp(c, 'high');
     SHEET_ORDER.forEach(function (n) { if (!sheetRequested[n]) loadSheet(n); });
     // on a slow line the sheets must not share it with sharp frames: wait until all have landed
     for (i = 0; i < SHEETS; i++) if (!sheets[i]) { decodeAround(c); return; }
+    // while the live scene is on trial, save the line: the sheets and the frame on screen are enough to show
+    if (S.liveTrying) { decodeAround(c); return; }
     // a reader who has stopped on a blurry frame gets the whole line: downloads away from them are dropped
     // (and queued again), and nothing else is asked for until their frame is here
     if (!sharp[c] && performance.now() - movedAt > 300) {
@@ -195,7 +229,56 @@
       return { c: c, sharp: sc === undefined ? 'not asked' : sc === null ? 'in flight' : 'here', decoded: decoded.has(c),
         decoding: decoding.size, fetching: fetching, fetchers: FETCHERS };
     };
-    setTimeout(function () { if (!arrived) body.classList.add('no-film'); }, 10000);
+    setTimeout(function () { if (!arrived && !S.live) body.classList.add('no-film'); }, 10000);
+    tryLive();
+  }
+
+  /* ---------- live 3D, for devices that can draw it ---------- */
+  function liveCandidate() {
+    var nav = navigator, why = '';
+    if (reduce) why = 'reduced motion';
+    else if (location.hash === '#frames' || /[?&]frames\b/.test(location.search)) why = 'asked for frames';
+    else if (/[?&]live\b/.test(location.search)) S.liveForced = /[?&]live=force\b/.test(location.search);   // testing: ?live tries, ?live=force skips the speed check
+    else if (nav.connection && nav.connection.saveData) why = 'data saver';
+    else if (!(window.HTMLScriptElement && HTMLScriptElement.supports && HTMLScriptElement.supports('importmap'))) why = 'no import maps';
+    else if ((nav.hardwareConcurrency || 4) < 4) why = 'few cores';
+    else if (nav.deviceMemory && nav.deviceMemory < 4) why = 'little memory';
+    else {
+      var c = document.createElement('canvas'), gl = c.getContext('webgl2'), r = '';
+      if (!gl) why = 'no webgl2';
+      else {
+        var info = gl.getExtension('WEBGL_debug_renderer_info');
+        r = String(info ? gl.getParameter(info.UNMASKED_RENDERER_WEBGL) : gl.getParameter(gl.RENDERER));
+        var lose = gl.getExtension('WEBGL_lose_context'); if (lose) lose.loseContext();
+        S.gpu = r;
+        // software drawing, Intel graphics from before 2017, and entry-level phone GPUs keep the frames
+        if (/SwiftShader|llvmpipe|softpipe|Software|Basic Render|\bHD Graphics|GMA|Mali-(T|4|G31|G51|G52|G57)\b|Adreno \(TM\) [2-5]\d\d\b|PowerVR (SGX|Rogue GE)/i.test(r)) why = 'weak gpu';
+      }
+    }
+    S.liveSkip = why;
+    return !why;
+  }
+  function tryLive() {
+    if (!story || !liveCandidate()) return;
+    S.liveTrying = true;
+    var giveUp = setTimeout(function () { S.liveTrying = false; }, 9000);   // never hold the frames back for long
+    import(new URL(ROOT + 'assets/js/live.js', document.baseURI).href).then(function (m) {
+      return m.start({
+        stageEl: document.getElementById('stage'), storyEl: story, sceneId: story.dataset.scene, root: ROOT, S: S,
+        onLive: function () {
+          clearTimeout(giveUp);
+          S.live = true; S.liveTrying = false;
+          inflight.forEach(function (ctrl) { ctrl.abort(); });
+          body.classList.remove('no-film');
+          setTimeout(function () { if (S.live) body.classList.add('live-on'); }, 700);
+        },
+        onFail: function (why) {
+          clearTimeout(giveUp);
+          S.live = false; S.liveTrying = false; S.liveFail = why; drawnKey = '';
+          body.classList.remove('live-on');
+        },
+      });
+    }).catch(function (e) { clearTimeout(giveUp); S.liveTrying = false; S.liveFail = 'load: ' + (e && e.message); });
   }
   if (story && film) {
     if (location.hash === '#bench') {
@@ -233,8 +316,8 @@
         var a = 0; dotEnds.forEach(function (e, i) { if (p >= e) a = i + 1; });
         if (a !== activeDot) { activeDot = a; dots.forEach(function (d, i) { d.classList.toggle('on', i === a); d.setAttribute('aria-current', i === a ? 'step' : 'false'); }); }
       }
-      if (FRAMES && rect.bottom > 0) drawFilm();
-      if (FRAMES) pump();
+      if (FRAMES && !S.live && rect.bottom > 0) drawFilm();
+      if (FRAMES && !S.live) pump();
     }
     if (S.hud) S.hud();
     requestAnimationFrame(tick);
@@ -250,7 +333,7 @@
     var day = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'].indexOf(get_('weekday'));
     var mins = (+get_('hour')) * 60 + (+get_('minute'));
     var open = day !== closedDay && mins >= openAt && mins < closeAt;
-    statusEls.forEach(function (el) { el.classList.add(open ? 'open' : 'closed'); el.textContent = open ? 'مفتوح الآن' : 'مغلق الآن'; });
+    statusEls.forEach(function (el) { el.classList.add(open ? 'open' : 'closed'); el.textContent = open ? T.open : T.closed; });
     var row = document.querySelector('.hours tr[data-day="' + day + '"]');
     if (row) row.classList.add('today');
   }
@@ -267,9 +350,11 @@
       });
     });
     var lb = document.createElement('div');
-    lb.className = 'lightbox'; lb.setAttribute('role', 'dialog'); lb.setAttribute('aria-modal', 'true'); lb.setAttribute('aria-label', 'عرض الصورة');
+    // previous sits at the reading start (right in Arabic, left in English), its arrow pointing that way
+    lb.className = 'lightbox'; lb.setAttribute('role', 'dialog'); lb.setAttribute('aria-modal', 'true'); lb.setAttribute('aria-label', T.lightbox);
     lb.innerHTML = '<figure style="margin:0;display:grid;justify-items:center"><img alt=""><figcaption class="lb-cap"></figcaption></figure>' +
-      '<button class="lb-close" type="button" aria-label="إغلاق">×</button><button class="lb-prev" type="button" aria-label="السابقة">›</button><button class="lb-next" type="button" aria-label="التالية">‹</button>';
+      '<button class="lb-close" type="button" aria-label="' + T.close + '">×</button><button class="lb-prev" type="button" aria-label="' + T.prev + '">' + (rtl ? '›' : '‹') +
+      '</button><button class="lb-next" type="button" aria-label="' + T.next + '">' + (rtl ? '‹' : '›') + '</button>';
     body.appendChild(lb);
     var lbImg = lb.querySelector('img'), lbCap = lb.querySelector('.lb-cap'), items = [], at = 0, opener = null;
     function visibleItems() { return Array.prototype.slice.call(gallery.querySelectorAll('li:not([hidden]) button')); }
@@ -286,8 +371,8 @@
     document.addEventListener('keydown', function (e) {
       if (!lb.classList.contains('open')) return;
       if (e.key === 'Escape') close();
-      if (e.key === 'ArrowLeft') show(at + 1);
-      if (e.key === 'ArrowRight') show(at - 1);
+      if (e.key === 'ArrowLeft') show(at + (rtl ? 1 : -1));
+      if (e.key === 'ArrowRight') show(at + (rtl ? -1 : 1));
     });
   }
 
@@ -296,9 +381,9 @@
   if (form) {
     form.addEventListener('submit', function (e) {
       e.preventDefault();
-      var f = new FormData(form), lines = ['مرحباً، أود طلب عرض سعر:'];
-      [['product', 'المنتج'], ['qty', 'الكمية'], ['size', 'المقاس'], ['finish', 'التشطيب'], ['name', 'الاسم'], ['notes', 'ملاحظات']].forEach(function (k) {
-        var v = (f.get(k[0]) || '').toString().trim(); if (v) lines.push(k[1] + ': ' + v);
+      var f = new FormData(form), lines = [T.quote_intro];
+      ['product', 'qty', 'size', 'finish', 'name', 'notes'].forEach(function (k) {
+        var v = (f.get(k) || '').toString().trim(); if (v) lines.push(T.fields[k] + ': ' + v);
       });
       window.open('https://wa.me/' + form.dataset.wa + '?text=' + encodeURIComponent(lines.join('\n')), '_blank', 'noopener');
     });
@@ -312,7 +397,9 @@
     var hf = 0, hs = performance.now();
     S.hud = function () {
       hf++; var n = performance.now(); if (n - hs < 500) return;
-      hud.textContent = 'FPS ' + Math.round(hf * 1000 / (n - hs)) + '\nsmall ' + (S.filmSmall || 0) + ' · sharp ' + fetched + '/' + FRAMES + ' (' + set + ')';
+      hud.textContent = 'FPS ' + Math.round(hf * 1000 / (n - hs)) + '\n' + (S.live ? 'LIVE 3D · ' + S.liveMs + ' ms/frame'
+        : 'frames · small ' + (S.filmSmall || 0) + ' · sharp ' + fetched + '/' + FRAMES + ' (' + set + ')' +
+          (S.liveTrying ? '\ntrying live…' : S.liveSkip ? '\nno live: ' + S.liveSkip : S.liveFail ? '\nno live: ' + S.liveFail : ''));
       hf = 0; hs = n;
     };
   }

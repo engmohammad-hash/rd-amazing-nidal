@@ -1,13 +1,14 @@
 {% extends "base.html" %}
 {% import "partials/macros.html" as m %}
 {% block main %}
-{{ m.band('الصفحة غير موجودة', 'ربما تغيّر الرابط أو حُذفت الصفحة. يمكنك العودة إلى الرئيسية أو تصفّح منتجاتنا.', none, link) }}
-<section class="light-zone section" aria-label="روابط مقترحة">
+{{ m.band(t.notfound.title, t.notfound.lead, none, link) }}
+<section class="light-zone section" aria-label="{{ t.notfound.aria }}">
   <div class="wrap">
     <div class="order-row">
-      <a class="btn btn-maroon" href="{{ link('') }}">الصفحة الرئيسية</a>
-      <a class="btn btn-outline" href="{{ link('products/') }}">منتجاتنا</a>
-      <a class="btn btn-outline" href="{{ link('contact/') }}">تواصل معنا</a>
+      <a class="btn btn-maroon" href="{{ link('') }}">{{ t.notfound.home }}</a>
+      <a class="btn btn-outline" href="{{ link('products/') }}">{{ t.notfound.products }}</a>
+      <a class="btn btn-outline" href="{{ link('contact/') }}">{{ t.notfound.contact }}</a>
+      <a class="btn btn-outline" href="{{ root }}en/" lang="en">English site</a>
     </div>
   </div>
 </section>

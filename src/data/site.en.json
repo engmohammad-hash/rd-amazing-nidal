@@ -1,0 +1,193 @@
+{
+  "business": {
+    "name": "RD Amazing",
+    "tagline": "Complete Print Solutions",
+    "about_short": "A Dammam print house for every kind of paper and plastic print, and maker of printed paper cups, with luxury finishes worthy of your brand.",
+    "city": "Dammam",
+    "region": "Eastern Province",
+    "country": "Saudi Arabia",
+    "hours": { "label": "Daily 9 am – 9 pm, closed Fridays" }
+  },
+
+  "credit": { "name": "Eng. Mohammad" },
+
+  "nav": [
+    { "label": "Home", "href": "" },
+    { "label": "Products", "href": "products/" },
+    { "label": "Our work", "href": "works/" },
+    { "label": "About", "href": "about/" },
+    { "label": "Reviews", "href": "reviews/" },
+    { "label": "Contact", "href": "contact/" }
+  ],
+
+  "home": {
+    "dots": ["Design", "Print", "Finish", "Deliver"],
+    "hero": {
+      "eyebrow": "RD Amazing Printing",
+      "title": "We print luxury",
+      "lead": "Design, print, finishing and packaging under one roof in Dammam, for prints that carry your name and stay in your client's hand."
+    },
+    "acts": [
+      { "num": "01", "label": "Design", "title": "Every luxury print starts with a considered line", "text": "We sit with you on the idea and turn it into a print-ready file: size, margins, stock and colours, before ink ever touches paper.", "chips": ["A4 · 210×297 mm", "3 mm bleed", "Print-ready PDF"] },
+      { "num": "02", "label": "Print", "title": "Colours that come out as designed", "text": "Carefully calibrated colour, so maroon stays maroon and beige stays beige from the first copy to the thousandth.", "chips": ["CMYK + Pantone", "Offset · Digital", "Stock up to 700 gsm"] },
+      { "num": "03", "label": "Finish", "title": "A touch you can see and feel", "text": "Hot foil in beige and gold, embossing, laser cutting and coloured edges: details that keep your print in hand for longer.", "chips": ["Hot foil", "Embossing", "Coloured edges"] },
+      { "num": "04", "label": "Delivery", "title": "Delivered wrapped, as it deserves", "text": "Every order is wrapped with care and delivered on time across Dammam and the Eastern Province." }
+    ],
+    "why": [
+      { "title": "Every stage under one roof", "text": "Design, print, finishing and packaging in one place, so your order never gets lost between suppliers." },
+      { "title": "Your brand colours, exactly", "text": "We match your logo colours and show you a proof before the full run." },
+      { "title": "Luxury finishes", "text": "Hot foil, embossing, spot UV and coloured edges, for prints you can see and feel." },
+      { "title": "We make the cups", "text": "Printed paper cups in your design for cafés, restaurants and events, from manufacturing to print." }
+    ],
+    "steps": [
+      { "title": "Reach out", "text": "Send us your idea or file on WhatsApp." },
+      { "title": "Design and approval", "text": "We prepare the design and a proof and sign it off with you." },
+      { "title": "Print and finish", "text": "Produced with the stocks and finishes we agreed." },
+      { "title": "Wrap and deliver", "text": "We wrap your order and deliver it on time." }
+    ]
+  },
+
+  "products": [
+    {
+      "name": "Business cards", "tag": "Identity",
+      "short": "Thick-stock cards with luxury finishes that impress from the first touch.",
+      "description": "Luxury business card printing in Dammam: thick stock, hot foil, embossing and coloured edges.",
+      "hero": { "title": "A first impression you can hold", "lead": "Business cards on thick stock with luxury finishes, staying in your client's wallet long after the meeting." },
+      "acts": [
+        { "num": "01", "label": "Stock", "title": "A thickness you feel at first touch", "text": "Art card, cotton paper or duplexed two-layer card, from 350 to 700 gsm.", "chips": ["Matte", "Cotton feel", "Duplexed"] },
+        { "num": "02", "label": "Finish", "title": "Foil that catches the light", "text": "Beige and gold hot foil, embossing, and spot UV that lifts the logo off a matte surface.", "chips": ["Hot foil", "Embossing", "Spot UV"] },
+        { "num": "03", "label": "Range", "title": "A card that looks like your brand", "text": "Coloured edges, rounded corners and custom die-cuts. We design with you from scratch or print your file as it is.", "chips": ["Coloured edges", "Rounded corners", "Custom cut"] }
+      ],
+      "specs": [
+        { "label": "Stock", "items": ["Art card 350 gsm", "Cotton paper 600 gsm", "Duplexed card 700 gsm"] },
+        { "label": "Size", "items": ["9 × 5 cm", "8.5 × 5.5 cm", "Custom size"] },
+        { "label": "Finish", "items": ["Matte or gloss lamination", "Hot foil", "Embossing", "Spot UV", "Coloured edges"] }
+      ]
+    },
+    {
+      "name": "Incense boxes", "tag": "Packaging",
+      "short": "Rigid boxes with hot-foil Islamic patterns and a lining that cradles incense and perfume.",
+      "description": "Luxury incense and oud box making and printing in Dammam: rigid board, magnetic lid, hot-foil patterns and velvet lining.",
+      "hero": { "title": "A box worthy of oud", "lead": "Rigid boxes wrapped in fine paper, with patterns in hot foil and a lining that cradles incense and perfume." },
+      "acts": [
+        { "num": "01", "label": "Structure", "title": "Rigid board that never bends", "text": "A solid shell wrapped in textured paper, with a lid that closes firmly and opens smoothly.", "chips": ["Rigid board", "Magnetic lid", "Textured paper"] },
+        { "num": "02", "label": "Pattern", "title": "Islamic patterns with a quiet shine", "text": "Eight-point stars and geometric patterns in beige hot foil on matte maroon, around your logo.", "chips": ["Hot foil", "Embossed pattern", "Custom design"] },
+        { "num": "03", "label": "Inside", "title": "A lining that holds the product", "text": "Inserts cut to your incense pieces or perfume bottles, in velvet in your brand colour.", "chips": ["Velvet lining", "Made-to-fit inserts", "Room for a bottle"] }
+      ],
+      "specs": [
+        { "label": "Structure", "items": ["Rigid board", "Magnetic lid", "Drawer box", "Separate lid"] },
+        { "label": "Wrap", "items": ["Textured paper", "Velvet paper", "Faux leather"] },
+        { "label": "Finish", "items": ["Hot foil", "Embossing", "Spot UV"] },
+        { "label": "Inside", "items": ["Velvet lining", "Foam insert", "Card dividers"] }
+      ]
+    },
+    {
+      "name": "Sweet boxes", "tag": "Packaging",
+      "short": "Sweet, date and chocolate boxes with a smooth drawer and a slot for every piece.",
+      "description": "Luxury sweet, date and chocolate box printing in Dammam: drawer box, inner dividers, satin ribbon and hot foil.",
+      "hero": { "title": "A gift that begins before it opens", "lead": "Sweet, date and chocolate boxes with a drawer that glides out and slots that keep every piece in place." },
+      "acts": [
+        { "num": "01", "label": "Box", "title": "An elegant sleeve and a gliding drawer", "text": "An outer sleeve with an inner drawer and a satin pull that makes opening easy and adds luxury.", "chips": ["Drawer box", "Satin pull", "Fine paper"] },
+        { "num": "02", "label": "Slots", "title": "A place for every piece", "text": "Inner dividers to the number and size of your pieces, keeping chocolates and dates from moving.", "chips": ["Slots to count", "Card dividers", "Confectionery paper"] },
+        { "num": "03", "label": "Occasion", "title": "Ramadan, Eid and weddings", "text": "Designs for the seasons and occasions, with the family or company name.", "chips": ["Ramadan", "Eid", "Weddings"] }
+      ],
+      "specs": [
+        { "label": "Shape", "items": ["Drawer box", "Separate lid", "Window box"] },
+        { "label": "Slots", "items": ["9 slots", "16 slots", "25 slots", "To order"] },
+        { "label": "Finish", "items": ["Hot foil", "Satin ribbon", "Matte lamination"] }
+      ]
+    },
+    {
+      "name": "Luxury bags", "tag": "Packaging",
+      "short": "Rigid paper bags with rope or ribbon handles that show your logo at every step.",
+      "description": "Luxury paper bag printing in Dammam: rigid stock, cotton rope or satin ribbon handles, matte lamination and hot foil.",
+      "hero": { "title": "Your brand walks the street", "lead": "Rigid paper bags with rope or ribbon handles that carry your product and show your logo at every step." },
+      "acts": [
+        { "num": "01", "label": "Stock", "title": "A bag that carries weight with grace", "text": "Art or kraft stock with a board base, holding heavy boxes without losing its shape.", "chips": ["Art paper", "Kraft", "Board base"] },
+        { "num": "02", "label": "Finish", "title": "A logo that shines on matte", "text": "Matte lamination with a hot-foil logo, and tissue paper inside in your brand colour.", "chips": ["Matte lamination", "Hot foil", "Tissue paper"] },
+        { "num": "03", "label": "Colours", "title": "Exactly your brand's colour", "text": "Maroon, cream, charcoal or any colour you choose, with a cotton rope or satin ribbon to match.", "chips": ["Cotton rope", "Satin ribbon", "Die-cut handle"] }
+      ],
+      "specs": [
+        { "label": "Stock", "items": ["Art 250 gsm", "Brown or white kraft", "Textured paper"] },
+        { "label": "Handle", "items": ["Cotton rope", "Satin ribbon", "Die-cut handle"] },
+        { "label": "Finish", "items": ["Matte or gloss lamination", "Hot foil", "Embossing"] }
+      ]
+    },
+    {
+      "name": "Wedding invitations", "tag": "Occasions",
+      "short": "Invitations in Arabic calligraphy on cotton paper, in envelopes sealed with wax.",
+      "description": "Luxury wedding and event invitation printing in Dammam: cotton paper, Arabic calligraphy, hot foil and wax-sealed envelopes.",
+      "hero": { "title": "An invitation opened with joy", "lead": "Invitations in authentic Arabic calligraphy on cotton paper, in wax-sealed envelopes, for your most beautiful days." },
+      "acts": [
+        { "num": "01", "label": "Envelope", "title": "A wax seal that keeps the surprise", "text": "An envelope lined with patterned paper, and a wax seal in the colour of the occasion with the couple's initials.", "chips": ["Lined envelope", "Wax seal", "Couple's initials"] },
+        { "num": "02", "label": "Card", "title": "Calligraphy and gleaming foil", "text": "Thick cotton paper, a design in Arabic calligraphy, and hot foil for the names and details.", "chips": ["Cotton paper", "Arabic calligraphy", "Hot foil"] },
+        { "num": "03", "label": "Details", "title": "Everything the occasion needs", "text": "Table cards, thank-you cards and favour boxes, all in the same design.", "chips": ["Table cards", "Thank-you cards", "Favour boxes"] }
+      ],
+      "specs": [
+        { "label": "Card", "items": ["Cotton paper", "Textured paper", "Clear acrylic"] },
+        { "label": "Envelope", "items": ["Lined envelope", "Wax seal", "Satin ribbon"] },
+        { "label": "Finish", "items": ["Hot foil", "Embossing", "Laser cut"] }
+      ]
+    },
+    {
+      "name": "Printed paper cups", "tag": "Manufacturing",
+      "short": "We manufacture paper cups for hot and cold drinks and print them with your design.",
+      "description": "Paper cup manufacturing and printing in Dammam for cafés, restaurants and events: single or double wall, lids and sleeves.",
+      "hero": { "title": "Your logo in every sip", "lead": "We manufacture paper cups for hot and cold drinks, printed with your design for cafés, restaurants and events." },
+      "acts": [
+        { "num": "01", "label": "Making", "title": "We make them, not just print them", "text": "Single or double wall paper cups, in sizes for coffee, tea and juice.", "chips": ["Single wall", "Double wall", "Several sizes"] },
+        { "num": "02", "label": "Print", "title": "A design that wraps the cup", "text": "Food-safe inks, with a design that runs all the way around the cup.", "chips": ["Food-safe inks", "Full wrap", "Brand colours"] },
+        { "num": "03", "label": "Range", "title": "Lids, sleeves and sizes", "text": "Lids and printed heat sleeves, in small, medium and large in the same design.", "chips": ["Lids", "Heat sleeves", "3 sizes"] }
+      ],
+      "specs": [
+        { "label": "Wall", "items": ["Single", "Double", "Ripple"] },
+        { "label": "Size", "items": ["4 oz", "8 oz", "12 oz", "16 oz"] },
+        { "label": "Extras", "items": ["Lids", "Heat sleeves", "Cup carriers"] }
+      ]
+    },
+    {
+      "name": "Stickers and labels", "tag": "Products",
+      "short": "Labels on rolls or sheets, die-cut to shape, for boxes, jars and gifts.",
+      "description": "Sticker and label printing in Dammam: rolls or sheets, die-cut to shape, paper, clear or waterproof.",
+      "hero": { "title": "The label that completes your product", "lead": "Labels on rolls or sheets, die-cut to shape, for boxes, jars, bags and gifts." },
+      "acts": [
+        { "num": "01", "label": "Roll", "title": "A roll ready for fast packing", "text": "Labels on a roll that peel off one by one, made for packing lines and shops.", "chips": ["Roll", "Sheet", "Die-cut"] },
+        { "num": "02", "label": "Material", "title": "Paper, clear or waterproof", "text": "Paper, gloss, clear and plastic materials that resist water and oil.", "chips": ["Paper", "Clear", "Waterproof"] },
+        { "num": "03", "label": "On product", "title": "Sticks and stays", "text": "Strong adhesive for glass, plastic and board, with a precise cut that follows the design.", "chips": ["Glass", "Plastic", "Board"] }
+      ],
+      "specs": [
+        { "label": "Format", "items": ["Roll", "Sheet", "Die-cut to shape"] },
+        { "label": "Material", "items": ["Paper", "Gloss", "Clear", "Waterproof"] },
+        { "label": "Finish", "items": ["Hot foil", "Gloss or matte", "Precise cut"] }
+      ]
+    }
+  ],
+
+  "vision2030": {
+    "title": "Proud to support Saudi Vision 2030",
+    "text": "We are proud to be part of the Kingdom's industrial renaissance: we print and manufacture in Dammam, and help Saudi small and medium businesses stand out with a professional identity that competes.",
+    "points": [
+      { "title": "Local manufacturing", "text": "Printing and manufacturing inside the Kingdom instead of importing." },
+      { "title": "Backing entrepreneurs", "text": "A professional printed identity, starting from quantities that suit new businesses." },
+      { "title": "Quality that competes", "text": "Stocks and finishes to the standard Saudi brands deserve." }
+    ]
+  },
+
+  "reviews_note": "These are sample reviews to show the page layout; they will be replaced with real client reviews.",
+  "reviews": [
+    { "name": "Café owner", "role": "Printed paper cups", "text": "The cups came out in exactly our logo colours, and customers started photographing and sharing them.", "stars": 5 },
+    { "name": "Perfume and incense shop", "role": "Incense boxes", "text": "The Islamic pattern in hot foil gave the product a value above its price.", "stars": 5 },
+    { "name": "A bride", "role": "Wedding invitations", "text": "The wax-sealed invitations were the most beautiful detail of the wedding, and every guest kept theirs.", "stars": 5 },
+    { "name": "A start-up", "role": "Business cards", "text": "The duplexed card with coloured edges became our identity, and delivery was on time.", "stars": 5 },
+    { "name": "Sweet shop", "role": "Sweet boxes", "text": "The drawer box with slots kept the chocolates safe and looked like a luxury gift.", "stars": 5 },
+    { "name": "Online store", "role": "Stickers", "text": "The label roll saved us a lot of packing time, and the cut is very precise.", "stars": 5 }
+  ],
+
+  "faq": [
+    { "q": "How do I request a quote?", "a": "Send us the product, quantity and size on WhatsApp and we will reply with a clear quote during working hours." },
+    { "q": "Do you design, or do I send a ready file?", "a": "Both. We design with you from the idea, or print your file as it is after checking it for print." },
+    { "q": "Which file format is best for print?", "a": "A high-resolution PDF in CMYK with a 3 mm bleed, or the open design file." },
+    { "q": "Do you show a proof before the full run?", "a": "Yes, we send you a proof to approve before producing the quantity." },
+    { "q": "Where are you?", "a": "In Dammam, and we deliver across Dammam and the Eastern Province." }
+  ]
+}

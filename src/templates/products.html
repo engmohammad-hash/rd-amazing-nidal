@@ -1,15 +1,15 @@
 {% extends "base.html" %}
 {% import "partials/macros.html" as m %}
 {% block main %}
-{{ m.band('منتجاتنا', 'من كرت التعريف إلى علبة الهدية والكوب الذي يحمل شعارك: كل ما تطبعه علامتك، بتشطيبات فاخرة.', [('الرئيسية', ''), ('منتجاتنا', none)], link) }}
-<section class="light-zone section" aria-label="قائمة المنتجات">
+{{ m.band(t.products.title, t.products.lead, [(t.crumb_home, ''), (t.products.title, none)], link) }}
+<section class="light-zone section" aria-label="{{ t.products.aria }}">
   <div class="wrap">
     <ul class="products">
-      {% for p in products %}{{ m.product_card(p, link, root, 'h2') }}{% endfor %}
+      {% for p in products %}{{ m.product_card(p, link, root, t, 'h2') }}{% endfor %}
       <li class="product-cta">
-        <h2>تبحث عن مطبوعة أخرى؟</h2>
-        <p>فواتير، أختام، بروشورات، لوحات، تغليف بمقاس خاص… أخبرنا بفكرتك ونقترح عليك الخامة والتشطيب المناسبين.</p>
-        <a class="btn btn-fill" href="{{ wa('مرحباً، أبحث عن مطبوعة غير موجودة في قائمة المنتجات.') }}" target="_blank" rel="noopener">{% include "partials/wa-icon.svg" %} اسألنا عبر واتساب</a>
+        <h2>{{ t.products.cta_title }}</h2>
+        <p>{{ t.products.cta_text }}</p>
+        <a class="btn btn-fill" href="{{ wa(t.products.cta_msg) }}" target="_blank" rel="noopener">{% include "partials/wa-icon.svg" %} {{ t.products.cta_btn }}</a>
       </li>
     </ul>
   </div>

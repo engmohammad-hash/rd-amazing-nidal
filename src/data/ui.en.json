@@ -1,0 +1,141 @@
+{
+  "lang": "en", "dir": "ltr", "locale": "en_US", "prefix": "en/",
+  "arrow": "→", "nums": ["01", "02", "03", "04", "05"],
+  "other": { "lang": "ar", "prefix": "", "name": "العربية", "short": "ع" },
+
+  "skip": "Skip to content",
+  "home_aria": "home page",
+  "nav_aria": "Sections",
+  "menu": "Menu",
+  "quote_btn": "Request a quote",
+  "quote_msg": "Hello, I would like a quote.",
+  "drawer_quote": "Request a quote on WhatsApp",
+  "call": "Call us",
+  "theme_dark": "Dark mode",
+  "theme_light": "Light mode",
+  "lang_switch": "العربية",
+  "to_top": "Back to top",
+  "wa_float": "Chat on WhatsApp",
+  "wa_float_msg": "Hello, I would like to ask about your services.",
+  "crumb_home": "Home",
+  "stars_of": "out of 5",
+
+  "cta": {
+    "title": "Ready for your next print?",
+    "text": "Send us your idea or file on WhatsApp and we will reply with a clear quote during working hours.",
+    "wa": "Chat on WhatsApp",
+    "browse": "Browse our products"
+  },
+  "foot": {
+    "vision": "Proud to support Saudi Vision 2030",
+    "site": "Site", "products": "Products", "contact": "Contact",
+    "wa": "WhatsApp", "call": "Call", "ig": "Instagram", "hello": "Hello",
+    "year": "2026",
+    "credit": "Website designed and developed by"
+  },
+  "story": { "stages": "Stages", "cue": "Scroll to begin" },
+  "card": { "by": "by RD Amazing", "more": "Explore" },
+
+  "home": {
+    "label": "The journey of a print",
+    "products_eyebrow": "What we print", "products_title": "Prints made to be kept",
+    "products_lead": "Choose a product and we will suggest the stock and finish that suit your taste and budget.",
+    "all_products": "All products",
+    "why_eyebrow": "Why RD Amazing", "why_title": "Everything your print needs, in one place",
+    "steps_eyebrow": "How we work", "steps_title": "From your idea to your hand in four steps",
+    "vision_eyebrow": "Vision 2030", "read_more": "Read more",
+    "vision_alt": "A luxury incense box with an Islamic star pattern by RD Amazing",
+    "reviews_eyebrow": "Reviews", "reviews_title": "What our clients say", "all_reviews": "All reviews"
+  },
+  "product": {
+    "order_msg": "Hello, I would like a quote for {name}.",
+    "order": "Order {name}", "see_works": "See our work",
+    "specs_title": "{name}: options",
+    "specs_lead": "Tell us the quantity and size and we will suggest the best fit.",
+    "order_wa": "Order on WhatsApp", "quote_form": "Quote request form", "reply": "We reply during working hours:",
+    "gallery_eyebrow": "Gallery", "gallery_title": "{name} from our studio", "photo": "photo",
+    "note": "Illustrative renders of the designs; they will be replaced with photos of our finished work.",
+    "more_eyebrow": "More products", "more_title": "You may also like"
+  },
+  "products": {
+    "title": "Our products",
+    "lead": "From the business card to the gift box and the cup that carries your logo: everything your brand prints, with luxury finishes.",
+    "aria": "Product list",
+    "cta_title": "Looking for something else?",
+    "cta_text": "Invoices, stamps, brochures, signs, custom-size packaging… tell us your idea and we will suggest the right stock and finish.",
+    "cta_btn": "Ask us on WhatsApp",
+    "cta_msg": "Hello, I am looking for a print that is not in your product list."
+  },
+  "works": {
+    "title": "Our work",
+    "lead": "Cards, boxes, bags, invitations, cups and stickers from our studio. Pick a category and tap any image to see it in full.",
+    "aria": "Gallery", "filters": "Filter the gallery", "all": "All"
+  },
+  "about": {
+    "title": "About us",
+    "story_eyebrow": "Our story", "story_title": "Complete printing under one roof",
+    "story_p1": "At {name} we believe a print is part of its owner's identity. So we follow every order from the first idea to delivery: we design, print, finish and package in one place in {city}.",
+    "story_p2": "We print on paper, board and plastic, manufacture and print paper cups, and work with cafés, shops, companies and families on their occasions.",
+    "story_alt": "Luxury-finish business cards by RD Amazing",
+    "values_eyebrow": "What sets us apart", "values_title": "Why our clients come back",
+    "vision_eyebrow": "Vision 2030", "vision_numeral": "2030"
+  },
+  "reviews": {
+    "title": "Client reviews",
+    "lead": "What café owners, shops and families say once their prints arrive.",
+    "ig": "See our work on Instagram",
+    "share": "Share your feedback", "share_msg": "Hello, I would like to share feedback on my order."
+  },
+  "contact": {
+    "title": "Contact us",
+    "lead": "Send us your idea or file and we will reply with a clear quote during working hours.",
+    "aria": "Ways to reach us",
+    "wa": "WhatsApp", "wa_note": "Fastest for replies and files", "wa_msg": "Hello, I would like to ask about your services.",
+    "call": "Phone",
+    "email": "Email", "email_note": "For large files and formal quotes",
+    "ig": "Instagram", "ig_note": "Our latest work",
+    "where": "Location", "where_note": "Open in Google Maps",
+    "quote": "Quote", "quote_card": "Request form", "quote_note": "Fill in the details and send them on WhatsApp",
+    "form_title": "Request a quote", "form_hint": "Fill in what you know and a ready WhatsApp message will open with your request.",
+    "f_product": "Product", "f_pick": "Choose a product", "f_other": "Something else",
+    "f_qty": "Quantity", "f_qty_ph": "e.g. 500",
+    "f_size": "Size", "f_size_ph": "e.g. 9 × 5 cm",
+    "f_finish": "Finish", "f_finish_ph": "Hot foil, matte lamination…",
+    "f_name": "Name",
+    "f_notes": "Notes", "f_notes_ph": "Colours, delivery date, anything else",
+    "f_send": "Send on WhatsApp",
+    "hours_title": "Opening hours", "hours_caption": "Opening hours, Saudi time",
+    "days": [[6, "Saturday"], [0, "Sunday"], [1, "Monday"], [2, "Tuesday"], [3, "Wednesday"], [4, "Thursday"], [5, "Friday"]],
+    "hours_range": "9 am – 9 pm", "closed": "Closed",
+    "tz": "Saudi Arabia time.",
+    "faq_eyebrow": "FAQ", "faq_title": "Before you order"
+  },
+  "notfound": {
+    "title": "Page not found",
+    "lead": "The link may have changed or the page was removed. Head back home or browse our products.",
+    "aria": "Suggested links", "home": "Home page", "products": "Our products", "contact": "Contact us"
+  },
+  "meta": {
+    "home_title": "{name} | Luxury printing in {city}",
+    "home_desc": "A Dammam print house for business cards, incense and sweet boxes, luxury bags, wedding invitations, printed paper cups and stickers, with luxury finishes.",
+    "products_title": "Products | {name}",
+    "products_desc": "Business cards, incense and sweet boxes, luxury bags, wedding invitations, printed paper cups and stickers from RD Amazing in Dammam.",
+    "product_title": "{product} in {city} | {name}",
+    "works_title": "Our work | {name}",
+    "works_desc": "The RD Amazing gallery in Dammam: cards, incense and sweet boxes, bags, invitations, paper cups and stickers.",
+    "about_title": "About us | {name}",
+    "about_desc_extra": " Proud to support Saudi Vision 2030 with local manufacturing.",
+    "reviews_title": "Reviews | {name}",
+    "reviews_desc": "What RD Amazing clients in Dammam say about our cards, boxes, bags, invitations, cups and stickers.",
+    "contact_title": "Contact | {name}",
+    "contact_desc": "Reach RD Amazing in Dammam on WhatsApp {phone}, {hours}.",
+    "notfound_title": "Page not found | {name}",
+    "notfound_desc": "The page you asked for does not exist."
+  },
+  "js": {
+    "open": "Open now", "closed": "Closed now",
+    "lightbox": "Image viewer", "close": "Close", "prev": "Previous", "next": "Next",
+    "quote_intro": "Hello, I would like a quote:",
+    "fields": { "product": "Product", "qty": "Quantity", "size": "Size", "finish": "Finish", "name": "Name", "notes": "Notes" }
+  }
+}

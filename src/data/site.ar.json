@@ -17,6 +17,8 @@
     "base_url": "https://engmohammad-hash.github.io/rd-amazing-nidal/"
   },
 
+  "credit": { "name": "م. محمد" },
+
   "nav": [
     { "label": "الرئيسية", "href": "" },
     { "label": "منتجاتنا", "href": "products/" },

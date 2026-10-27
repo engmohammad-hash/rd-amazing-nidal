@@ -1,52 +1,46 @@
 {% extends "base.html" %}
 {% import "partials/macros.html" as m %}
 {% block main %}
-{% set order_text = 'مرحباً، أود طلب عرض سعر لـ ' ~ p.name ~ '.' %}
-{% set order_html %}<a class="btn btn-fill" href="{{ wa(order_text) }}" target="_blank" rel="noopener">اطلب {{ p.name }} ←</a><a class="btn btn-line" href="#gallery">شاهد الأعمال</a>{% endset %}
+{% set order_text = t.product.order_msg | fill(name=p.name) %}
+{% set order_html %}<a class="btn btn-fill" href="{{ wa(order_text) }}" target="_blank" rel="noopener">{{ t.product.order | fill(name=p.name) }} {{ t.arrow }}</a><a class="btn btn-line" href="#gallery">{{ t.product.see_works }}</a>{% endset %}
 {% set hero = {'eyebrow': p.name, 'title': p.hero.title, 'lead': p.hero.lead, 'actions': order_html} %}
-{{ m.story(p.scene, film.frames, film.height, film.starts, p.acts | map(attribute='label') | list, hero, acts, p.name, root, order_html) }}
+{{ m.story(p.scene, film.frames, film.height, film.starts, p.acts | map(attribute='label') | list, hero, acts, p.name, root, t, order_html) }}
 
 <section class="light-zone section" aria-labelledby="specs-title">
   <div class="wrap">
     <header class="head">
-      <ol class="crumbs" style="color:var(--beige-deep)"><li><a href="{{ link('') }}">الرئيسية</a></li><li><a href="{{ link('products/') }}">منتجاتنا</a></li><li>{{ p.name }}</li></ol>
-      <h2 id="specs-title">مواصفات {{ p.name }}</h2>
-      <p>{{ p.short }} أخبرنا بالكمية والمقاس، ونقترح عليك الخيار الأنسب.</p>
+      <ol class="crumbs accent"><li><a href="{{ link('') }}">{{ t.crumb_home }}</a></li><li><a href="{{ link('products/') }}">{{ t.products.title }}</a></li><li>{{ p.name }}</li></ol>
+      <h2 id="specs-title">{{ t.product.specs_title | fill(name=p.name) }}</h2>
+      <p>{{ p.short }} {{ t.product.specs_lead }}</p>
     </header>
     <div class="specs">
       {% for s in p.specs %}<div class="spec"><h3>{{ s.label }}</h3><ul>{% for i in s['items'] %}<li>{{ i }}</li>{% endfor %}</ul></div>{% endfor %}
     </div>
     <div class="order-row">
-      <a class="btn btn-maroon" href="{{ wa(order_text) }}" target="_blank" rel="noopener">{% include "partials/wa-icon.svg" %} اطلب عبر واتساب</a>
-      <a class="btn btn-outline" href="{{ link('contact/') }}#quote">نموذج طلب عرض سعر</a>
-      <small>نرد خلال ساعات العمل: {{ b.hours.label }}</small>
+      <a class="btn btn-maroon" href="{{ wa(order_text) }}" target="_blank" rel="noopener">{% include "partials/wa-icon.svg" %} {{ t.product.order_wa }}</a>
+      <a class="btn btn-outline" href="{{ link('contact/') }}#quote">{{ t.product.quote_form }}</a>
+      <small>{{ t.product.reply }} {{ b.hours.label }}</small>
     </div>
   </div>
 </section>
 
 <section class="light-zone alt section" id="gallery" aria-labelledby="gallery-title">
   <div class="wrap">
-    <header class="head">
-      <p class="eyebrow"><span>معرض الأعمال</span><span class="rule"></span></p>
-      <h2 id="gallery-title">{{ p.name }} من أعمالنا</h2>
-    </header>
+    {{ m.head(t.product.gallery_eyebrow, t.product.gallery_title | fill(name=p.name), 'gallery-title') }}
     <ul class="gallery">
       {% for i in range(1, 7) %}{% set n = '%02d'|format(i) %}
-      <li><button type="button" data-full="{{ root }}gallery/{{ p.scene }}/{{ n }}.jpg" data-cap="{{ p.name }} · {{ i }}"><img src="{{ root }}gallery/{{ p.scene }}/{{ n }}-thumb.jpg" alt="{{ p.name }} من مطابع روعة التصاميم، صورة {{ i }}" width="720" height="540" loading="lazy"></button></li>
+      <li><button type="button" data-full="{{ root }}gallery/{{ p.scene }}/{{ n }}.jpg" data-cap="{{ p.name }} · {{ i }}"><img src="{{ root }}gallery/{{ p.scene }}/{{ n }}-thumb.jpg" alt="{{ p.name }} {{ t.card.by }}, {{ t.product.photo }} {{ i }}" width="720" height="540" loading="lazy"></button></li>
       {% endfor %}
     </ul>
-    <p class="note">صور توضيحية مرسومة للتصميم، وستُستبدل بصور أعمالنا الفعلية.</p>
+    <p class="note">{{ t.product.note }}</p>
   </div>
 </section>
 
 <section class="light-zone section" aria-labelledby="more-title">
   <div class="wrap">
-    <header class="head">
-      <p class="eyebrow"><span>منتجات أخرى</span><span class="rule"></span></p>
-      <h2 id="more-title">قد يعجبك أيضاً</h2>
-    </header>
+    {{ m.head(t.product.more_eyebrow, t.product.more_title, 'more-title') }}
     <ul class="products">
-      {% for o in related %}{{ m.product_card(o, link, root) }}{% endfor %}
+      {% for o in related %}{{ m.product_card(o, link, root, t) }}{% endfor %}
     </ul>
   </div>
 </section>

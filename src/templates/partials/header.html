@@ -1,22 +1,33 @@
+{% import "partials/icons.html" as ic %}
+{% macro theme_button(extra='') %}<button class="icon-btn theme-btn{{ extra }}" type="button" data-theme-toggle data-label-dark="{{ t.theme_dark }}" data-label-light="{{ t.theme_light }}" aria-label="{{ t.theme_dark }}"><span class="i-moon">{{ ic.icon('moon') }}</span><span class="i-sun">{{ ic.icon('sun') }}</span></button>{% endmacro %}
 <header class="hdr" id="hdr">
   <div class="hdr-in">
-    <a class="brand" href="{{ link('') }}" aria-label="{{ b.name }}، الصفحة الرئيسية">
+    <a class="brand" href="{{ link('') }}" aria-label="{{ b.name }}{{ '، ' if lang == 'ar' else ', ' }}{{ t.home_aria }}">
       <span class="brand-mark">
         <img class="on-dark" src="{{ root }}assets/img/logo-beige.png" alt="" width="46" height="50">
         <img class="on-light" src="{{ root }}assets/img/logo-color.png" alt="" width="46" height="50">
       </span>
       <span class="brand-name"><b>{{ b.name }}</b><small>{{ b.tagline }} · {{ b.city }}</small></span>
     </a>
-    <nav class="nav" aria-label="الأقسام">
+    <nav class="nav" aria-label="{{ t.nav_aria }}">
       {% for n in nav %}<a href="{{ link(n.href) }}"{% if n.href == section %} aria-current="page"{% endif %}>{{ n.label }}</a>
       {% endfor %}
     </nav>
-    <a class="btn btn-line" href="{{ wa('مرحباً، أود طلب عرض سعر.') }}" target="_blank" rel="noopener">اطلب عرض سعر</a>
-    <button class="menu-btn" id="menu-btn" type="button" aria-label="القائمة" aria-expanded="false" aria-controls="drawer"><span></span><span></span><span></span></button>
+    <div class="hdr-tools">
+      <a class="lang-btn" href="{{ alt_link }}" hreflang="{{ t.other.lang }}" lang="{{ t.other.lang }}" aria-label="{{ t.lang_switch }}">{{ t.other.short }}</a>
+      {{ theme_button() }}
+    </div>
+    <a class="btn btn-line hdr-quote" href="{{ wa(t.quote_msg) }}" target="_blank" rel="noopener">{{ t.quote_btn }}</a>
+    <button class="menu-btn" id="menu-btn" type="button" aria-label="{{ t.menu }}" aria-expanded="false" aria-controls="drawer"><span></span><span></span><span></span></button>
+    <a class="icon-btn call-btn" href="tel:{{ b.phone }}" aria-label="{{ t.call }}: {{ b.phone_display }}">{{ ic.icon('phone') }}</a>
   </div>
 </header>
-<nav class="drawer" id="drawer" aria-label="القائمة">
+<nav class="drawer" id="drawer" aria-label="{{ t.menu }}">
   {% for n in nav %}<a href="{{ link(n.href) }}">{{ n.label }}</a>
   {% endfor %}
-  <a class="btn btn-fill" href="{{ wa('مرحباً، أود طلب عرض سعر.') }}" target="_blank" rel="noopener">اطلب عرض سعر عبر واتساب</a>
+  <div class="drawer-tools">
+    <a class="btn btn-fill" href="{{ wa(t.quote_msg) }}" target="_blank" rel="noopener">{{ t.drawer_quote }}</a>
+    <a class="lang-btn" href="{{ alt_link }}" hreflang="{{ t.other.lang }}" lang="{{ t.other.lang }}">{{ t.lang_switch }}</a>
+    {{ theme_button() }}
+  </div>
 </nav>

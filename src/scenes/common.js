@@ -1,7 +1,8 @@
 /* What every scene shares: renderer, studio lighting, maroon backdrop with the logo rings and a calligraphic
    watermark word, drifting dust, canvas helpers, and the layout that puts the object where the page copy is not.
-   Scenes are rendered offline into frames by src/render.html; visitors never run this code. */
-import * as THREE from 'https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js';
+   Scenes are rendered offline into frames by src/render.html, and drawn live by static/js/live.js on devices
+   fast enough for it. 'three' comes from the page's import map (static/vendor/three.module.min.js, r160). */
+import * as THREE from 'three';
 export { THREE };
 
 export const clamp = (v, a = 0, b = 1) => Math.min(b, Math.max(a, v));
@@ -91,9 +92,12 @@ export const PALETTE = {
   beige: '#D6C1A0', beigeLight: '#EADCC2', beigeDeep: '#B99C70', cream: '#F4ECDF', ink: '#2B0716',
 };
 
-export async function createStage(canvas, { assets }) {
-  const context = canvas.getContext('webgl2', { alpha: false, antialias: true, preserveDrawingBuffer: true });
-  const renderer = new THREE.WebGLRenderer({ canvas, context, antialias: true, preserveDrawingBuffer: true });
+export async function createStage(canvas, { assets, live = false }) {
+  // offline renders read every frame back, so they keep the drawing buffer; a live page never reads it
+  const opts = { alpha: false, antialias: true, preserveDrawingBuffer: !live, powerPreference: live ? 'high-performance' : 'default' };
+  const context = canvas.getContext('webgl2', opts);
+  if (!context) throw new Error('no webgl2');
+  const renderer = new THREE.WebGLRenderer({ canvas, context, antialias: true, preserveDrawingBuffer: !live });
   renderer.setPixelRatio(1);
   renderer.outputColorSpace = THREE.SRGBColorSpace;
   renderer.toneMapping = THREE.ACESFilmicToneMapping;
@@ -166,6 +170,7 @@ export async function createStage(canvas, { assets }) {
   const bgC = cnv(16, 16), bgTex = colorTex(bgC);
   scene.background = bgTex;
   function paintBackground(W, H, cx, cy, look) {
+    if (live) { W = Math.ceil(W / 2); H = Math.ceil(H / 2); }
     bgC.width = W; bgC.height = H;
     const g = bgC.getContext('2d'), x = cx * W, y = cy * H;
     const gr = g.createRadialGradient(x, y, 0, x, y, Math.max(W, H) * 1.05);

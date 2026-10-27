@@ -1,5 +1,5 @@
 {# The sticky scroll film with its copy panels. `hero` is the opening panel, `acts` the panels that follow. #}
-{% macro story(scene, frames, height, starts, labels, hero, acts, label, root, cta_html='') %}
+{% macro story(scene, frames, height, starts, labels, hero, acts, label, root, t, cta_html='') %}
 <section class="story" id="story" data-hero data-scene="{{ scene }}" data-frames="{{ frames }}" data-starts="{{ starts | join(',') }}" style="--len:{{ height }}" aria-label="{{ label }}">
   <div class="stage" id="stage">
     <canvas id="film" class="film" aria-hidden="true"></canvas>
@@ -21,23 +21,23 @@
       </article>
       {% endfor %}
     </div>
-    <ol class="dots" id="dots" aria-label="المراحل">
-      {% for l in labels %}<li><button type="button"><span class="num">{{ ['٠١','٠٢','٠٣','٠٤','٠٥'][loop.index0] }}</span><span class="bar"></span><span class="lbl">{{ l }}</span></button></li>
+    <ol class="dots" id="dots" aria-label="{{ t.story.stages }}">
+      {% for l in labels %}<li><button type="button"><span class="num">{{ t.nums[loop.index0] }}</span><span class="bar"></span><span class="lbl">{{ l }}</span></button></li>
       {% endfor %}
     </ol>
-    <div class="cue" id="cue" aria-hidden="true"><span>مرّر لتبدأ</span><span class="line"></span></div>
+    <div class="cue" id="cue" aria-hidden="true"><span>{{ t.story.cue }}</span><span class="line"></span></div>
   </div>
 </section>
 {% endmacro %}
 
-{% macro product_card(p, link, root, heading='h3') %}
+{% macro product_card(p, link, root, t, heading='h3') %}
 <li class="product">
   <a href="{{ link('products/' ~ p.slug ~ '/') }}">
-    <span class="ph"><img src="{{ root }}gallery/{{ p.scene }}/01-thumb.jpg" alt="{{ p.name }} من مطابع روعة التصاميم" width="720" height="540" loading="lazy"></span>
+    <span class="ph"><img src="{{ root }}gallery/{{ p.scene }}/01-thumb.jpg" alt="{{ p.name }} {{ t.card.by }}" width="720" height="540" loading="lazy"></span>
     <span class="tag">{{ p.tag }}</span>
     <{{ heading }}>{{ p.name }}</{{ heading }}>
     <p>{{ p.short }}</p>
-    <span class="more">اكتشف المنتج ←</span>
+    <span class="more">{{ t.card.more }} {{ t.arrow }}</span>
   </a>
 </li>
 {% endmacro %}
@@ -50,4 +50,12 @@
     {% if lead %}<p>{{ lead }}</p>{% endif %}
   </div>
 </section>
+{% endmacro %}
+
+{% macro head(eyebrow, title, id, lead='') %}
+<header class="head">
+  <p class="eyebrow"><span>{{ eyebrow }}</span><span class="rule"></span></p>
+  <h2 id="{{ id }}">{{ title }}</h2>
+  {% if lead %}<p>{{ lead }}</p>{% endif %}
+</header>
 {% endmacro %}

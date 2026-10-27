@@ -1,17 +1,18 @@
 {% extends "base.html" %}
 {% import "partials/macros.html" as m %}
+{% set c = t.contact %}
 {% block main %}
-{{ m.band('تواصل معنا', 'أرسل لنا فكرتك أو ملفك، ونرد عليك بعرض سعر واضح خلال ساعات العمل.', [('الرئيسية', ''), ('تواصل معنا', none)], link) }}
+{{ m.band(c.title, c.lead, [(t.crumb_home, ''), (c.title, none)], link) }}
 
-<section class="light-zone section" aria-label="طرق التواصل">
+<section class="light-zone section" aria-label="{{ c.aria }}">
   <div class="wrap">
     <div class="contact-grid">
-      <a class="contact-card" href="{{ wa('مرحباً، أود الاستفسار عن خدماتكم.') }}" target="_blank" rel="noopener"><span class="k">واتساب</span><span class="v">{{ b.phone_display }}</span><small>الأسرع للرد وإرسال الملفات</small></a>
-      <a class="contact-card" href="tel:{{ b.phone }}"><span class="k">اتصال</span><span class="v">{{ b.phone_display }}</span><small>{{ b.hours.label }}</small></a>
-      <a class="contact-card" href="mailto:{{ b.email }}"><span class="k">البريد الإلكتروني</span><span class="v">{{ b.email }}</span><small>للملفات الكبيرة والعروض الرسمية</small></a>
-      <a class="contact-card" href="https://www.instagram.com/{{ b.instagram }}/" target="_blank" rel="noopener"><span class="k">إنستغرام</span><span class="v">@{{ b.instagram }}</span><small>أحدث أعمالنا</small></a>
-      <a class="contact-card" href="{{ b.maps }}" target="_blank" rel="noopener"><span class="k">الموقع</span><span class="v rtl">{{ b.city }}، {{ b.region }}</span><small>افتح في خرائط Google</small></a>
-      <a class="contact-card" href="#quote"><span class="k">عرض سعر</span><span class="v rtl">نموذج الطلب</span><small>املأ التفاصيل وأرسلها عبر واتساب</small></a>
+      <a class="contact-card" href="{{ wa(c.wa_msg) }}" target="_blank" rel="noopener"><span class="k">{{ c.wa }}</span><span class="v ltr">{{ b.phone_display }}</span><small>{{ c.wa_note }}</small></a>
+      <a class="contact-card" href="tel:{{ b.phone }}"><span class="k">{{ c.call }}</span><span class="v ltr">{{ b.phone_display }}</span><small>{{ b.hours.label }}</small></a>
+      <a class="contact-card" href="mailto:{{ b.email }}"><span class="k">{{ c.email }}</span><span class="v ltr">{{ b.email }}</span><small>{{ c.email_note }}</small></a>
+      <a class="contact-card" href="https://www.instagram.com/{{ b.instagram }}/" target="_blank" rel="noopener"><span class="k">{{ c.ig }}</span><span class="v ltr">@{{ b.instagram }}</span><small>{{ c.ig_note }}</small></a>
+      <a class="contact-card" href="{{ b.maps }}" target="_blank" rel="noopener"><span class="k">{{ c.where }}</span><span class="v">{{ b.city }}{{ '، ' if lang == 'ar' else ', ' }}{{ b.region }}</span><small>{{ c.where_note }}</small></a>
+      <a class="contact-card" href="#quote"><span class="k">{{ c.quote }}</span><span class="v">{{ c.quote_card }}</span><small>{{ c.quote_note }}</small></a>
     </div>
   </div>
 </section>
@@ -19,46 +20,43 @@
 <section class="light-zone alt section" id="quote" aria-labelledby="quote-title">
   <div class="wrap split" style="align-items:start">
     <form class="quote-form" id="quote-form" data-wa="{{ b.whatsapp }}" aria-labelledby="quote-title">
-      <h2 id="quote-title" style="margin:0;font-size:1.5rem;color:var(--maroon)">اطلب عرض سعر</h2>
-      <p class="hint">املأ ما تعرفه، وستُفتح رسالة واتساب جاهزة بطلبك.</p>
-      <label>المنتج
+      <h2 id="quote-title" class="title-sm">{{ c.form_title }}</h2>
+      <p class="hint">{{ c.form_hint }}</p>
+      <label>{{ c.f_product }}
         <select name="product" required>
-          <option value="">اختر المنتج</option>
+          <option value="">{{ c.f_pick }}</option>
           {% for p in products %}<option>{{ p.name }}</option>{% endfor %}
-          <option>منتج آخر</option>
+          <option>{{ c.f_other }}</option>
         </select>
       </label>
       <div class="row">
-        <label>الكمية<input name="qty" inputmode="numeric" placeholder="مثلاً ٥٠٠"></label>
-        <label>المقاس<input name="size" placeholder="مثلاً ٩ × ٥ سم"></label>
+        <label>{{ c.f_qty }}<input name="qty" inputmode="numeric" placeholder="{{ c.f_qty_ph }}"></label>
+        <label>{{ c.f_size }}<input name="size" placeholder="{{ c.f_size_ph }}"></label>
       </div>
-      <label>التشطيب<input name="finish" placeholder="بصمة حرارية، سلوفان مطفي…"></label>
-      <label>الاسم<input name="name" autocomplete="name"></label>
-      <label>ملاحظات<textarea name="notes" placeholder="الألوان، موعد التسليم، أي تفاصيل أخرى"></textarea></label>
-      <button class="btn btn-maroon" type="submit" style="justify-self:start">{% include "partials/wa-icon.svg" %} أرسل عبر واتساب</button>
+      <label>{{ c.f_finish }}<input name="finish" placeholder="{{ c.f_finish_ph }}"></label>
+      <label>{{ c.f_name }}<input name="name" autocomplete="name"></label>
+      <label>{{ c.f_notes }}<textarea name="notes" placeholder="{{ c.f_notes_ph }}"></textarea></label>
+      <button class="btn btn-maroon" type="submit" style="justify-self:start">{% include "partials/wa-icon.svg" %} {{ c.f_send }}</button>
     </form>
     <div class="prose">
-      <h2 style="margin:0;font-size:1.5rem;color:var(--maroon)">ساعات العمل</h2>
+      <h2 class="title-sm">{{ c.hours_title }}</h2>
       <p style="margin:0"><span class="status" data-status>{{ b.hours.label }}</span></p>
       <table class="hours">
-        <caption class="sr-only">ساعات العمل بتوقيت السعودية</caption>
+        <caption class="sr-only">{{ c.hours_caption }}</caption>
         <tbody>
-          {% for d in [(6, 'السبت'), (0, 'الأحد'), (1, 'الاثنين'), (2, 'الثلاثاء'), (3, 'الأربعاء'), (4, 'الخميس'), (5, 'الجمعة')] %}
-          <tr data-day="{{ d[0] }}"><td>{{ d[1] }}</td><td>{% if d[0] == b.hours.closed_day %}إجازة{% else %}٩ صباحاً – ٩ مساءً{% endif %}</td></tr>
+          {% for d in c.days %}
+          <tr data-day="{{ d[0] }}"><td>{{ d[1] }}</td><td>{% if d[0] == b.hours.closed_day %}{{ c.closed }}{% else %}{{ c.hours_range }}{% endif %}</td></tr>
           {% endfor %}
         </tbody>
       </table>
-      <p class="note" style="margin:0">بتوقيت المملكة العربية السعودية.</p>
+      <p class="note" style="margin:0">{{ c.tz }}</p>
     </div>
   </div>
 </section>
 
 <section class="light-zone section" aria-labelledby="faq-title">
   <div class="wrap">
-    <header class="head">
-      <p class="eyebrow"><span>أسئلة شائعة</span><span class="rule"></span></p>
-      <h2 id="faq-title">قبل أن تطلب</h2>
-    </header>
+    {{ m.head(c.faq_eyebrow, c.faq_title, 'faq-title') }}
     <div class="faq">
       {% for f in faq %}<details{% if loop.first %} open{% endif %}><summary>{{ f.q }}</summary><p>{{ f.a }}</p></details>
       {% endfor %}
