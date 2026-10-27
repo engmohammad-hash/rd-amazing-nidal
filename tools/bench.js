@@ -9,7 +9,7 @@
   var wait = function (ms) { return new Promise(function (r) { setTimeout(r, ms); }); };
 
   async function run() {
-    var t0 = performance.now();
+    var t0 = performance.now(), loadedAt = t0;
     while (!document.querySelector('.film.ready') && performance.now() - t0 < 30000) await wait(100);
     var readyAfter = performance.now() - t0;
     await wait(2000);
@@ -39,12 +39,14 @@
     var sorted = gaps.slice().sort(function (a, b) { return a - b; });
     var mean = function (a) { return a.reduce(function (x, y) { return x + y; }, 0) / a.length; };
     var result = {
+      run: (location.search.match(/[?&]run=(\d+)/) || [])[1] || '',
       where: location.host,
       fps: +(1000 / mean(gaps)).toFixed(1),
       p95ms: +sorted[Math.floor(sorted.length * .95)].toFixed(1),
       worstMs: +sorted[sorted.length - 1].toFixed(1),
       longTasks: long.length,
       longestTaskMs: Math.round(Math.max.apply(null, [0].concat(long))),
+      testLoadedAtMs: Math.round(loadedAt),
       filmReadyAfterMs: Math.round(readyAfter),
       smallFramesAtStart: smallAtStart,
       sharpFramesAtStart: fetchedAtStart,

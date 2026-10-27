@@ -16,13 +16,20 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parent.parent
 FRAMES = ROOT / "demo" / "frames"
 SAVE = re.compile(r"^/save/(desktop|mobile)/(\d{3})\.jpg$")
-# set FRAME_SERVER_KBPS (e.g. 130) to imitate a slow connection: all responses share that bandwidth
+# imitate a slow connection: FRAME_SERVER_KBPS (e.g. 130) is the bandwidth all responses share,
+# FRAME_SERVER_RTT_MS (e.g. 300) the wait before each response starts, like a VPN round trip
 KBPS = float(os.environ.get("FRAME_SERVER_KBPS", "0"))
+RTT = float(os.environ.get("FRAME_SERVER_RTT_MS", "0")) / 1000
 PIPE = threading.Lock()
 
 
 class Handler(SimpleHTTPRequestHandler):
     def copyfile(self, source, outputfile):
+        # only the film is slowed: the page and the test script still arrive at once
+        if not self.path.startswith("/demo/frames/"):
+            return super().copyfile(source, outputfile)
+        if RTT:
+            time.sleep(RTT)
         if not KBPS:
             return super().copyfile(source, outputfile)
         data = source.read()

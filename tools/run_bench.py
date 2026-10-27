@@ -29,13 +29,25 @@ EDGE = BROWSERS[browser]
 
 # a test profile of our own, never the visitor's everyday one
 profile = Path(tempfile.gettempdir()) / f"rd-bench-profile-{browser}"
+def close_test_browsers():
+    # a test window left over from an earlier run would answer on the debugging port with its old result
+    subprocess.run([
+        "powershell", "-NoProfile", "-Command",
+        "Get-CimInstance Win32_Process | Where-Object { $_.CommandLine -like '*rd-bench-profile*' } | "
+        "ForEach-Object { try { Stop-Process -Id $_.ProcessId -Force -ErrorAction Stop } catch {} }",
+    ], capture_output=True)
+    time.sleep(2)
+
+
 for run in range(runs):
+    close_test_browsers()
     # empty the profile's own HTTP cache too: Chrome keeps using it even with --disk-cache-dir
     for sub in ("Cache", "Code Cache", "Service Worker"):
         shutil.rmtree(profile / "Default" / sub, ignore_errors=True)
     cache = Path(tempfile.mkdtemp(prefix="rd-bench-cache-"))
+    token = str(int(time.time()))
     sep = "&" if "?" in url.split("#")[0] else "?"
-    page = url.replace("#bench", f"{sep}run={int(time.time())}#bench")
+    page = url.replace("#bench", f"{sep}run={token}#bench")
     edge = subprocess.Popen([
         EDGE, "--no-first-run", "--no-default-browser-check", "--disable-extensions", "--disable-sync",
         "--disable-backgrounding-occluded-windows", "--disable-renderer-backgrounding",
@@ -51,9 +63,10 @@ for run in range(runs):
         except Exception:
             continue
         for t in tabs:
-            if t.get("title", "").startswith("BENCH DONE "):
-                result = t["title"][len("BENCH DONE "):]
+            title = t.get("title", "")
+            if title.startswith("BENCH DONE ") and f'"run":"{token}"' in title.replace("&quot;", '"'):
+                result = title[len("BENCH DONE "):].replace("&quot;", '"')
     subprocess.run(["taskkill", "/F", "/T", "/PID", str(edge.pid)], capture_output=True)
-    time.sleep(3)
+    close_test_browsers()
     shutil.rmtree(cache, ignore_errors=True)
     print(f"run {run + 1} ->", result or "no result (timed out)", flush=True)
