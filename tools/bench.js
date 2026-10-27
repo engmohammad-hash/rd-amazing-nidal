@@ -19,12 +19,13 @@
     try { po.observe({ type: 'longtask' }); } catch (e) {}
 
     var top = story.offsetTop, total = story.offsetHeight - innerHeight;
-    var gaps = [], trail = [], shown0 = S.filmShown || 0, fetchedAtStart = S.filmFetched || 0, dur = 14000;
+    var gaps = [], trail = [], sharpTicks = 0, shown0 = S.filmShown || 0, fetchedAtStart = S.filmFetched || 0, smallAtStart = S.filmSmall || 0, dur = 14000;
     await new Promise(function (resolve) {
       var start = performance.now(), last = start;
       function step(now) {
         gaps.push(now - last); last = now;
         trail.push(S.filmGap || 0);
+        if (S.filmSharp) sharpTicks++;
         var k = Math.min(1, (now - start) / dur);
         var pos = k < .8 ? k / .8 : 1 - (k - .8) / .2 * .3;
         window.scrollTo(0, top + total * pos * .97);
@@ -45,8 +46,10 @@
       longTasks: long.length,
       longestTaskMs: Math.round(Math.max.apply(null, [0].concat(long))),
       filmReadyAfterMs: Math.round(readyAfter),
-      framesLoadedAtStart: fetchedAtStart,
-      framesLoadedAtEnd: S.filmFetched || 0,
+      smallFramesAtStart: smallAtStart,
+      sharpFramesAtStart: fetchedAtStart,
+      sharpFramesAtEnd: S.filmFetched || 0,
+      sharpShownShare: Math.round(sharpTicks / trail.length * 100) + '%',
       pictureTrailsByFrames: +mean(trail).toFixed(1),
       ticksMoreThan3Behind: Math.round(trail.filter(function (g) { return g > 3; }).length / trail.length * 100) + '%',
       filmFramesShown: (S.filmShown || 0) - shown0,

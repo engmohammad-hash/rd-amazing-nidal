@@ -364,61 +364,73 @@
     function travel() { return Math.max(1, story.offsetHeight - window.innerHeight); }
 
     /* ---------- the film ----------
-       Frames arrive as JPEG files and are decoded off the main thread into bitmaps, only around the
-       reader's position, and a frame is never drawn before it is decoded. Measured on a 2011 laptop
-       (tools/bench.js): WebP frames caused stalls of up to 400 ms; JPEG frames scroll exactly as fast
-       as the page does with no film at all. */
+       Every frame comes in two sizes: a tiny one (all 200 weigh under 1 MB) and a sharp one. The tiny frames
+       arrive within seconds even on a slow connection, so the story moves from the first scroll, and each sharp
+       frame replaces its tiny one as soon as it lands. Frames are decoded off the main thread into bitmaps, only
+       around the reader, and nothing is drawn before it is decoded. Measured on a 2011 laptop (tools/bench.js):
+       WebP frames stalled the page up to 400 ms; these JPEGs cost nothing beyond the page itself. */
     var fctx = film.getContext('2d', { alpha: false });
+    fctx.imageSmoothingQuality = 'high';
     var BEHIND = 10, AHEAD = 22, DECODERS = Math.max(2, Math.min(4, (navigator.hardwareConcurrency || 4) - 1)), FETCHERS = 6;
-    var set = '', files = [], queue = [], fetching = 0, fetched = 0;
-    var decoded = new Map(), decoding = new Set(), drawn = -1, dir = 1, lastC = 0;
+    var set = '', small = [], sharp = [], smallQueue = [], sharpQueue = [], fetching = 0, fetched = 0, arrived = 0;
+    var decoded = new Map(), decoding = new Set(), drawn = -1, drawnSharp = false, dir = 1, lastC = 0;
 
     function pad(i) { return ('00' + i).slice(-3); }
     function current() { return Math.round(S.p * (FRAMES - 1)); }
+    function coarseToFine() {
+      // every 32nd frame first, then every 16th, 8th ... so any scroll position has a close frame early
+      var order = [], seen = new Uint8Array(FRAMES);
+      [32, 16, 8, 4, 2, 1].forEach(function (step) {
+        for (var i = 0; i < FRAMES; i += step) if (!seen[i]) { seen[i] = 1; order.push(i); }
+      });
+      return order;
+    }
     function chooseSet() {
       var next = window.innerWidth / window.innerHeight < 0.85 ? 'mobile' : 'desktop';
       if (next === set) return;
       set = next;
-      decoded.forEach(function (b) { if (b.close) b.close(); });
-      decoded = new Map(); decoding = new Set(); files = new Array(FRAMES); fetching = 0; fetched = 0; drawn = -1;
+      decoded.forEach(function (d) { if (d.bmp.close) d.bmp.close(); });
+      decoded = new Map(); decoding = new Set(); small = new Array(FRAMES); sharp = new Array(FRAMES);
+      smallQueue = coarseToFine(); sharpQueue = coarseToFine();
+      fetching = 0; fetched = 0; arrived = 0; drawn = -1;
       film.width = SIZES[set][0]; film.height = SIZES[set][1];
-      // coarse to fine: every 32nd frame first, then every 16th, 8th ... so any scroll position has a close frame early
-      queue = [];
-      var seen = new Uint8Array(FRAMES);
-      [32, 16, 8, 4, 2, 1].forEach(function (step) {
-        for (var i = 0; i < FRAMES; i += step) if (!seen[i]) { seen[i] = 1; queue.push(i); }
-      });
       pump();
     }
     function nextFetch() {
-      // files around the reader come first, ahead of them before behind
-      var c = current();
-      for (var d = 0; d <= AHEAD; d++) {
+      var c = current(), i, d;
+      // 1. the sharp frames the reader is looking at right now
+      for (d = 0; d <= 3; d++) { i = c + d * dir; if (i >= 0 && i < FRAMES && sharp[i] === undefined) return [sharp, i, '']; }
+      // 2. every tiny frame, so the whole story can move
+      while (smallQueue.length) { i = smallQueue.shift(); if (small[i] === undefined) return [small, i, '-lo']; }
+      // 3. sharp frames around the reader, ahead of them before behind
+      for (d = 0; d <= AHEAD; d++) {
         var a = c + d * dir, b = c - d * dir;
-        if (a >= 0 && a < FRAMES && files[a] === undefined) return a;
-        if (d <= BEHIND && b >= 0 && b < FRAMES && files[b] === undefined) return b;
+        if (a >= 0 && a < FRAMES && sharp[a] === undefined) return [sharp, a, ''];
+        if (d <= BEHIND && b >= 0 && b < FRAMES && sharp[b] === undefined) return [sharp, b, ''];
       }
-      while (queue.length) { var i = queue.shift(); if (files[i] === undefined) return i; }
-      return -1;
+      // 4. the rest of the sharp frames
+      while (sharpQueue.length) { i = sharpQueue.shift(); if (sharp[i] === undefined) return [sharp, i, '']; }
+      return null;
     }
     function pump() {
       while (fetching < FETCHERS) {
-        var i = nextFetch();
-        if (i < 0) break;
-        fetchFrame(i);
+        var job = nextFetch();
+        if (!job) break;
+        fetchFrame(job[0], job[1], job[2]);
       }
       decodeAround();
     }
-    function fetchFrame(i) {
-      var forSet = set;
-      files[i] = null; fetching++;
-      fetch(FRAME_BASE + forSet + '/' + pad(i) + '.jpg')
+    function fetchFrame(store, i, suffix) {
+      var forSet = set, isSharp = store === sharp;
+      store[i] = null; fetching++;
+      fetch(FRAME_BASE + forSet + suffix + '/' + pad(i) + '.jpg')
         .then(function (r) { if (!r.ok) throw new Error(r.status); return r.blob(); })
         .then(function (blob) {
           if (forSet !== set) return;
-          files[i] = blob; fetched++; S.filmFetched = fetched;
+          store[i] = blob; arrived++;
+          if (isSharp) { fetched++; S.filmFetched = fetched; } else S.filmSmall = (S.filmSmall || 0) + 1;
           site.classList.remove('no-film');   // a slow connection may bring the first frame after the logo took over
-        }, function () { if (forSet === set) files[i] = false; })
+        }, function () { if (forSet === set) store[i] = false; })
         .then(function () { if (forSet === set) { fetching--; pump(); } });
     }
     function toBitmap(blob) {
@@ -437,18 +449,24 @@
       var c = current();
       var lo = c - (dir > 0 ? BEHIND : AHEAD), hi = c + (dir > 0 ? AHEAD : BEHIND);
       // let go of frames far from the reader so memory stays small
-      decoded.forEach(function (b, i) {
-        if ((i < lo - 4 || i > hi + 4) && i !== drawn) { if (b.close) b.close(); decoded.delete(i); }
+      decoded.forEach(function (d, i) {
+        if ((i < lo - 4 || i > hi + 4) && i !== drawn) { if (d.bmp.close) d.bmp.close(); decoded.delete(i); }
       });
-      for (var d = 0; d <= AHEAD && decoding.size < DECODERS; d++) {
-        [c + d * dir, c - d * dir].forEach(function (i) {
-          if (decoding.size >= DECODERS || i < lo || i > hi || decoded.has(i) || decoding.has(i) || !files[i]) return;
+      for (var k = 0; k <= AHEAD && decoding.size < DECODERS; k++) {
+        [c + k * dir, c - k * dir].forEach(function (i) {
+          if (decoding.size >= DECODERS || i < lo || i > hi || decoding.has(i)) return;
+          var have = decoded.get(i), useSharp = !!sharp[i];
+          if (have && (have.sharp || !useSharp)) return;   // already as good as it gets for now
+          var blob = useSharp ? sharp[i] : small[i];
+          if (!blob) return;
           var forSet = set;
           decoding.add(i);
-          toBitmap(files[i]).then(function (bmp) {
+          toBitmap(blob).then(function (bmp) {
             decoding.delete(i);
-            if (forSet !== set) { if (bmp.close) bmp.close(); return; }
-            decoded.set(i, bmp); drawn = -1;
+            var old = decoded.get(i);
+            if (forSet !== set || (old && old.sharp && !useSharp)) { if (bmp.close) bmp.close(); return; }
+            if (old && old.bmp.close) old.bmp.close();   // the canvas keeps its own pixels
+            decoded.set(i, { bmp: bmp, sharp: useSharp });
           }, function () { decoding.delete(i); });
         });
       }
@@ -456,11 +474,14 @@
     function drawFilm() {
       var c = current(), best = -1, gap = 1e9;
       if (c !== lastC) { dir = c > lastC ? 1 : -1; lastC = c; }
-      decoded.forEach(function (b, i) { var g = Math.abs(i - c); if (g < gap) { gap = g; best = i; } });
+      decoded.forEach(function (d, i) { var g = Math.abs(i - c); if (g < gap) { gap = g; best = i; } });
       S.filmGap = best < 0 ? FRAMES : gap;   // how many frames the picture trails the scroll (read by tools/bench.js)
-      if (best < 0 || best === drawn) return;
-      fctx.drawImage(decoded.get(best), 0, 0, film.width, film.height);
-      drawn = best; S.filmShown = (S.filmShown || 0) + 1;
+      if (best < 0) return;
+      var d = decoded.get(best);
+      S.filmSharp = d.sharp;
+      if (best === drawn && d.sharp === drawnSharp) return;
+      fctx.drawImage(d.bmp, 0, 0, film.width, film.height);
+      drawn = best; drawnSharp = d.sharp; S.filmShown = (S.filmShown || 0) + 1;
       if (!film.classList.contains('ready')) film.classList.add('ready');
     }
 
@@ -469,7 +490,7 @@
     window.addEventListener('resize', chooseSet);
     S.filmSet = set;
     // if no frame arrives at all (offline, blocked), show the logo instead of an empty stage
-    setTimeout(function () { if (!fetched) site.classList.add('no-film'); }, 10000);
+    setTimeout(function () { if (!arrived) site.classList.add('no-film'); }, 10000);
     // #bench runs the automatic scrolling speed test from tools/bench.js
     if (location.hash === '#bench') {
       var bench = document.createElement('script');
@@ -487,7 +508,7 @@
         hudFrames++;
         var n = performance.now();
         if (n - hudSince < 500) return;
-        hud.textContent = 'FPS ' + Math.round(hudFrames * 1000 / (n - hudSince)) + '\nframes ' + fetched + '/' + FRAMES + ' (' + set + ') · ready ' + decoded.size;
+        hud.textContent = 'FPS ' + Math.round(hudFrames * 1000 / (n - hudSince)) + '\nsmall ' + (S.filmSmall || 0) + ' · sharp ' + fetched + '/' + FRAMES + ' (' + set + ')';
         hudFrames = 0; hudSince = n;
       };
     }
