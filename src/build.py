@@ -36,10 +36,9 @@ def wa(text):
 
 
 def copy_assets():
+    # overwrite in place: on Windows a file another program has open cannot be deleted, only rewritten
     assets = OUT / "assets"
-    if assets.exists():
-        shutil.rmtree(assets)
-    shutil.copytree(SRC / "static", assets)
+    shutil.copytree(SRC / "static", assets, dirs_exist_ok=True)
     shutil.copy2(ROOT / "tools" / "bench.js", assets / "js" / "bench.js")
     # the home film's opening frame doubles as the link-preview image
     shutil.copy2(OUT / "frames" / "story" / "desktop" / "000.jpg", assets / "img" / "og.jpg")

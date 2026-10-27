@@ -53,7 +53,7 @@
   var TILES = { desktop: [288, 162], mobile: [162, 324] }, COLS = 10, SHEETS = 4, SHEET_ORDER = [0, 2, 1, 3];
   var BEHIND = 10, AHEAD = 22, DECODERS = Math.max(2, Math.min(4, (navigator.hardwareConcurrency || 4) - 1)), FETCHERS = 12, sheetBytes = 0, sheetsIn = 0, sheetsFrom = 0;
   var sheets = [], sheetRequested = [], sharp = [], sharpQueue = [], fetching = 0, fetched = 0, arrived = 0;
-  var decoded = new Map(), decoding = new Set(), drawnKey = '', dir = 1, lastC = 0, fctx = null;
+  var decoded = new Map(), decoding = new Set(), inflight = new Map(), drawnKey = '', dir = 1, lastC = 0, movedAt = 0, fctx = null;
 
   function pad(i) { return ('00' + i).slice(-3); }
   function current() { return Math.round(S.p * (FRAMES - 1)); }
@@ -68,7 +68,8 @@
     set = next;
     decoded.forEach(function (b) { if (b.close) b.close(); });
     sheets.forEach(function (b) { if (b && b.close) b.close(); });
-    decoded = new Map(); decoding = new Set(); sheets = new Array(SHEETS); sheetRequested = new Array(SHEETS);
+    inflight.forEach(function (ctrl) { ctrl.abort(); });
+    decoded = new Map(); decoding = new Set(); inflight = new Map(); sheets = new Array(SHEETS); sheetRequested = new Array(SHEETS);
     sharp = new Array(FRAMES); sharpQueue = coarseToFine();
     fetching = 0; fetched = 0; arrived = 0; drawnKey = ''; sheetBytes = 0; sheetsIn = 0; sheetsFrom = performance.now();
     film.width = SIZES[set][0]; film.height = SIZES[set][1];
@@ -83,12 +84,12 @@
       im.src = url;
     });
   }
-  function get(url, onBlob, priority) {
+  function get(url, onBlob, priority, ctrl, onAbort) {
     var forSet = set;
     fetching++;
-    fetch(url, { priority: priority || 'auto' })
+    fetch(url, { priority: priority || 'auto', signal: ctrl ? ctrl.signal : undefined })
       .then(function (r) { if (!r.ok) throw new Error(r.status); return r.blob(); })
-      .then(function (blob) { if (forSet === set) onBlob(blob); }, function () {})
+      .then(function (blob) { if (forSet === set) onBlob(blob); }, function (e) { if (forSet === set && onAbort && e && e.name === 'AbortError') onAbort(); })
       .then(function () { if (forSet === set) { fetching--; pump(); } });
   }
   function loadSheet(n) {
@@ -110,18 +111,31 @@
   }
   function loadSharp(i, priority) {
     sharp[i] = null;
+    var ctrl = window.AbortController ? new AbortController() : null;
+    if (ctrl) inflight.set(i, ctrl);
     get(BASE + set + '/' + pad(i) + '.jpg', function (blob) {
+      inflight.delete(i);
       sharp[i] = blob; fetched++; arrived++; S.filmFetched = fetched;
       body.classList.remove('no-film');
-    }, priority || 'low');
+    }, priority || 'low', ctrl, function () {
+      inflight.delete(i); sharp[i] = undefined; sharpQueue.push(i);
+    });
   }
   function pump() {
     if (!FRAMES) return;
     var c = current(), d, i;
-    if (sharp[c] === undefined) loadSharp(c, 'high');
+    // the frame on screen may take one slot beyond the cap, never more: while scrolling, every tick has a new one
+    if (sharp[c] === undefined && fetching <= FETCHERS) loadSharp(c, 'high');
     SHEET_ORDER.forEach(function (n) { if (!sheetRequested[n]) loadSheet(n); });
     // on a slow line the sheets must not share it with sharp frames: wait until all have landed
     for (i = 0; i < SHEETS; i++) if (!sheets[i]) { decodeAround(c); return; }
+    // a reader who has stopped on a blurry frame gets the whole line: downloads away from them are dropped
+    // (and queued again), and nothing else is asked for until their frame is here
+    if (!sharp[c] && performance.now() - movedAt > 300) {
+      inflight.forEach(function (ctrl, k) { if (Math.abs(k - c) > 1) ctrl.abort(); });
+      decodeAround(c);
+      return;
+    }
     for (d = 0; d <= AHEAD && fetching < FETCHERS; d++) {
       var a = c + d * dir, b = c - d * dir;
       if (a >= 0 && a < FRAMES && sharp[a] === undefined) loadSharp(a);
@@ -157,7 +171,7 @@
   }
   function drawFilm() {
     var c = current(), src = null, gap;
-    if (c !== lastC) { dir = c > lastC ? 1 : -1; lastC = c; }
+    if (c !== lastC) { dir = c > lastC ? 1 : -1; lastC = c; movedAt = performance.now(); }
     for (gap = 0; gap <= AHEAD; gap++) { src = sourceFor(c - gap) || sourceFor(c + gap); if (src) break; }
     S.filmGap = src ? gap : FRAMES;
     if (!src) return;
@@ -175,6 +189,12 @@
     chooseSet();
     window.addEventListener('resize', chooseSet);
     S.filmSet = set;
+    // for tools/bench.js: what the frame on screen is waiting for
+    S.state = function () {
+      var c = current(), sc = sharp[c];
+      return { c: c, sharp: sc === undefined ? 'not asked' : sc === null ? 'in flight' : 'here', decoded: decoded.has(c),
+        decoding: decoding.size, fetching: fetching, fetchers: FETCHERS };
+    };
     setTimeout(function () { if (!arrived) body.classList.add('no-film'); }, 10000);
   }
   if (story && film) {

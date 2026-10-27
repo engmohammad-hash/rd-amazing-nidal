@@ -22,6 +22,20 @@
     try { po.observe({ type: 'longtask' }); } catch (e) {}
 
     var top = story.offsetTop, total = story.offsetHeight - innerHeight;
+
+    // a reader glides to the second act in a second and stops to read: how long until that frame is sharp
+    await new Promise(function (resolve) {
+      var g0 = performance.now();
+      (function glide(now) {
+        var k = Math.min(1, (now - g0) / 1000);
+        window.scrollTo({ top: top + total * .4 * k, behavior: 'instant' });
+        if (k < 1) requestAnimationFrame(glide); else resolve();
+      })(g0);
+    });
+    var glideAt = performance.now();
+    await wait(400);   // the picture eases into place
+    while (!S.filmSharp && performance.now() - glideAt < 15000) await wait(50);
+    var sharpAfterGlide = performance.now() - glideAt;
     var gaps = [], trail = [], sharpTicks = 0, shown0 = S.filmShown || 0, fetchedAtStart = S.filmFetched || 0, smallAtStart = S.filmSmall || 0, dur = 14000;
     await new Promise(function (resolve) {
       var start = performance.now(), last = start;
@@ -41,6 +55,8 @@
     gaps.shift();
     // a reader who stops: how long until the frame on screen is the sharp one
     var stopAt = performance.now();
+    var atStop = S.state ? S.state() : null, atStop2s = null;
+    setTimeout(function () { atStop2s = S.state ? S.state() : null; }, 2000);
     while (!S.filmSharp && performance.now() - stopAt < 15000) await wait(50);
     var sharpAfterStop = performance.now() - stopAt;
 
@@ -66,7 +82,10 @@
       fontsReadyAtMs: Math.round(fontsAt),
       firstSharpAtMs: Math.round(firstSharpAt),
       sharpAfterStopMs: Math.round(sharpAfterStop),
+      sharpAfterGlideMs: Math.round(sharpAfterGlide),
       lineKBps: S.lineKBps || 0,
+      atStop: atStop,
+      atStop2s: atStop2s,
       scrollStartAtMs: Math.round(scrollAt),
       viewport: innerWidth + 'x' + innerHeight + '@' + devicePixelRatio,
     };
