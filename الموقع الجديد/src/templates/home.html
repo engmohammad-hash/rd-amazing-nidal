@@ -1,0 +1,127 @@
+{% extends "base.html" %}
+{% import "partials/icons.html" as ic %}
+{% set has_hero = true %}
+{% block preload %}<link rel="preload" as="image" href="{{ root }}assets/video/hero-desktop.jpg?v={{ version }}" media="(min-aspect-ratio: 4/5)" fetchpriority="high">
+<link rel="preload" as="image" href="{{ root }}assets/video/hero-mobile.jpg?v={{ version }}" media="(max-aspect-ratio: 4/5)" fetchpriority="high">
+{% endblock %}
+{% macro head(key, id, lead=true) %}
+<div class="sec-head rv">
+  <div>
+    <p class="sec-eyebrow">{{ t[key].eyebrow }}</p>
+    <h2 id="{{ id }}-title">{{ t[key].title[0] }} <span>{{ t[key].title[1] }}</span></h2>
+  </div>
+  {% if lead %}<p class="sec-lead">{{ t[key].lead }}</p>{% endif %}
+</div>
+{% endmacro %}
+{% block main %}
+<section class="hero" id="top" aria-labelledby="hero-title">
+  <div class="hero-media" aria-hidden="true">
+    <picture>
+      <source media="(max-aspect-ratio: 4/5)" srcset="{{ root }}assets/video/hero-mobile.jpg?v={{ version }}">
+      <img class="hero-poster" src="{{ root }}assets/video/hero-desktop.jpg?v={{ version }}" alt="" width="1920" height="1080" fetchpriority="high">
+    </picture>
+    <video class="hero-video" muted playsinline loop preload="none" disablepictureinpicture tabindex="-1"
+           data-wide="{{ root }}assets/video/hero-desktop.mp4?v={{ version }}" data-tall="{{ root }}assets/video/hero-mobile.mp4?v={{ version }}"></video>
+  </div>
+  <div class="wrap hero-in">
+    <div class="hero-copy">
+      <p class="eyebrow">{{ d.hero.eyebrow }}</p>
+      <h1 id="hero-title">{{ d.hero.title[0] }} <span>{{ d.hero.title[1] }}</span></h1>
+      <p class="hero-lead">{{ d.hero.lead }}</p>
+      <div class="hero-actions">
+        <a class="btn btn-light" href="{{ wa(t.quote_msg) }}" target="_blank" rel="noopener">{% include "partials/wa-icon.svg" %} {{ t.quote_btn }}</a>
+        <a class="btn btn-ghost" href="tel:{{ b.phone }}">{{ ic.icon('phone') }} {{ t.hero.call }}</a>
+      </div>
+      <a class="hero-browse" href="#services">{{ t.hero.browse }} {{ ic.icon('down') }}</a>
+      <p class="hero-note">{{ d.hero.note }}</p>
+    </div>
+  </div>
+</section>
+
+<div class="strip" aria-hidden="true">
+  <div class="strip-track">
+    {% for k in range(2) %}<ul class="strip-list">{% for s in d.strip %}<li>{{ s }}</li><li class="strip-star">{{ ic.icon('star') }}</li>{% endfor %}</ul>{% endfor %}
+  </div>
+</div>
+
+<section class="section" id="services" aria-labelledby="services-title">
+  <div class="wrap">
+    {{ head('services', 'services') }}
+    <div class="svc-grid">
+      {% for s in d.services %}
+      <article class="svc rv" style="--i: {{ loop.index0 % 3 }}">
+        <span class="svc-num">{{ '%02d' % loop.index }}</span>
+        <h3>{{ s.name }}</h3>
+        <ul class="svc-items">{% for it in s['items'] %}<li>{{ it }}</li>{% endfor %}</ul>
+        <a class="svc-quote" href="{{ wa(t.services.quote_msg | fill(name=s.name)) }}" target="_blank" rel="noopener">{{ t.services.quote }} {{ ic.icon('arrow') }}</a>
+      </article>
+      {% endfor %}
+    </div>
+    <div class="svc-more rv"><a class="btn btn-fill" href="{{ wa(t.quote_msg) }}" target="_blank" rel="noopener">{% include "partials/wa-icon.svg" %} {{ t.services.more }}</a></div>
+  </div>
+</section>
+
+<section class="section section-alt" id="works" aria-labelledby="works-title">
+  <div class="wrap">
+    {{ head('works', 'works') }}
+    <div class="works-grid">
+      {% for w in d.works %}
+      <figure class="work rv" style="--i: {{ loop.index0 % 3 }}">
+        <a href="{{ root }}assets/img/works/{{ w.img }}.jpg" data-lightbox data-caption="{{ w.title }}" aria-label="{{ t.js.lightbox }}: {{ w.title }}">
+          <img src="{{ root }}assets/img/works/{{ w.img }}-thumb.jpg" alt="{{ w.title }}" width="720" height="540" loading="lazy" decoding="async">
+        </a>
+        <figcaption><span>{{ w.title }}</span><b>{{ '%02d' % loop.index }}</b></figcaption>
+      </figure>
+      {% endfor %}
+    </div>
+    <p class="works-note">{{ t.works.note }}</p>
+  </div>
+</section>
+
+<section class="section" id="about" aria-labelledby="about-title">
+  <div class="wrap about-grid">
+    <div class="about-text rv">
+      <p class="sec-eyebrow">{{ t.about.eyebrow }}</p>
+      <h2 id="about-title">{{ t.about.title[0] }} <span>{{ t.about.title[1] }}</span></h2>
+      <p>{{ d.about.text }}</p>
+      <a class="link-arrow" href="{{ wa(t.quote_msg) }}" target="_blank" rel="noopener">{{ t.about.link }} {{ ic.icon('arrow') }}</a>
+    </div>
+    <ol class="about-points">
+      {% for p in d.about.points %}<li class="rv" style="--i: {{ loop.index0 }}"><span class="pt-num">{{ '%02d' % loop.index }}</span><div><h3>{{ p.title }}</h3><p>{{ p.text }}</p></div></li>
+      {% endfor %}
+    </ol>
+  </div>
+</section>
+
+<section class="section section-alt" id="process" aria-labelledby="process-title">
+  <div class="wrap">
+    {{ head('process', 'process') }}
+    <ol class="steps">
+      {% for s in d.steps %}<li class="rv" style="--i: {{ loop.index0 }}"><span class="step-num">{{ '%02d' % loop.index }}</span><h3>{{ s.title }}</h3><p>{{ s.text }}</p></li>
+      {% endfor %}
+    </ol>
+  </div>
+</section>
+
+<section class="section section-contact" id="contact" aria-labelledby="contact-title">
+  <div class="wrap">
+    <div class="cta rv">
+      <div class="cta-text">
+        <p class="cta-eyebrow">{{ t.cta.eyebrow }}</p>
+        <h2 id="contact-title">{{ t.cta.title }}</h2>
+        <p>{{ t.cta.text }}</p>
+      </div>
+      <div class="cta-actions">
+        <a class="btn btn-light" href="{{ wa(t.quote_msg) }}" target="_blank" rel="noopener">{% include "partials/wa-icon.svg" %} {{ t.cta.wa }}</a>
+        <a class="cta-call" href="tel:{{ b.phone }}">{{ t.cta.or_call }} <b class="ltr">{{ b.phone_display }}</b></a>
+      </div>
+    </div>
+    <ul class="contact-cards">
+      <li class="rv" style="--i: 0"><a href="mailto:{{ b.email }}">{{ ic.icon('mail') }}<span class="ltr">{{ b.email }}</span></a></li>
+      <li class="rv" style="--i: 1"><a href="https://www.instagram.com/{{ b.instagram }}/" target="_blank" rel="noopener">{{ ic.icon('ig') }}<span class="ltr">@{{ b.instagram }}</span></a></li>
+      <li class="rv" style="--i: 2"><a href="{{ b.maps }}" target="_blank" rel="noopener">{{ ic.icon('pin') }}<span>{{ b.city }}{{ '، ' if lang == 'ar' else ', ' }}{{ b.region }}</span></a></li>
+      <li class="rv" style="--i: 3"><span class="contact-hours">{{ ic.icon('clock') }}<span>{{ b.hours.label }}</span></span></li>
+    </ul>
+  </div>
+</section>
+{% endblock %}

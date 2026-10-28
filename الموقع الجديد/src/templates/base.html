@@ -1,0 +1,46 @@
+<!doctype html>
+<html lang="{{ lang }}" dir="{{ dir }}">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>{{ title }}</title>
+<meta name="description" content="{{ description }}">
+<link rel="canonical" href="{{ b.base_url }}{{ path }}">
+{% if path != '404.html' %}<link rel="alternate" hreflang="ar" href="{{ alternates.ar }}">
+<link rel="alternate" hreflang="en" href="{{ alternates.en }}">
+<link rel="alternate" hreflang="x-default" href="{{ alternates.ar }}">
+{% endif %}<meta name="theme-color" content="#2A0016">
+<meta name="color-scheme" content="light dark">
+<meta property="og:type" content="website">
+<meta property="og:locale" content="{{ t.locale }}">
+<meta property="og:site_name" content="{{ b.name }}">
+<meta property="og:title" content="{{ title }}">
+<meta property="og:description" content="{{ description }}">
+<meta property="og:url" content="{{ b.base_url }}{{ path }}">
+<meta property="og:image" content="{{ b.base_url }}assets/img/og.jpg">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="icon" type="image/png" href="{{ root }}assets/img/logo-color.png">
+<link rel="apple-touch-icon" href="{{ root }}assets/img/logo-color.png">
+{# the visitor's theme, set before anything paints so the page never flashes the other one #}
+<script>(function () { var d = document.documentElement, t = null; try { t = localStorage.getItem('theme'); } catch (e) {} if (t !== 'dark' && t !== 'light') t = matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light'; d.setAttribute('data-theme', t); d.className += ' js'; })();</script>
+{% set script = 'arabic' if lang == 'ar' else 'latin' %}
+<link rel="preload" as="font" type="font/woff2" crossorigin href="{{ root }}assets/fonts/alexandria-{{ script }}.woff2">
+<link rel="preload" as="font" type="font/woff2" crossorigin href="{{ root }}assets/fonts/ibm-plex-sans-arabic-400-{{ script }}.woff2">
+{% block preload %}{% endblock %}
+<link rel="stylesheet" href="{{ root }}assets/css/site.css?v={{ version }}">
+<script type="application/ld+json">{{ jsonld | safe }}</script>
+</head>
+<body>
+{% import "partials/icons.html" as ic %}
+<a class="skip" href="#main">{{ t.skip }}</a>
+{% include "partials/header.html" %}
+<main id="main">
+{% block main %}{% endblock %}
+</main>
+{% include "partials/footer.html" %}
+<a class="wa-float{% if has_hero is defined %} away{% endif %}" href="{{ wa(t.wa_float_msg) }}" target="_blank" rel="noopener" aria-label="{{ t.wa_float }}">{% include "partials/wa-icon.svg" %}</a>
+<button class="to-top" id="to-top" type="button" aria-label="{{ t.to_top }}" tabindex="-1">{{ ic.icon('up') }}</button>
+<script>window.__T = {{ t.js | tojson }};</script>
+<script src="{{ root }}assets/js/site.js?v={{ version }}" defer></script>
+</body>
+</html>

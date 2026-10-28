@@ -7,3 +7,7 @@ desktop.ini
 
 # speed test results
 bench.log
+
+# the hero film's frames (rebuilt by tools/render_video.py) and its log
+**/tools/out/
+render.log

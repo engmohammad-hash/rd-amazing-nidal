@@ -1,0 +1,38 @@
+{% import "partials/icons.html" as ic %}
+{% macro theme_button() %}<button class="icon-btn theme-btn" type="button" data-theme-toggle data-label-dark="{{ t.theme_dark }}" data-label-light="{{ t.theme_light }}" aria-label="{{ t.theme_dark }}"><span class="i-moon">{{ ic.icon('moon') }}</span><span class="i-sun">{{ ic.icon('sun') }}</span></button>{% endmacro %}
+<div class="topbar">
+  <div class="wrap topbar-in">
+    <span class="topbar-text">{{ d.topbar }}</span>
+    <a class="topbar-call" href="tel:{{ b.phone }}"><span class="topbar-label">{{ t.topbar_call }}</span> <span class="ltr">{{ b.phone_display }}</span></a>
+  </div>
+</div>
+<header class="hdr" id="hdr">
+  <div class="wrap hdr-in">
+    <a class="brand" href="{{ home }}" aria-label="{{ b.name }}{{ '، ' if lang == 'ar' else ', ' }}{{ t.home_aria }}">
+      <span class="brand-mark">
+        <img class="on-light" src="{{ root }}assets/img/logo-color.png" alt="" width="46" height="50">
+        <img class="on-dark" src="{{ root }}assets/img/logo-beige.png" alt="" width="46" height="50">
+      </span>
+      <span class="brand-name"><b>{{ b.name }}</b><small>{{ b.tagline }}{% if lang == 'ar' %} · RD Amazing{% endif %}</small></span>
+    </a>
+    <nav class="nav" aria-label="{{ t.nav_aria }}">
+      {% for n in d.nav %}<a href="{{ anchor(n.id) }}" data-section="{{ n.id }}">{{ n.label }}</a>
+      {% endfor %}
+    </nav>
+    <div class="hdr-tools">
+      <a class="lang-btn" href="{{ alt_link }}" hreflang="{{ t.other.lang }}" lang="{{ t.other.lang }}" aria-label="{{ t.lang_switch }}">{{ t.other.short }}</a>
+      {{ theme_button() }}
+    </div>
+    <button class="menu-btn" id="menu-btn" type="button" aria-label="{{ t.menu }}" aria-expanded="false" aria-controls="drawer"><span></span><span></span><span></span></button>
+    <a class="call-btn" href="tel:{{ b.phone }}" aria-label="{{ t.call_aria }}: {{ b.phone_display }}">{{ ic.icon('phone') }}<span>{{ t.call }}</span></a>
+  </div>
+</header>
+<nav class="drawer" id="drawer" aria-label="{{ t.menu }}">
+  {% for n in d.nav %}<a href="{{ anchor(n.id) }}">{{ n.label }}</a>
+  {% endfor %}
+  <div class="drawer-tools">
+    <a class="btn btn-fill" href="{{ wa(t.quote_msg) }}" target="_blank" rel="noopener">{% include "partials/wa-icon.svg" %} {{ t.quote_btn }}</a>
+    <a class="lang-btn" href="{{ alt_link }}" hreflang="{{ t.other.lang }}" lang="{{ t.other.lang }}">{{ t.lang_switch }}</a>
+    {{ theme_button() }}
+  </div>
+</nav>

@@ -1,0 +1,69 @@
+{
+  "business": {
+    "name": "RD Amazing",
+    "tagline": "Complete Print Solutions",
+    "about_short": "A print house in Dammam for every kind of paper and plastic print, and maker of printed paper cups, with luxury finishes worthy of your brand.",
+    "city": "Dammam",
+    "region": "Eastern Province",
+    "country": "Saudi Arabia",
+    "hours": { "label": "Daily 9 am – 9 pm, closed Fridays" }
+  },
+
+  "nav": [
+    { "label": "Services" },
+    { "label": "Our work" },
+    { "label": "About" },
+    { "label": "How to order" },
+    { "label": "Contact" }
+  ],
+
+  "topbar": "Printing and luxury packaging in Dammam",
+
+  "hero": {
+    "eyebrow": "RD Amazing · Dammam",
+    "title": ["Complete printing,", "finished in luxury"],
+    "lead": "From business cards to incense and sweet boxes and printed cups: we design, print and pack under one roof, with chosen materials and finishes worthy of your name.",
+    "note": "We go over the design, size and quantity with you, and print only once you approve."
+  },
+
+  "strip": ["Cards", "Incense and sweet boxes", "Luxury bags", "Invitations", "Printed cups", "Stickers and labels", "Marketing print", "Promotional gifts"],
+
+  "services": [
+    { "name": "Cards", "items": ["Business cards", "Thank-you and gift cards", "Membership and loyalty cards", "Staff cards", "Product instruction cards"] },
+    { "name": "Incense and perfume boxes", "items": ["Luxury incense boxes", "Perfume and oud oil boxes", "Magnetic boxes", "Inner linings", "Ribbons and seals"] },
+    { "name": "Sweet and gift boxes", "items": ["Chocolate boxes", "Sweets and dates boxes", "Gift boxes", "Sliding drawer boxes", "Sleeves"] },
+    { "name": "Printed bags", "items": ["Luxury paper bags", "Kraft bags", "Cloth bags", "Gift bags with handles"] },
+    { "name": "Invitations and occasions", "items": ["Wedding invitations", "Event invitations", "Greeting cards", "Welcome stands", "Favours and themes"] },
+    { "name": "Cups and café print", "items": ["Printed paper cups", "Cup sleeves", "Cup carriers", "Menus", "Printed napkins"] },
+    { "name": "Stickers and labels", "items": ["Product stickers", "Sticker rolls", "Clear stickers", "Gold and silver stickers", "Seal labels"] },
+    { "name": "Marketing print", "items": ["Brochures", "Flyers", "Folded leaflets", "Catalogues", "Company profiles"] },
+    { "name": "Office print", "items": ["Invoices and receipts", "Letterheads", "Envelopes", "Folders", "Office forms"] },
+    { "name": "Signs and large format", "items": ["Banners", "Roll-ups", "Shop signs", "Posters", "Window stickers"] },
+    { "name": "Promotional gifts", "items": ["Pens", "Mugs", "Shields and awards", "Keyrings", "Gift sets"] },
+    { "name": "Apparel and textiles", "items": ["T-shirts", "Uniforms", "Caps", "Aprons", "Tote bags"] }
+  ],
+
+  "works": [
+    { "title": "Business cards with gold foil" },
+    { "title": "Luxury incense box" },
+    { "title": "Sweets box with a drawer" },
+    { "title": "Luxury paper bags" },
+    { "title": "Printed paper cups" },
+    { "title": "Wedding invitation" }
+  ],
+
+  "about": {
+    "text": "A print house in Dammam for paper and plastic print and printed paper cups, from the smallest card to the finest box. We care about what makes the difference: the material, the finish, true colour and delivery on time.",
+    "points": [
+      { "title": "Design and print under one roof", "text": "We prepare the design or adjust your file, then print and pack in one place." },
+      { "title": "Luxury finishes", "text": "Gold and silver foil, embossing and debossing, matt and gloss lamination, and die-cutting." },
+      { "title": "A clear price and a date we keep", "text": "We agree the price and delivery date before we start, and we keep to them." }
+    ]
+  },
+
+  "steps": [
+    { "title": "Send your request", "text": "Tell us the product, quantity and size, and send the design file if you have one." },
+    { "title": "We review and confirm", "text": "We agree the material, finish and price, and you see a proof before anything is printed." },
+    { "title": "We print and deliver", "text": "Printing starts once you approve, and you receive it on the agreed date." }
+  ]
+}

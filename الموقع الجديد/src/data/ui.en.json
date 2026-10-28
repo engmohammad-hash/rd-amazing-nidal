@@ -1,0 +1,84 @@
+{
+  "lang": "en",
+  "dir": "ltr",
+  "locale": "en_US",
+  "prefix": "en/",
+  "other": { "lang": "ar", "prefix": "", "name": "العربية", "short": "ع" },
+
+  "skip": "Skip to content",
+  "home_aria": "home page",
+  "nav_aria": "Page sections",
+  "menu": "Menu",
+  "call": "Call",
+  "call_aria": "Call us",
+  "theme_dark": "Dark mode",
+  "theme_light": "Light mode",
+  "lang_switch": "العربية",
+  "to_top": "Back to top",
+  "wa_float": "Chat on WhatsApp",
+  "wa_float_msg": "Hello RD Amazing, I have a question.",
+  "quote_btn": "Get a quote",
+  "quote_msg": "Hello RD Amazing, I would like a quote for printing.",
+  "topbar_call": "Orders and questions",
+
+  "hero": { "browse": "Browse services", "call": "Call us" },
+
+  "services": {
+    "eyebrow": "01 / Services",
+    "title": ["What we", "print"],
+    "lead": "Twelve departments covering the print and packaging your brand needs. Ask us about sizes, materials and price for any product.",
+    "quote": "Get a quote",
+    "quote_msg": "Hello RD Amazing, I would like a quote for {name}.",
+    "more": "Can't find what you need? Ask us on WhatsApp"
+  },
+  "works": {
+    "eyebrow": "02 / Our work",
+    "title": ["Samples", "of our work"],
+    "lead": "Finishes and materials from our print. Tap any image to enlarge it.",
+    "note": "These images are illustrations for now, and will be replaced with photos of our own work."
+  },
+  "about": {
+    "eyebrow": "03 / About",
+    "title": ["About", "RD Amazing"],
+    "link": "Ask about our services"
+  },
+  "process": {
+    "eyebrow": "04 / How to order",
+    "title": ["How to order", "your print"],
+    "lead": "From your first message to your order in hand, in three clear steps."
+  },
+  "cta": {
+    "eyebrow": "Orders and quotes",
+    "title": "Talk to RD Amazing",
+    "text": "Tell us the product, quantity and size, and we will reply with a quote.",
+    "wa": "Get a quote on WhatsApp",
+    "or_call": "or call us directly"
+  },
+  "foot": {
+    "vision": "Supporting Saudi Vision 2030",
+    "sections": "On this page",
+    "services": "Main services",
+    "contact": "Contact",
+    "wa": "WhatsApp",
+    "call": "Call",
+    "ig": "Instagram",
+    "year": "2026",
+    "rights": "All rights reserved",
+    "credit": "Website designed by"
+  },
+  "notfound": {
+    "title": "Page not found",
+    "text": "The link may have changed, or been typed incorrectly.",
+    "home": "Back to the home page",
+    "en": "English site"
+  },
+
+  "meta": {
+    "home_title": "{name} | Luxury printing and packaging in {city}",
+    "home_desc": "RD Amazing in Dammam: business cards, incense and sweet boxes, bags and invitations, printed paper cups, stickers and marketing print, with luxury finishes. Get a quote on WhatsApp.",
+    "notfound_title": "Page not found | {name}",
+    "notfound_desc": "Page not found."
+  },
+
+  "js": { "close": "Close", "prev": "Previous", "next": "Next", "lightbox": "View image" }
+}

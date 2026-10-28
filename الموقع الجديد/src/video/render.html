@@ -1,0 +1,78 @@
+<!doctype html>
+<html lang="ar">
+<head>
+<meta charset="utf-8">
+<title>hero film renderer</title>
+<style>
+  @font-face { font-family: "Aref Ruqaa"; font-weight: 700; src: url(aref-ruqaa-700-arabic.woff2) format("woff2"); }
+  @font-face { font-family: "IBM Plex Sans Arabic"; font-weight: 400; src: url(../static/fonts/ibm-plex-sans-arabic-400-arabic.woff2) format("woff2"); unicode-range: U+0600-06FF, U+0750-077F, U+200C-200E, U+FB50-FDFF, U+FE70-FEFF; }
+  @font-face { font-family: "IBM Plex Sans Arabic"; font-weight: 400; src: url(../static/fonts/ibm-plex-sans-arabic-400-latin.woff2) format("woff2"); unicode-range: U+0000-00FF, U+2000-206F; }
+  @font-face { font-family: "IBM Plex Sans Arabic"; font-weight: 500; src: url(../static/fonts/ibm-plex-sans-arabic-500-arabic.woff2) format("woff2"); unicode-range: U+0600-06FF, U+0750-077F, U+200C-200E, U+FB50-FDFF, U+FE70-FEFF; }
+  @font-face { font-family: "IBM Plex Sans Arabic"; font-weight: 600; src: url(../static/fonts/ibm-plex-sans-arabic-600-arabic.woff2) format("woff2"); unicode-range: U+0600-06FF, U+0750-077F, U+200C-200E, U+FB50-FDFF, U+FE70-FEFF; }
+  @font-face { font-family: "IBM Plex Sans Arabic"; font-weight: 600; src: url(../static/fonts/ibm-plex-sans-arabic-600-latin.woff2) format("woff2"); unicode-range: U+0000-00FF, U+2000-206F; }
+  @font-face { font-family: "Alexandria"; font-weight: 400 700; src: url(../static/fonts/alexandria-latin.woff2) format("woff2"); unicode-range: U+0000-00FF, U+2000-206F; }
+  body { margin: 0; background: #111; color: #ddd; font: 13px/1.5 Consolas, monospace; }
+  canvas { display: block; max-width: 100%; height: auto; }
+  pre { padding: 8px 12px; margin: 0; }
+</style>
+</head>
+<body>
+<pre id="log">loading…</pre>
+<canvas id="gl"></canvas>
+<canvas id="out"></canvas>
+<script type="importmap">{ "imports": { "three": "./three.module.min.js" } }</script>
+<script type="module">
+  /* Renders the hero film frame by frame and posts each JPEG to tools/serve.py.
+     http://localhost:8767/src/video/render.html?set=desktop|mobile[&sample=6]
+     Frames are drawn at 1.5x and scaled down, for clean edges; a soft vignette is added on the way out. */
+  import { createFilm, FRAMES } from './hero.js';
+
+  const q = new URLSearchParams(location.search);
+  const SET = q.get('set') === 'mobile' ? 'mobile' : 'desktop';
+  const sample = Number(q.get('sample') || 0);   // only this many evenly spaced frames, for a quick look
+  const [W, H] = SET === 'mobile' ? [1080, 1920] : [1920, 1080];
+  const SS = 1.5;
+  const logEl = document.getElementById('log');
+  const log = m => { logEl.textContent = m; document.title = m; };
+  const gl = document.getElementById('gl'), out = document.getElementById('out'), g = out.getContext('2d', { alpha: false });
+
+  async function save(i) {
+    out.width = W; out.height = H;
+    g.imageSmoothingQuality = 'high';
+    g.drawImage(gl, 0, 0, W, H);
+    const v = g.createRadialGradient(W / 2, H * .46, Math.min(W, H) * .32, W / 2, H / 2, Math.hypot(W, H) * .62);
+    v.addColorStop(0, 'rgba(10,0,5,0)'); v.addColorStop(1, 'rgba(10,0,5,.55)');
+    g.fillStyle = v; g.fillRect(0, 0, W, H);
+    const blob = await new Promise(r => out.toBlob(r, 'image/jpeg', .94));
+    const url = `/save/hero/${SET}/${String(i).padStart(4, '0')}.jpg`;
+    for (let attempt = 1; ; attempt++) {
+      try {
+        const res = await fetch(url, { method: 'POST', body: blob });
+        if (res.ok) return blob.size;
+        throw new Error(`saving ${url} failed: ${res.status}`);
+      } catch (e) {
+        if (attempt === 5) throw e;
+        await new Promise(r => setTimeout(r, 400 * attempt));
+      }
+    }
+  }
+
+  try {
+    const film = await createFilm(gl, { tall: SET === 'mobile', width: W * SS, height: H * SS, logoUrl: '../static/img/logo-beige.png' });
+    let bytes = 0;
+    for (let i = 0; i < FRAMES; i++) {
+      if (sample && i % Math.ceil(FRAMES / sample) !== 0) continue;
+      film.render(i / FRAMES);
+      bytes += await save(i);
+      if (i % 5 === 0) log(`hero ${SET} ${i}/${FRAMES} · ${(bytes / 1048576).toFixed(1)} MB`);
+    }
+    log(`ALL DONE hero ${SET} · ${(bytes / 1048576).toFixed(1)} MB`);
+    window.__done = { ok: true, bytes };
+  } catch (e) {
+    console.error(e);
+    log('FAILED: ' + (e && e.message || e));
+    window.__done = { ok: false, error: String(e) };
+  }
+</script>
+</body>
+</html>

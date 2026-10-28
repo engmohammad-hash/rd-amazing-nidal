@@ -1,0 +1,14 @@
+{% extends "base.html" %}
+{% block main %}
+<section class="section notfound">
+  <div class="wrap">
+    <p class="sec-eyebrow">404</p>
+    <h1>{{ t.notfound.title }}</h1>
+    <p>{{ t.notfound.text }}</p>
+    <div class="notfound-actions">
+      <a class="btn btn-fill" href="{{ home }}">{{ t.notfound.home }}</a>
+      <a class="btn btn-line" href="{{ root }}en/" lang="en">{{ t.notfound.en }}</a>
+    </div>
+  </div>
+</section>
+{% endblock %}
