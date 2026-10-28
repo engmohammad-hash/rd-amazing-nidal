@@ -9,8 +9,6 @@
     "hours": { "label": "Daily 9 am – 9 pm, closed Fridays" }
   },
 
-  "credit": { "name": "Eng. Mohammad" },
-
   "nav": [
     { "label": "Home", "href": "" },
     { "label": "Products", "href": "products/" },

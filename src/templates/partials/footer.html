@@ -41,6 +41,6 @@
   <div class="wrap foot-bottom">
     <span>© {{ t.foot.year }} {{ b.name }} · {{ b.tagline }}</span>
     <span>{{ b.city }} · {{ b.country }}</span>
-    <span class="credit">{{ t.foot.credit }} {% if credit.url is defined and credit.url %}<a href="{{ credit.url }}" target="_blank" rel="noopener">{{ credit.name }}</a>{% else %}<b>{{ credit.name }}</b>{% endif %}</span>
+    <span class="credit">{{ t.foot.credit }} {% if credit.url is defined and credit.url %}<a class="ltr" href="{{ credit.url }}" target="_blank" rel="noopener">{{ credit.name }}</a>{% else %}<b>{{ credit.name }}</b>{% endif %}</span>
   </div>
 </footer>

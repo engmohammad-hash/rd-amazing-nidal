@@ -363,9 +363,10 @@ a.contact-card:hover { border-color: var(--z-line-strong); transform: translateY
 .foot .about { display: grid; gap: 1rem; font-size: .93rem; line-height: 1.9; }
 .foot .about .brand-name b { color: var(--beige-light); }
 .foot .ltr { direction: ltr; unicode-bidi: isolate; }
-.foot-bottom { display: flex; flex-wrap: wrap; justify-content: space-between; gap: .6rem 2rem; padding-block: 1.4rem; border-top: 1px solid var(--line-dark); font-size: .82rem; color: rgba(214, 193, 160, .6); }
+.foot-bottom { display: flex; flex-wrap: wrap; justify-content: space-between; gap: .6rem 2rem; padding-block: 1.4rem calc(env(safe-area-inset-bottom, 0px) + 92px); border-top: 1px solid var(--line-dark); font-size: .82rem; color: rgba(214, 193, 160, .6); }
 .credit b, .credit a { color: var(--beige); font-weight: 600; text-decoration: none; }
-.credit a:hover { color: var(--beige-light); }
+.credit a { border-bottom: 1px solid rgba(214, 193, 160, .35); transition: color .2s, border-color .2s; }
+.credit a:hover { color: var(--beige-light); border-color: var(--beige-light); }
 .vision-line { display: inline-flex; align-items: center; gap: .7rem; }
 .vision-line::before { content: ""; width: 1.8rem; height: 1px; background: currentColor; opacity: .6; }
 .wa-float {
