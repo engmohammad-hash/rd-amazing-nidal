@@ -6,4 +6,4 @@ Thumbs.db
 desktop.ini
 
 # speed test results
-tools/bench.log
+bench.log
