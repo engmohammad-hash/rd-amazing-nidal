@@ -13,7 +13,9 @@ PREFIX = f"{ROOT.name}/docs"
 
 
 def git(*args):
-    return subprocess.run(["git", *args], cwd=REPO, check=True, capture_output=True, text=True, encoding="utf-8").stdout.strip()
+    # quotepath off: git subtree compares path names, and the folder's Arabic name must not come back escaped
+    return subprocess.run(["git", "-c", "core.quotepath=false", *args], cwd=REPO, check=True, capture_output=True,
+                          text=True, encoding="utf-8").stdout.strip()
 
 
 if git("status", "--porcelain", "--", PREFIX):
