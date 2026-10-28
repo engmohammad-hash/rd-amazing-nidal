@@ -1,0 +1,5 @@
+Fonts in this folder are subsets (Arabic and Latin) of fonts published on Google Fonts,
+licensed under the SIL Open Font License, Version 1.1 (https://openfontlicense.org).
+
+Alexandria            The Alexandria Project Authors (Google Fonts: https://fonts.google.com/specimen/Alexandria)
+IBM Plex Sans Arabic  Copyright 2017 IBM Corp. (https://github.com/IBM/plex)
