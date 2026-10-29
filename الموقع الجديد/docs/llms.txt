@@ -12,18 +12,22 @@
 
 ## الخدمات
 
-- الكروت والبطاقات: كروت شخصية، كروت شكر وإهداء، بطاقات عضوية وولاء، بطاقات موظفين، كروت تعليمات المنتج
-- علب البخور والعطور: بوكسات بخور فاخرة، علب عطور ودهن عود، علب مغناطيسية، بطانات داخلية، شرائط وأختام
-- علب الحلويات والهدايا: علب شوكولاتة، علب حلويات وتمور، بوكسات هدايا، علب بدرج منزلق، سليفات
-- الأكياس المطبوعة: أكياس ورقية فاخرة، أكياس كرافت، أكياس قماش، أكياس هدايا بمقابض
-- الدعوات والمناسبات: دعوات زفاف، دعوات مناسبات، بطاقات تهنئة، ستاندات ترحيب، توزيعات وثيمات
-- الأكواب ومطبوعات المقاهي: أكواب ورقية مطبوعة، أكمام أكواب، حوامل أكواب، منيو، مناديل مطبوعة
-- الستيكرات والملصقات: ستيكر منتجات، رول ستيكر، ستيكر شفاف، ستيكر ذهبي وفضي، ملصقات إغلاق
-- المطبوعات التسويقية: بروشورات، فلايرات، مطويات، كتالوجات، بروفايل شركات
-- المطبوعات الإدارية: فواتير وسندات، أوراق رسمية، أظرف، ملفات وفولدرات، نماذج إدارية
-- اللوحات والطباعة الكبيرة: بنرات، رول أب، لوحات محلات، بوسترات، ستيكر واجهات
-- الهدايا الدعائية: أقلام، مجات، دروع وتكريم، ميداليات، أطقم هدايا
-- الملابس والمنسوجات: تيشيرتات، يونيفورم، قبعات، مرايل، شنط قماش
+- البوكسات وعلب التغليف: بوكسات هارد كفر، بوكسات ورق مقوى، بوكسات طعام، بوكسات عطورات، علب حلا
+- الأكياس: أكياس ورق مقوى، أكياس ورق كرافت، أكياس قماش، أكياس بلاستيكية، توت باق قماش
+- الاستكر اللاصق: استكر بارز TDF، استكر بلاستك، استكر ورقي، استكر شيت، استكر واجهة محل، رولات استكر للمطاعم والمناحل وشركات المياه، استكر سيارات، تفريغ استكر شفاف
+- مطبوعات خاصة للكافيهات: أكواب ورقية، أكواب بلاستك، حامل أكواب، أغطية أكواب، بوكسات حلا، ورق زبدة، استكرات، جيك سفري مع كيس ألمنيوم حافظ حرارة
+- مطبوعات خاصة للمطاعم والمخابز: بوكسات لقيمات وخلية نحل وورق عنب، كيس ورقي، منيو، بروشورات افتتاحية وعروضات، ورق طاولة، استكرات، مناديل
+- خدمات طباعة سريعة: بزنز كارت، كارت شكر، بطاقات تعريفية ID، جواز سفر بمناسبة الافتتاح، كروت طاولة وتعليقة مياه
+- خدمات طباعة تعريفية وتسويقية للشركات: فولدرات، بروشورات، كتالوجات
+- خدمات طباعة للمدارس والجمعيات: كتب، أجندات، شهادات تكريم، نوت بوك
+- خدمات طباعة تنظيمية وللمحاسبة: فواتير، سند صرف، سند قبض، أختام، ورق فاخر للمراسلات
+- خدمات التطريز والطباعة الحرارية: تيشيرتات، قبعات، أكياس قماشية للمناسبات، سفتي شركات
+- الهدايا الدعائية: دروع تكريم كرستال، جلد، خشب، أكريليك، شهادات تكريم مع كفر، ماغ حراري، أقلام، أجندات، ميداليات، كوب سيراميك
+- خدمات تسوير مشاريع: بنر، فلكس Flex، فينيل Vinyl، استكر
+- خدمات تنظيم Event: معارض، مؤتمرات، حفلات، مباريات رياضية، ورش جامعات
+- خدمات اللوحات الاسمية: لوحات ضوئية أكريليك، لوحات ضوئية زنكور وأكريليك، لوحات ستيل، تركيب كلادينغ، تركيب جيبسوم بورد (بلاستر بورد)
+- خدمات الأكريليك والفوركس والفلين: قص أكريليك، حفر ليزر على الأكريليك، تركيب استكر لاصق على الأكريليك، ستاندات أكريليك، قص فوركس، تركيب استكر على الفوركس، قص فلين، تركيب استكر على الفلين
+- خدمات طباعة بكج لمحلات العبايات وللمصورات: بوكسات، أكياس ورقية، أكياس قماش، ليبل قماش، ليبل حراري، تاق ورق، استكر لاصق، ورق تغليف، شرايط
 
 ### المتجر الإلكتروني (https://engmohammad-hash.github.io/rd-amazing-nidal/shop/)
 
@@ -51,18 +55,22 @@
 
 ## Services
 
-- Cards: Business cards, Thank-you and gift cards, Membership and loyalty cards, Staff cards, Product instruction cards
-- Incense and perfume boxes: Luxury incense boxes, Perfume and oud oil boxes, Magnetic boxes, Inner linings, Ribbons and seals
-- Sweet and gift boxes: Chocolate boxes, Sweets and dates boxes, Gift boxes, Sliding drawer boxes, Sleeves
-- Printed bags: Luxury paper bags, Kraft bags, Cloth bags, Gift bags with handles
-- Invitations and occasions: Wedding invitations, Event invitations, Greeting cards, Welcome stands, Favours and themes
-- Cups and café print: Printed paper cups, Cup sleeves, Cup carriers, Menus, Printed napkins
-- Stickers and labels: Product stickers, Sticker rolls, Clear stickers, Gold and silver stickers, Seal labels
-- Marketing print: Brochures, Flyers, Folded leaflets, Catalogues, Company profiles
-- Office print: Invoices and receipts, Letterheads, Envelopes, Folders, Office forms
-- Signs and large format: Banners, Roll-ups, Shop signs, Posters, Window stickers
-- Promotional gifts: Pens, Mugs, Shields and awards, Keyrings, Gift sets
-- Apparel and textiles: T-shirts, Uniforms, Caps, Aprons, Tote bags
+- Boxes and packaging: Hard-cover boxes, Cardboard boxes, Food boxes, Perfume boxes, Sweets boxes
+- Bags: Cardboard paper bags, Kraft paper bags, Cloth bags, Plastic bags, Cloth tote bags
+- Stickers: Raised TDF stickers, Plastic stickers, Paper stickers, Sticker sheets, Shopfront stickers, Sticker rolls for restaurants, apiaries and water companies, Car stickers, Clear cut-out stickers
+- Café print: Paper cups, Plastic cups, Cup holders, Cup lids, Sweets boxes, Butter paper, Stickers, Takeaway jug with a heat-keeping foil bag
+- Restaurant and bakery print: Boxes for luqaimat, honeycomb bread and vine leaves, Paper bags, Menus, Opening and offer brochures, Table paper, Stickers, Napkins
+- Quick print: Business cards, Thank-you cards, ID cards, Opening-day passports, Table cards and water bottle tags
+- Corporate identity and marketing print: Folders, Brochures, Catalogues
+- Print for schools and associations: Books, Planners, Certificates, Notebooks
+- Office and accounting print: Invoices, Payment vouchers, Receipt vouchers, Stamps, Fine letter paper
+- Embroidery and heat printing: T-shirts, Caps, Cloth bags for occasions, Company safety vests
+- Promotional gifts: Crystal, leather, wood and acrylic awards, Certificates with covers, Heat-change mugs, Pens, Planners, Keyrings, Ceramic mugs
+- Project hoardings: Banners, Flex, Vinyl, Stickers
+- Event services: Exhibitions, Conferences, Parties, Sports matches, University workshops
+- Name signs: Acrylic light signs, Zincor and acrylic light signs, Steel signs, Cladding installation, Gypsum board (plasterboard) installation
+- Acrylic, Forex and foam board: Acrylic cutting, Laser engraving on acrylic, Stickers mounted on acrylic, Acrylic stands, Forex cutting, Stickers mounted on Forex, Foam board cutting, Stickers mounted on foam board
+- Packaging for abaya shops and photographers: Boxes, Paper bags, Cloth bags, Fabric labels, Heat-transfer labels, Paper tags, Stickers, Wrapping paper, Ribbons
 
 ### Online shop (https://engmohammad-hash.github.io/rd-amazing-nidal/en/shop/)
 

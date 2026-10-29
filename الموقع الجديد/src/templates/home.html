@@ -67,10 +67,11 @@
     {{ head('services', 'services') }}
     <div class="svc-grid">
       {% for s in d.services %}
-      <article class="svc rv" style="--i: {{ loop.index0 % 3 }}">
+      <article class="svc rv" style="--i: {{ loop.index0 % 4 }}">
         <span class="svc-num">{{ '%02d' % loop.index }}</span>
         <h3>{{ s.name }}</h3>
         <ul class="svc-items">{% for it in s['items'] %}<li>{{ it }}</li>{% endfor %}</ul>
+        {% if s.get('note') %}<p class="svc-note">{{ ic.icon('star') }}<span>{{ s.note }}</span></p>{% endif %}
         <a class="svc-quote" href="{{ wa(t.services.quote_msg | fill(name=s.name)) }}" target="_blank" rel="noopener">{{ t.services.quote }} {{ ic.icon('arrow') }}</a>
       </article>
       {% endfor %}

@@ -26,21 +26,25 @@
     "note": "We go over the design, size and quantity with you, and print only once you approve."
   },
 
-  "strip": ["Cards", "Incense and sweet boxes", "Luxury bags", "Invitations", "Printed cups", "Stickers and labels", "Marketing print", "Promotional gifts"],
+  "strip": ["Boxes and packaging", "Bags", "Stickers", "Café and restaurant print", "Promotional gifts", "Name signs", "Events", "Acrylic and Forex"],
 
   "services": [
-    { "name": "Cards", "items": ["Business cards", "Thank-you and gift cards", "Membership and loyalty cards", "Staff cards", "Product instruction cards"] },
-    { "name": "Incense and perfume boxes", "items": ["Luxury incense boxes", "Perfume and oud oil boxes", "Magnetic boxes", "Inner linings", "Ribbons and seals"] },
-    { "name": "Sweet and gift boxes", "items": ["Chocolate boxes", "Sweets and dates boxes", "Gift boxes", "Sliding drawer boxes", "Sleeves"] },
-    { "name": "Printed bags", "items": ["Luxury paper bags", "Kraft bags", "Cloth bags", "Gift bags with handles"] },
-    { "name": "Invitations and occasions", "items": ["Wedding invitations", "Event invitations", "Greeting cards", "Welcome stands", "Favours and themes"] },
-    { "name": "Cups and café print", "items": ["Printed paper cups", "Cup sleeves", "Cup carriers", "Menus", "Printed napkins"] },
-    { "name": "Stickers and labels", "items": ["Product stickers", "Sticker rolls", "Clear stickers", "Gold and silver stickers", "Seal labels"] },
-    { "name": "Marketing print", "items": ["Brochures", "Flyers", "Folded leaflets", "Catalogues", "Company profiles"] },
-    { "name": "Office print", "items": ["Invoices and receipts", "Letterheads", "Envelopes", "Folders", "Office forms"] },
-    { "name": "Signs and large format", "items": ["Banners", "Roll-ups", "Shop signs", "Posters", "Window stickers"] },
-    { "name": "Promotional gifts", "items": ["Pens", "Mugs", "Shields and awards", "Keyrings", "Gift sets"] },
-    { "name": "Apparel and textiles", "items": ["T-shirts", "Uniforms", "Caps", "Aprons", "Tote bags"] }
+    {"name": "Boxes and packaging", "items": ["Hard-cover boxes", "Cardboard boxes", "Food boxes", "Perfume boxes", "Sweets boxes"]},
+    {"name": "Bags", "items": ["Cardboard paper bags", "Kraft paper bags", "Cloth bags", "Plastic bags", "Cloth tote bags"]},
+    {"name": "Stickers", "items": ["Raised TDF stickers", "Plastic stickers", "Paper stickers", "Sticker sheets", "Shopfront stickers", "Sticker rolls for restaurants, apiaries and water companies", "Car stickers", "Clear cut-out stickers"], "note": "Sticker fitting available"},
+    {"name": "Café print", "items": ["Paper cups", "Plastic cups", "Cup holders", "Cup lids", "Sweets boxes", "Butter paper", "Stickers", "Takeaway jug with a heat-keeping foil bag"], "note": "Foil stamping and wrap printing on cups"},
+    {"name": "Restaurant and bakery print", "items": ["Boxes for luqaimat, honeycomb bread and vine leaves", "Paper bags", "Menus", "Opening and offer brochures", "Table paper", "Stickers", "Napkins"]},
+    {"name": "Quick print", "items": ["Business cards", "Thank-you cards", "ID cards", "Opening-day passports", "Table cards and water bottle tags"]},
+    {"name": "Corporate identity and marketing print", "items": ["Folders", "Brochures", "Catalogues"]},
+    {"name": "Print for schools and associations", "items": ["Books", "Planners", "Certificates", "Notebooks"], "note": "Special prices for schools and associations"},
+    {"name": "Office and accounting print", "items": ["Invoices", "Payment vouchers", "Receipt vouchers", "Stamps", "Fine letter paper"]},
+    {"name": "Embroidery and heat printing", "items": ["T-shirts", "Caps", "Cloth bags for occasions", "Company safety vests"]},
+    {"name": "Promotional gifts", "items": ["Crystal, leather, wood and acrylic awards", "Certificates with covers", "Heat-change mugs", "Pens", "Planners", "Keyrings", "Ceramic mugs"], "note": "Raised UV, spot UV and heat printing available"},
+    {"name": "Project hoardings", "items": ["Banners", "Flex", "Vinyl", "Stickers"], "note": "Steel frames on concrete footings fitted"},
+    {"name": "Event services", "items": ["Exhibitions", "Conferences", "Parties", "Sports matches", "University workshops"], "note": "Including print of pop-ups, roll-ups, Forex boards, Flexo boards, tall pole flags and desk flags"},
+    {"name": "Name signs", "items": ["Acrylic light signs", "Zincor and acrylic light signs", "Steel signs", "Cladding installation", "Gypsum board (plasterboard) installation"]},
+    {"name": "Acrylic, Forex and foam board", "items": ["Acrylic cutting", "Laser engraving on acrylic", "Stickers mounted on acrylic", "Acrylic stands", "Forex cutting", "Stickers mounted on Forex", "Foam board cutting", "Stickers mounted on foam board"]},
+    {"name": "Packaging for abaya shops and photographers", "items": ["Boxes", "Paper bags", "Cloth bags", "Fabric labels", "Heat-transfer labels", "Paper tags", "Stickers", "Wrapping paper", "Ribbons"]}
   ],
 
   "works": [
