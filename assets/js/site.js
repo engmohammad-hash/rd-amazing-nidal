@@ -76,7 +76,7 @@
   var video = doc.querySelector('.hero-video');
   var saveData = navigator.connection && navigator.connection.saveData;
   if (video && !reduce && !saveData) {
-    var tall = matchMedia('(max-aspect-ratio: 4/5)'), visible = true, wanted = '';
+    var visible = true;
     var play = function () {
       if (!video.src) return;
       if (!visible || doc.hidden) { video.pause(); return; }
@@ -85,24 +85,17 @@
     };
     // The whole film is fetched before it plays: phones often refuse to buffer a video ahead, and on a slow line a
     // film that starts early stops and starts again. Until then the poster, its first frame, is on screen.
-    var pick = function () {
-      var src = tall.matches ? video.dataset.tall : video.dataset.wide;
-      if (src === wanted) return play();
-      wanted = src;
-      fetch(src).then(function (r) { return r.ok ? r.blob() : Promise.reject(r.status); }).then(function (blob) {
-        if (src !== wanted) return;   // the screen turned while it was on its way
-        video.classList.remove('playing');
-        if (video.src) URL.revokeObjectURL(video.src);
+    var load = function () {
+      fetch(video.dataset.src).then(function (r) { return r.ok ? r.blob() : Promise.reject(r.status); }).then(function (blob) {
         video.src = URL.createObjectURL(blob);
         play();
-      }).catch(function () { if (src === wanted) wanted = ''; });
+      }).catch(function () {});
     };
     video.addEventListener('playing', function () { video.classList.add('playing'); });
-    if (tall.addEventListener) tall.addEventListener('change', pick); else tall.addListener(pick);
     if (io) new IntersectionObserver(function (en) { visible = en[0].isIntersecting; play(); }).observe(video.parentNode);
     doc.addEventListener('visibilitychange', play);
     // the poster is already showing; the film starts once the rest of the page has arrived
-    if (doc.readyState === 'complete') pick(); else addEventListener('load', pick);
+    if (doc.readyState === 'complete') load(); else addEventListener('load', load);
   }
 
   /* ---------- things rise into place as they come into view ---------- */

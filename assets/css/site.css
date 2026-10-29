@@ -1,5 +1,5 @@
 /* مطابع روعة التصاميم, the new site. Light mode: a beige page with maroon type; dark mode turns it round, a maroon
-   page with beige type. The hero sits on the film in both. Logical properties throughout, so Arabic (rtl) and
+   page with beige type. The hero frames the shop's own film on those same colours. Logical properties throughout, so Arabic (rtl) and
    English (ltr) share every rule; the few physical ones say why. */
 
 @font-face { font-family: 'Alexandria'; font-style: normal; font-weight: 400 800; font-display: swap; src: url(../fonts/alexandria-arabic.woff2) format('woff2'); unicode-range: U+0600-06FF, U+0750-077F, U+0870-08FF, U+200C-200E, U+2010-2011, U+204F, U+2E41, U+FB50-FDFF, U+FE70-FEFC; }
@@ -177,38 +177,43 @@ html[data-theme="dark"] .theme-btn .i-sun { display: block; }
 .drawer-tools .lang-btn { flex: 1; }
 body.menu-open { overflow: hidden; }
 
-/* ---------- hero: the film behind, the copy on the right in both languages (the film's name plate is on the left) ---------- */
-.hero {
-  position: relative; isolation: isolate; display: flex; align-items: center; overflow: hidden;
-  min-height: clamp(560px, calc(100svh - 116px), 880px); background: #12000A; color: var(--beige-light);
-}
-.hero-media { position: absolute; inset: 0; z-index: -1; }
-.hero-media picture, .hero-poster, .hero-video { position: absolute; inset: 0; width: 100%; height: 100%; }
-.hero-poster, .hero-video { object-fit: cover; object-position: 30% 50%; }
-.hero-video { opacity: 0; transition: opacity 1.2s ease; }
-.hero-video.playing { opacity: 1; }
-.hero::after {
-  content: ""; position: absolute; inset: 0; z-index: -1; pointer-events: none;
-  background:
-    linear-gradient(to left, rgba(18, 0, 10, .94) 0%, rgba(18, 0, 10, .84) 40%, rgba(18, 0, 10, .3) 62%, rgba(18, 0, 10, 0) 80%),
-    linear-gradient(to top, rgba(18, 0, 10, .5), rgba(18, 0, 10, 0) 30%);
-}
-.hero-in { display: flex; padding-block: clamp(48px, 8vh, 96px); }
-.hero-copy { width: min(100%, 560px); margin-left: auto; margin-right: 0; }
-.eyebrow { display: flex; align-items: center; gap: .8rem; margin-bottom: 1.1rem; font: 500 .9rem/1.4 var(--font-head); color: var(--gold-bright); }
+/* ---------- hero: the copy, and the shop's own film in a gold frame, both on the page's colours, light or dark ---------- */
+:root { --hero-glow: #F8F0E2; --frame: #B08A55; --frame-soft: rgba(176, 138, 85, .5); --frame-shadow: rgba(75, 1, 41, .35); }
+html[data-theme="dark"] { --hero-glow: #5C0B35; --frame: #E4C690; --frame-soft: rgba(228, 198, 144, .45); --frame-shadow: rgba(0, 0, 0, .6); }
+.hero { position: relative; overflow: hidden; background: radial-gradient(60% 85% at 24% 50%, var(--hero-glow), transparent 72%), var(--bg); transition: background-color .35s; }
+[dir="ltr"] .hero { background: radial-gradient(60% 85% at 76% 50%, var(--hero-glow), transparent 72%), var(--bg); }
+.hero-in { display: grid; grid-template-columns: 1.05fr .95fr; align-items: center; gap: clamp(32px, 5vw, 80px); padding-block: clamp(40px, 6vh, 72px); }
+.hero-copy { max-width: 580px; }
+.eyebrow { display: flex; align-items: center; gap: .8rem; margin-bottom: 1.1rem; font: 500 .9rem/1.4 var(--font-head); color: var(--accent); }
 .eyebrow::before { content: ""; width: 2.4rem; height: 1px; background: currentColor; }
-.hero h1 { font-size: clamp(2.3rem, 4.4vw, 3.8rem); line-height: 1.22; color: #F7EEDD; }
-.hero h1 span { display: block; color: var(--gold-bright); }
-html[lang="en"] .hero h1 { font-size: clamp(2rem, 3.5vw, 3.05rem); line-height: 1.15; }
-.hero-lead { margin-top: 1.2rem; max-width: 34em; font-size: clamp(1rem, 1.2vw, 1.1rem); line-height: 1.95; color: rgba(234, 220, 194, .86); }
+.hero h1 { font-size: clamp(2.3rem, 4.2vw, 3.7rem); line-height: 1.22; color: var(--text); }
+.hero h1 span { display: block; color: var(--accent); }
+html[lang="en"] .hero h1 { font-size: clamp(2rem, 3.4vw, 3rem); line-height: 1.15; }
+.hero-lead { margin-top: 1.2rem; max-width: 34em; font-size: clamp(1rem, 1.2vw, 1.1rem); line-height: 1.95; color: var(--text-soft); }
 .hero-actions { display: flex; flex-wrap: wrap; gap: .8rem; margin-top: 2rem; }
-.hero-browse { display: inline-flex; align-items: center; gap: .5rem; margin-top: 1.5rem; font: 600 .95rem/1 var(--font-head); color: var(--beige-light); }
+.hero-browse { display: inline-flex; align-items: center; gap: .5rem; font: 600 .95rem/1 var(--font-head); color: var(--text); }
 .hero-browse svg { width: 18px; height: 18px; }
+.hero-browse:hover { color: var(--accent); }
 .hero-links { display: flex; flex-wrap: wrap; gap: .6rem 1.8rem; margin-top: 1.5rem; }
-.hero-links .hero-browse { margin-top: 0; }
 .hero-links > a:first-child svg { animation: nudge 2.4s ease-in-out infinite; }
-.hero-browse:hover { color: var(--gold-bright); }
-.hero-note { margin-top: 1.5rem; padding-top: 1.2rem; border-top: 1px solid rgba(234, 220, 194, .18); font-size: .86rem; color: rgba(234, 220, 194, .66); }
+.hero-note { margin-top: 1.5rem; padding-top: 1.2rem; border-top: 1px solid var(--line); font-size: .86rem; color: var(--text-faint); }
+.hero-film { display: flex; justify-content: center; padding: 22px; }
+/* as tall as the screen allows under the header, so the whole frame shows on a laptop */
+.hero-frame {
+  position: relative; width: min(100%, 460px, calc((100svh - 116px - 2 * clamp(40px, 6vh, 72px) - 44px) * .8)); aspect-ratio: 4 / 5;
+  background: var(--maroon-900); box-shadow: 0 40px 70px -38px var(--frame-shadow);
+}
+.hero-frame::before, .hero-frame::after { content: ""; position: absolute; pointer-events: none; }
+.hero-frame::before { inset: -16px; border: 2px solid var(--frame); }
+.hero-frame::after { inset: -7px; border: 1px solid var(--frame-soft); }
+.hero-poster, .hero-video { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
+.hero-video { opacity: 0; transition: opacity 1s ease; }
+.hero-video.playing { opacity: 1; }
+.corner { position: absolute; width: 12px; height: 12px; background: var(--frame); transform: rotate(45deg); }
+.corner:nth-of-type(1) { top: -22px; left: -22px; }
+.corner:nth-of-type(2) { top: -22px; right: -22px; }
+.corner:nth-of-type(3) { bottom: -22px; left: -22px; }
+.corner:nth-of-type(4) { bottom: -22px; right: -22px; }
 @keyframes nudge { 50% { transform: translateY(4px); } }
 
 /* ---------- the moving strip of what we print ---------- */
@@ -417,13 +422,12 @@ html[data-theme="dark"] .foot { background: #14000A; }
   .svc-grid, .works-grid, .contact-cards, .foot-grid { grid-template-columns: 1fr; }
   .svc { padding: 1.35rem 1.3rem 1.1rem; }
 }
-/* tall screens get the tall film, with the name plate at the top and the copy at the bottom */
-@media (max-aspect-ratio: 4/5) {
-  .hero { align-items: flex-end; min-height: max(calc(100svh - 104px), 600px); }
-  .hero::after { background: linear-gradient(to top, rgba(18, 0, 10, .96) 0%, rgba(18, 0, 10, .86) 42%, rgba(18, 0, 10, .3) 64%, rgba(18, 0, 10, 0) 78%); }
-  .hero-poster, .hero-video { object-position: 50% 0; }
-  .hero-in { padding-block: 0 1.8rem; }
-  .hero-copy { width: 100%; margin: 0; }
+/* on a phone the film comes first, then the copy beneath it */
+@media (max-width: 760px) {
+  .hero-in { grid-template-columns: 1fr; gap: 1.2rem; padding-block: 1.6rem 2.2rem; }
+  .hero-film { order: -1; padding: 16px; }
+  .hero-frame { width: min(76vw, 340px); }
+  .hero-copy { max-width: none; }
   .eyebrow { margin-bottom: .8rem; }
   .hero h1 { font-size: clamp(2rem, 8.6vw, 2.7rem); }
   .hero-lead { margin-top: .9rem; font-size: .98rem; line-height: 1.85; }
