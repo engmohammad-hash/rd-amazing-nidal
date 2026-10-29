@@ -1,8 +1,7 @@
 {% extends "base.html" %}
 {% import "partials/icons.html" as ic %}
 {% set has_hero = true %}
-{% block preload %}<link rel="preload" as="image" href="{{ root }}assets/video/hero-desktop.jpg?v={{ version }}" media="(min-aspect-ratio: 4/5)" fetchpriority="high">
-<link rel="preload" as="image" href="{{ root }}assets/video/hero-mobile.jpg?v={{ version }}" media="(max-aspect-ratio: 4/5)" fetchpriority="high">
+{% block preload %}<link rel="preload" as="image" href="{{ root }}assets/video/hero.jpg?v={{ version }}" fetchpriority="high">
 {% endblock %}
 {% macro head(key, id, lead=true) %}
 <div class="sec-head rv">
@@ -15,28 +14,28 @@
 {% endmacro %}
 {% block main %}
 <section class="hero" id="top" aria-labelledby="hero-title">
-  <div class="hero-media" aria-hidden="true">
-    <picture>
-      <source media="(max-aspect-ratio: 4/5)" srcset="{{ root }}assets/video/hero-mobile.jpg?v={{ version }}">
-      <img class="hero-poster" src="{{ root }}assets/video/hero-desktop.jpg?v={{ version }}" alt="" width="1920" height="1080" fetchpriority="high">
-    </picture>
-    <video class="hero-video" muted playsinline loop preload="none" disablepictureinpicture tabindex="-1"
-           data-wide="{{ root }}assets/video/hero-desktop.mp4?v={{ version }}" data-tall="{{ root }}assets/video/hero-mobile.mp4?v={{ version }}"></video>
-  </div>
   <div class="wrap hero-in">
     <div class="hero-copy">
       <p class="eyebrow">{{ d.hero.eyebrow }}</p>
       <h1 id="hero-title">{{ d.hero.title[0] }} <span>{{ d.hero.title[1] }}</span></h1>
       <p class="hero-lead">{{ d.hero.lead }}</p>
       <div class="hero-actions">
-        <a class="btn btn-light" href="{{ wa(t.quote_msg) }}" target="_blank" rel="noopener">{% include "partials/wa-icon.svg" %} {{ t.quote_btn }}</a>
-        <a class="btn btn-ghost" href="tel:{{ b.phone }}">{{ ic.icon('phone') }} {{ t.hero.call }}</a>
+        <a class="btn btn-fill" href="{{ wa(t.quote_msg) }}" target="_blank" rel="noopener">{% include "partials/wa-icon.svg" %} {{ t.quote_btn }}</a>
+        <a class="btn btn-line" href="tel:{{ b.phone }}">{{ ic.icon('phone') }} {{ t.hero.call }}</a>
       </div>
       <div class="hero-links">
         <a class="hero-browse" href="#services">{{ t.hero.browse }} {{ ic.icon('down') }}</a>
         <a class="hero-browse" href="{{ shop_link }}">{{ ic.icon('bag') }} {{ t.shop.home_cta }}</a>
       </div>
       <p class="hero-note">{{ d.hero.note }}</p>
+    </div>
+    {# the shop's own film, in a gold frame the page draws, on the page's own colours: beige by day, maroon by night #}
+    <div class="hero-film" aria-hidden="true">
+      <div class="hero-frame">
+        <img class="hero-poster" src="{{ root }}assets/video/hero.jpg?v={{ version }}" alt="" width="720" height="900" fetchpriority="high">
+        <video class="hero-video" muted playsinline loop preload="none" disablepictureinpicture tabindex="-1" data-src="{{ root }}assets/video/hero.mp4?v={{ version }}"></video>
+        <i class="corner"></i><i class="corner"></i><i class="corner"></i><i class="corner"></i>
+      </div>
     </div>
   </div>
 </section>

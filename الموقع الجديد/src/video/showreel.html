@@ -1,0 +1,165 @@
+<!doctype html>
+<html lang="ar">
+<head>
+<meta charset="utf-8">
+<title>showreel renderer</title>
+<style>
+  body { margin: 0; background: #111; color: #ddd; font: 13px/1.5 Consolas, monospace; }
+  canvas { display: block; max-width: 100%; height: auto; }
+  pre { padding: 8px 12px; margin: 0; }
+</style>
+</head>
+<body>
+<pre id="log">loading…</pre>
+<canvas id="out"></canvas>
+<script type="module">
+  /* The hero film, from the client's own photos and clips, in the order they set: the shop's front, 1 to 20,
+     and the front again, ending on the very frame it starts with, so the loop has no seam. Silent, nothing laid
+     over the pictures: the site draws the gold frame and the colours around it, light or dark.
+     Sources in tools/out/showreel-src (0.jpg is the front). Each frame is posted to tools/serve.py:
+       showreel.html[?sample=8]   -> tools/out/showreel/desktop/NNNN.jpg */
+  const q = new URLSearchParams(location.search);
+  const sample = Number(q.get('sample') || 0);
+  const FPS = 30, W = 720, H = 900, XF = .7;
+  const MEDIA = '../../tools/out/showreel-src/';
+
+  // [file, seconds on screen, extra]; a clip's `from` is where its best moment starts, `box` its clean part
+  const SHOTS = [
+    ['0.jpg', 4.5, { front: 'in' }],
+    ['1.jpg', 2.5], ['2.jpg', 2.5], ['3.jpg', 2.5], ['4.jpg', 2.5], ['5.jpg', 2.5],
+    ['6.mp4', 3.5, { from: 2 }],
+    ['7.mp4', 3.5, { from: 3.2 }],
+    ['8.jpg', 2.5],
+    ['9.mp4', 3.5, { from: .3 }],
+    ['10.jpg', 2.5], ['11.jpg', 2.5], ['12.jpg', 2.5],
+    ['13.mp4', 3.5, { from: 4, box: [0, .24, 1, .76] }],
+    ['14.jpg', 2.5], ['15.jpg', 2.5], ['16.jpg', 2.5], ['17.jpg', 2.5], ['18.jpg', 2.5], ['19.jpg', 2.5], ['20.jpg', 2.5],
+    ['0.jpg', 4, { front: 'out' }],
+  ].map(([file, dur, extra = {}], i) => ({ file, dur, i, box: [0, 0, 1, 1], ...extra }));
+  let at = 0;
+  for (const s of SHOTS) { s.start = at; at += s.dur - XF; }
+  const T = SHOTS[SHOTS.length - 1].start + SHOTS[SHOTS.length - 1].dur, FRAMES = Math.round(T * FPS);
+
+  const logEl = document.getElementById('log');
+  const log = m => { logEl.textContent = m; document.title = m; };
+  const out = document.getElementById('out'), g = out.getContext('2d', { alpha: false });
+  out.width = W; out.height = H;
+  const ease = k => (k < .5 ? 2 * k * k : 1 - Math.pow(-2 * k + 2, 2) / 2);
+
+  async function loadVideo(file) {
+    const v = document.createElement('video');
+    v.muted = true; v.preload = 'auto'; v.playsInline = true; v.src = MEDIA + file;
+    await new Promise((res, rej) => { v.onloadeddata = res; v.onerror = () => rej(new Error('cannot load ' + file)); });
+    return v;
+  }
+  const loadImage = file => new Promise((res, rej) => { const i = new Image(); i.onload = () => res(i); i.onerror = () => rej(new Error('cannot load ' + file)); i.src = MEDIA + file; });
+  function seek(v, t) {
+    return new Promise(res => {
+      if (Math.abs(v.currentTime - t) < 1e-3 && v.readyState >= 2) return res();
+      v.addEventListener('seeked', () => res(), { once: true });
+      v.currentTime = Math.min(t, v.duration - .05);
+    });
+  }
+  // the part of a source that fills a w x h hole: the clean box cut to the hole's shape, zoomed and drifted
+  function region(sw, sh, box, w, h, zoom, dx, dy) {
+    const bx = box[0] * sw, by = box[1] * sh, bw = box[2] * sw, bh = box[3] * sh;
+    let rw = bw, rh = rw * h / w;
+    if (rh > bh) { rh = bh; rw = rh * w / h; }
+    rw /= zoom; rh /= zoom;
+    const cx = bx + bw / 2 + dx * (bw - rw) / 2, cy = by + bh / 2 + dy * (bh - rh) / 2;
+    return [cx - rw / 2, cy - rh / 2, rw, rh];
+  }
+
+  function drawShot(s, local) {
+    const src = s.media, sw = src.videoWidth || src.naturalWidth, sh = src.videoHeight || src.naturalHeight;
+    const k = ease(Math.min(1, local / s.dur)), wide = sw / sh > .9;
+    g.filter = 'saturate(1.06) contrast(1.04)';
+    if (s.front) {
+      // the shop's front: in, it moves closer to the lit sign; out, it comes back to where it began
+      const p = s.front === 'in' ? k : 1 - k;
+      const r = region(sw, sh, s.box, W, H, 1 + .12 * p, 0, -.7 * p);
+      g.drawImage(src, ...r, 0, 0, W, H);
+      g.filter = 'none';
+      signGlow(src, r, s.front === 'in' ? (local - 1.1) / 1.8 : (local - .7) / 1.8);
+      return;
+    }
+    if (wide) {
+      // a wide photo stays whole, over a soft blur of itself
+      g.filter = 'blur(22px) saturate(1.05) brightness(.82)';
+      g.drawImage(src, ...region(sw, sh, s.box, W, H, 1.15, 0, 0), -30, -30, W + 60, H + 60);
+      g.filter = 'saturate(1.06) contrast(1.04)';
+      const z = 1 + .04 * k, w = W * .94 * z, h = w * sh / sw;
+      g.save();
+      g.shadowColor = 'rgba(0,0,0,.4)'; g.shadowBlur = 30; g.shadowOffsetY = 10;
+      g.drawImage(src, (W - w) / 2, (H - h) / 2, w, h);
+      g.restore();
+    } else {
+      // tall and square ones fill the frame and drift a little, each the other way from the last
+      const dir = s.i % 2 ? 1 : -1;
+      g.drawImage(src, ...region(sw, sh, s.box, W, H, 1.02 + .06 * k, 0, dir * (.5 - k) * .8), 0, 0, W, H);
+    }
+    g.filter = 'none';
+  }
+  // the sign's lit letters bloom softly, and once per shot a gleam crosses them
+  function signGlow(src, r, gleam) {
+    g.save();
+    g.globalCompositeOperation = 'lighter';
+    g.globalAlpha = .3;
+    g.filter = 'blur(12px) brightness(1.35)';
+    g.drawImage(src, ...r, 0, 0, W, H);
+    g.filter = 'none';
+    if (gleam > 0 && gleam < 1) {
+      const x = -W * .4 + gleam * W * 1.8;
+      const gl = g.createLinearGradient(x - 140, 0, x + 140, H * .35);
+      gl.addColorStop(0, 'rgba(255,240,210,0)'); gl.addColorStop(.5, 'rgba(255,240,210,.2)'); gl.addColorStop(1, 'rgba(255,240,210,0)');
+      g.globalAlpha = Math.sin(gleam * Math.PI);
+      g.fillStyle = gl; g.fillRect(0, 0, W, H * .6);
+    }
+    g.restore();
+  }
+
+  async function frame(i) {
+    const t = i / FPS;
+    const live = SHOTS.filter(s => t >= s.start && t < s.start + s.dur);
+    for (const s of live) if (s.file.endsWith('.mp4')) await seek(s.media, s.from + (t - s.start));
+    g.fillStyle = '#12000A'; g.fillRect(0, 0, W, H);
+    for (const s of live) {
+      const local = t - s.start;
+      g.globalAlpha = s.i === 0 ? 1 : Math.min(1, local / XF);
+      drawShot(s, local);
+    }
+    g.globalAlpha = 1;
+  }
+
+  async function save(i) {
+    const blob = await new Promise(r => out.toBlob(r, 'image/jpeg', .93));
+    const url = `/save/showreel/desktop/${String(i).padStart(4, '0')}.jpg`;
+    for (let attempt = 1; ; attempt++) {
+      try {
+        const res = await fetch(url, { method: 'POST', body: blob });
+        if (res.ok) return blob.size;
+        throw new Error(`saving ${url} failed: ${res.status}`);
+      } catch (e) {
+        if (attempt === 5) throw e;
+        await new Promise(r => setTimeout(r, 400 * attempt));
+      }
+    }
+  }
+
+  try {
+    for (const s of SHOTS) s.media = s.file.endsWith('.mp4') ? await loadVideo(s.file) : await loadImage(s.file);
+    let bytes = 0;
+    for (let i = 0; i < FRAMES; i++) {
+      if (sample && i % Math.ceil(FRAMES / sample) !== 0) continue;
+      await frame(i);
+      bytes += await save(i);
+      if (i % 10 === 0) log(`showreel ${i}/${FRAMES} · ${(bytes / 1048576).toFixed(1)} MB · ${T.toFixed(1)} s`);
+    }
+    log(`ALL DONE showreel · ${(bytes / 1048576).toFixed(1)} MB · ${T.toFixed(1)} s`);
+  } catch (e) {
+    console.error(e);
+    log('FAILED: ' + (e && e.message || e));
+  }
+</script>
+</body>
+</html>

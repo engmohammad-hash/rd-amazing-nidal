@@ -11,3 +11,6 @@ bench.log
 # the hero film's frames (rebuilt by tools/render_video.py) and its log
 **/tools/out/
 render.log
+
+# the client's photos and clips for the hero film (the finished film is in the site)
+صور و فيديوهات منشان تصميم الفيديو/
