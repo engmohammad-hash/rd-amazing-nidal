@@ -65,5 +65,63 @@
     { "title": "Send your request", "text": "Tell us the product, quantity and size, and send the design file if you have one." },
     { "title": "We review and confirm", "text": "We agree the material, finish and price, and you see a proof before anything is printed." },
     { "title": "We print and deliver", "text": "Printing starts once you approve, and you receive it on the agreed date." }
-  ]
+  ],
+
+  "shop": {
+    "categories": [
+      { "name": "Cards" },
+      { "name": "Incense boxes" },
+      { "name": "Sweet boxes" },
+      { "name": "Bags" },
+      { "name": "Invitations" },
+      { "name": "Cups" },
+      { "name": "Stickers" }
+    ],
+    "options": {
+      "cards": { "unit": "cards", "choices": [
+        { "name": "Paper", "values": ["Matt coated 350 gsm", "Fine textured paper", "Clear plastic"] },
+        { "name": "Finish", "values": ["Gold foil", "Silver foil", "Matt lamination", "No finish"] } ] },
+      "incense": { "unit": "boxes", "choices": [
+        { "name": "Size", "values": ["Small", "Medium", "Large"] },
+        { "name": "Lining", "values": ["Maroon velvet", "Beige satin", "No lining"] } ] },
+      "sweets": { "unit": "boxes", "choices": [
+        { "name": "Pieces", "values": ["9 pieces", "16 pieces", "25 pieces"] },
+        { "name": "Finish", "values": ["Gold foil", "Matt lamination", "No finish"] } ] },
+      "bags": { "unit": "bags", "choices": [
+        { "name": "Size", "values": ["Small", "Medium", "Large"] },
+        { "name": "Handle", "values": ["Cotton rope", "Satin ribbon", "Twisted paper"] } ] },
+      "invitations": { "unit": "invitations", "choices": [
+        { "name": "Paper", "values": ["Fine textured paper", "Matt coated", "Pearl paper"] },
+        { "name": "Envelope", "values": ["With envelope", "No envelope"] } ] },
+      "cups": { "unit": "cups", "choices": [
+        { "name": "Size", "values": ["4 oz", "8 oz", "12 oz"] },
+        { "name": "Walls", "values": ["Single wall", "Double wall"] } ] },
+      "stickers": { "unit": "stickers", "choices": [
+        { "name": "Shape", "values": ["Round", "Square", "Die-cut to shape"] },
+        { "name": "Material", "values": ["Gloss paper", "Clear", "Gold"] } ] }
+    },
+    "products": [
+      { "badge": "Best seller", "name": "Luxury business cards", "short": "Heavy paper, precise print and a finish worthy of your name." },
+      { "name": "Gold foil business cards", "short": "Your name and logo in raised gold on dark paper." },
+      { "name": "Thank-you and gift cards", "short": "A small card to go with your orders and gifts." },
+      { "badge": "New", "name": "Luxury incense box", "short": "A lidded box with an inner lining for incense and the burner." },
+      { "name": "Magnetic incense box", "short": "A magnetic close and your logo on the lid." },
+      { "name": "Oud and oil box", "short": "An embossed lid for oud oil and perfume." },
+      { "badge": "Featured", "name": "Sweets box with a drawer", "short": "A sliding drawer and inner dividers to set the pieces out." },
+      { "name": "Chocolate box", "short": "Your logo on the lid and an elegant layout inside." },
+      { "name": "Luxury gift box", "short": "A rigid box carrying your name, for occasions and corporate gifts." },
+      { "badge": "Best seller", "name": "Luxury paper bags", "short": "Heavy paper and cotton handles in your brand's colours." },
+      { "name": "Maroon gift bag", "short": "A dark bag with an embossed logo, for shops and occasions." },
+      { "name": "White bag with handles", "short": "A calm design for perfume and fashion stores." },
+      { "name": "Wedding invitation", "short": "Fine paper and elegant Arabic lettering for an invitation to remember." },
+      { "name": "Invitation with a patterned envelope", "short": "An envelope printed inside with a pattern to suit the occasion." },
+      { "name": "Invitation with a wax seal", "short": "A wax seal with your logo or the couple's initials." },
+      { "badge": "Best seller", "name": "Printed paper cups", "short": "Cups with your logo in three sizes, for cafés and events." },
+      { "name": "Coffee cup with lid", "short": "A cup that keeps the heat in and carries your brand." },
+      { "name": "Cups with printed sleeves", "short": "A paper sleeve that protects the hand and shows your logo." },
+      { "name": "Sticker roll", "short": "Stickers on a roll, to pack orders quickly." },
+      { "badge": "New", "name": "Luxury round sticker", "short": "A sticker with your logo to seal boxes and bags." },
+      { "name": "Jar and tin labels", "short": "A label that wraps round jars and round tins." }
+    ]
+  }
 }

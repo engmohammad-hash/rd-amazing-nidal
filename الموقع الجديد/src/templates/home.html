@@ -32,7 +32,10 @@
         <a class="btn btn-light" href="{{ wa(t.quote_msg) }}" target="_blank" rel="noopener">{% include "partials/wa-icon.svg" %} {{ t.quote_btn }}</a>
         <a class="btn btn-ghost" href="tel:{{ b.phone }}">{{ ic.icon('phone') }} {{ t.hero.call }}</a>
       </div>
-      <a class="hero-browse" href="#services">{{ t.hero.browse }} {{ ic.icon('down') }}</a>
+      <div class="hero-links">
+        <a class="hero-browse" href="#services">{{ t.hero.browse }} {{ ic.icon('down') }}</a>
+        <a class="hero-browse" href="{{ shop_link }}">{{ ic.icon('bag') }} {{ t.shop.home_cta }}</a>
+      </div>
       <p class="hero-note">{{ d.hero.note }}</p>
     </div>
   </div>
@@ -57,7 +60,10 @@
       </article>
       {% endfor %}
     </div>
-    <div class="svc-more rv"><a class="btn btn-fill" href="{{ wa(t.quote_msg) }}" target="_blank" rel="noopener">{% include "partials/wa-icon.svg" %} {{ t.services.more }}</a></div>
+    <div class="svc-more rv">
+      <a class="btn btn-fill" href="{{ shop_link }}">{{ ic.icon('bag') }} {{ t.shop.home_cta }}</a>
+      <a class="btn btn-line" href="{{ wa(t.quote_msg) }}" target="_blank" rel="noopener">{% include "partials/wa-icon.svg" %} {{ t.services.more }}</a>
+    </div>
   </div>
 </section>
 

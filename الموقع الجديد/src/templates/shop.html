@@ -1,0 +1,65 @@
+{% extends "base.html" %}
+{% import "partials/icons.html" as ic %}
+{% block main %}
+<section class="page-band">
+  <div class="wrap">
+    <nav class="crumbs" aria-label="{{ t.shop.crumb_home }}"><a href="{{ home }}">{{ t.shop.crumb_home }}</a><span aria-hidden="true">/</span><span aria-current="page">{{ t.shop.title }}</span></nav>
+    <h1>{{ t.shop.title }}</h1>
+    <p>{{ t.shop.lead }}</p>
+  </div>
+</section>
+
+<section class="section shop" aria-labelledby="shop-title">
+  <div class="wrap">
+    <h2 class="sr-only" id="shop-title">{{ t.shop.title }}</h2>
+    <div class="shop-bar">
+      <div class="chips" role="group" aria-label="{{ t.shop.title }}">
+        <button class="chip on" type="button" data-cat="all" aria-pressed="true">{{ t.shop.all }} <span>{{ shop.products | length }}</span></button>
+        {% for c in shop.categories %}<button class="chip" type="button" data-cat="{{ c.id }}" aria-pressed="false">{{ c.name }} <span>{{ shop.products | selectattr('cat', 'equalto', c.id) | list | length }}</span></button>
+        {% endfor %}
+      </div>
+      <div class="shop-tools">
+        <label class="search">{{ ic.icon('search') }}<input type="search" id="shop-search" placeholder="{{ t.shop.search }}" aria-label="{{ t.shop.search }}"></label>
+        <select id="shop-sort" aria-label="{{ t.shop.sort }}"><option value="default">{{ t.shop.sort_default }}</option><option value="name">{{ t.shop.sort_name }}</option></select>
+      </div>
+    </div>
+    <p class="shop-count" id="shop-count" aria-live="polite" data-template="{{ t.shop.count }}">{{ t.shop.count | fill(n=shop.products | length) }}</p>
+
+    <div class="p-grid" id="p-grid">
+      {% for p in shop.products %}
+      <article class="p-card" data-id="{{ p.id }}" data-cat="{{ p.cat }}" data-name="{{ p.name }}" data-order="{{ loop.index0 }}">
+        <div class="p-media">
+          <a class="p-link" href="?p={{ p.id }}" data-qv="{{ p.id }}" aria-label="{{ t.shop.view }}: {{ p.name }}">
+            <img src="{{ root }}assets/img/shop/{{ p.img[0] }}-thumb.jpg" alt="{{ p.name }}" width="720" height="540"{% if loop.index > 4 %} loading="lazy"{% endif %} decoding="async">
+            <img class="p-alt" src="{{ root }}assets/img/shop/{{ p.img[1] }}-thumb.jpg" alt="" width="720" height="540" loading="lazy" decoding="async">
+          </a>
+          {% if p.get('badge') %}<span class="p-badge">{{ p.badge }}</span>{% endif %}
+          <div class="p-actions">
+            <button class="p-act" type="button" data-fav="{{ p.id }}" aria-pressed="false" aria-label="{{ t.cart.fav_add }}: {{ p.name }}">{{ ic.icon('heart') }}</button>
+            <button class="p-act" type="button" data-qv="{{ p.id }}" aria-label="{{ t.shop.view }}: {{ p.name }}">{{ ic.icon('eye') }}</button>
+          </div>
+        </div>
+        <div class="p-body">
+          <span class="p-cat">{{ cat_names[p.cat] }}</span>
+          <h3><a href="?p={{ p.id }}" data-qv="{{ p.id }}">{{ p.name }}</a></h3>
+          <p>{{ p.short }}</p>
+          <div class="p-foot">
+            <span class="p-price">{{ t.shop.price }}</span>
+            <button class="p-add" type="button" data-add="{{ p.id }}" aria-label="{{ t.shop.add }}: {{ p.name }}">{{ ic.icon('plus') }}<span>{{ t.shop.add }}</span></button>
+          </div>
+        </div>
+      </article>
+      {% endfor %}
+    </div>
+    <p class="shop-empty" id="shop-empty" hidden>{{ t.shop.empty }}</p>
+
+    <div class="shop-custom">
+      <div>
+        <h2>{{ t.shop.custom_title }}</h2>
+        <p>{{ t.shop.custom_text }}</p>
+      </div>
+      <a class="btn btn-fill" href="{{ wa(t.shop.custom_msg) }}" target="_blank" rel="noopener">{% include "partials/wa-icon.svg" %} {{ t.shop.custom_btn }}</a>
+    </div>
+  </div>
+</section>
+{% endblock %}

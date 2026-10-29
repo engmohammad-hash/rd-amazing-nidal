@@ -115,6 +115,22 @@ class Site:
                 for s in self.data["services"]]},
         }
 
+    def shop_json(self, root):
+        """What the cart, favourites and quick view need on every page, in this page's language."""
+        shop, img = self.data["shop"], root + "assets/img/shop/"
+        products = []
+        for p in shop["products"]:
+            o = shop["options"][p["cat"]]
+            products.append({
+                "id": p["id"], "cat": p["cat"], "name": p["name"], "short": p["short"], "badge": p.get("badge", ""),
+                "img": [f"{img}{k}.jpg" for k in p["img"]], "thumb": [f"{img}{k}-thumb.jpg" for k in p["img"]],
+                "unit": o["unit"], "min": o["min"], "step": o["step"], "choices": o["choices"],
+            })
+        return json.dumps({
+            "wa": WHATSAPP, "shop": root + self.prefix + "shop/",
+            "cats": {c["id"]: c["name"] for c in shop["categories"]}, "products": products, "t": self.t["cart"],
+        }, ensure_ascii=False, separators=(",", ":")).replace("</", "<\\/")
+
     def render(self, template, path, ctx):
         """`path` is the page's place inside its language; Arabic sits at the root, English under en/."""
         t, full = self.t, self.prefix + path
@@ -123,7 +139,9 @@ class Site:
         home = (root + self.prefix) or "./"
         page = {
             "t": t, "lang": t["lang"], "dir": t["dir"], "b": self.b, "d": self.data, "credit": self.data["credit"],
-            "root": root, "home": home, "path": full, "version": VERSION, "wa": wa,
+            "root": root, "home": home, "path": full, "version": VERSION, "wa": wa, "template": template,
+            "shop": self.data["shop"], "shop_link": root + self.prefix + "shop/", "shop_json": self.shop_json(root),
+            "cat_names": {c["id"]: c["name"] for c in self.data["shop"]["categories"]},
             # on the home page a section link is just its anchor; elsewhere it leads back home first
             "anchor": (lambda id: "#" + id) if template == "home.html" else (lambda id, h=home: h + "#" + id),
             "alt_link": (root + t["other"]["prefix"] + path) or "./",
@@ -141,6 +159,18 @@ class Site:
             "jsonld": jsonld(self.business_ld(), {"@type": "WebSite", "@id": BASE + self.prefix + "#site", "url": BASE + self.prefix,
                                                   "name": b["name"], "inLanguage": t["locale"].replace("_", "-"),
                                                   "publisher": {"@id": ORG_ID}}),
+        })
+        shop_url = BASE + self.prefix + "shop/"
+        self.render("shop.html", "shop/", {
+            "title": fill(t["shop"]["meta_title"], **names), "description": t["shop"]["meta_desc"],
+            "jsonld": jsonld(
+                {"@type": "BreadcrumbList", "itemListElement": [
+                    {"@type": "ListItem", "position": 1, "name": t["shop"]["crumb_home"], "item": BASE + self.prefix},
+                    {"@type": "ListItem", "position": 2, "name": t["shop"]["title"], "item": shop_url}]},
+                {"@type": "ItemList", "itemListElement": [
+                    {"@type": "ListItem", "position": i + 1, "url": f"{shop_url}?p={p['id']}", "name": p["name"],
+                     "image": BASE + f"assets/img/shop/{p['img'][0]}.jpg"}
+                    for i, p in enumerate(self.data["shop"]["products"])]}),
         })
         if self.code == "ar":   # GitHub Pages has a single 404 page for the whole site
             self.render("404.html", "404.html", {
@@ -173,6 +203,8 @@ def write_meta(sites):
     for s, head in ((ar, "الخدمات"), (en, "Services")):
         lines += [f"## {head}", ""]
         lines += [f"- {svc['name']}: {'، '.join(svc['items']) if s is ar else ', '.join(svc['items'])}" for svc in s.data["services"]]
+        lines += ["", f"### {s.t['shop']['title']} ({BASE}{s.prefix}shop/)", ""]
+        lines += [f"- {p['name']}: {p['short']}" for p in s.data["shop"]["products"]]
         lines += [""]
     write(OUT / "llms.txt", "\n".join(lines))
 

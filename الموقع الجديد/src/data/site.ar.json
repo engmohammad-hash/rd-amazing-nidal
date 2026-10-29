@@ -75,5 +75,63 @@
     { "title": "أرسل طلبك", "text": "ابعث لنا نوع المنتج والكمية والمقاس، وملف التصميم إن وُجد." },
     { "title": "نراجع ونعتمد", "text": "نتفق على الخامة والتشطيب والسعر، وترى نموذج التصميم قبل الطباعة." },
     { "title": "نطبع ونسلّم", "text": "نبدأ الطباعة بعد موافقتك، ونسلّمك في الموعد المتفق عليه." }
-  ]
+  ],
+
+  "shop": {
+    "categories": [
+      { "id": "cards", "name": "الكروت" },
+      { "id": "incense", "name": "علب البخور" },
+      { "id": "sweets", "name": "علب الحلويات" },
+      { "id": "bags", "name": "الأكياس" },
+      { "id": "invitations", "name": "الدعوات" },
+      { "id": "cups", "name": "الأكواب" },
+      { "id": "stickers", "name": "الستيكرات" }
+    ],
+    "options": {
+      "cards": { "unit": "كرت", "min": 100, "step": 100, "choices": [
+        { "name": "الورق", "values": ["كوشيه مطفي ٣٥٠ جم", "ورق فاخر محبب", "بلاستيك شفاف"] },
+        { "name": "التشطيب", "values": ["طباعة ذهبية", "طباعة فضية", "سلوفان مطفي", "بدون تشطيب"] } ] },
+      "incense": { "unit": "علبة", "min": 50, "step": 50, "choices": [
+        { "name": "المقاس", "values": ["صغير", "وسط", "كبير"] },
+        { "name": "البطانة", "values": ["مخمل عنابي", "ستان بيج", "بدون بطانة"] } ] },
+      "sweets": { "unit": "علبة", "min": 50, "step": 50, "choices": [
+        { "name": "عدد القطع", "values": ["٩ قطع", "١٦ قطعة", "٢٥ قطعة"] },
+        { "name": "التشطيب", "values": ["طباعة ذهبية", "سلوفان مطفي", "بدون تشطيب"] } ] },
+      "bags": { "unit": "كيس", "min": 100, "step": 50, "choices": [
+        { "name": "المقاس", "values": ["صغير", "وسط", "كبير"] },
+        { "name": "المقبض", "values": ["حبل قطني", "شريط ستان", "ورق مبروم"] } ] },
+      "invitations": { "unit": "دعوة", "min": 50, "step": 25, "choices": [
+        { "name": "الورق", "values": ["ورق فاخر محبب", "كوشيه مطفي", "ورق لؤلؤي"] },
+        { "name": "الظرف", "values": ["مع ظرف", "بدون ظرف"] } ] },
+      "cups": { "unit": "كوب", "min": 1000, "step": 500, "choices": [
+        { "name": "الحجم", "values": ["٤ أونص", "٨ أونص", "١٢ أونص"] },
+        { "name": "الطبقات", "values": ["طبقة واحدة", "طبقتين"] } ] },
+      "stickers": { "unit": "ستيكر", "min": 250, "step": 250, "choices": [
+        { "name": "الشكل", "values": ["دائري", "مربع", "قص على الشكل"] },
+        { "name": "الخامة", "values": ["ورق لامع", "شفاف", "ذهبي"] } ] }
+    },
+    "products": [
+      { "id": "luxury-cards", "cat": "cards", "img": ["cards-02", "cards-01", "cards-03"], "badge": "الأكثر طلباً", "name": "كروت شخصية فاخرة", "short": "ورق سميك وطباعة دقيقة وتشطيب يليق باسمك." },
+      { "id": "foil-cards", "cat": "cards", "img": ["cards-04", "cards-06", "cards-02"], "name": "كروت بطباعة ذهبية", "short": "اسمك وشعارك بالذهب البارز على ورق داكن." },
+      { "id": "thank-you-cards", "cat": "cards", "img": ["cards-05", "cards-01", "cards-04"], "name": "كروت شكر وإهداء", "short": "بطاقة صغيرة ترافق طلباتك وهداياك." },
+      { "id": "luxury-incense-box", "cat": "incense", "img": ["incense-05", "incense-02", "incense-06"], "badge": "جديد", "name": "بوكس بخور فاخر", "short": "علبة بغطاء وبطانة داخلية للبخور والمبخرة." },
+      { "id": "magnetic-incense-box", "cat": "incense", "img": ["incense-01", "incense-04", "incense-03"], "name": "بوكس بخور مغناطيسي", "short": "إغلاق مغناطيسي وشعارك على الغطاء." },
+      { "id": "oud-box", "cat": "incense", "img": ["incense-03", "incense-01", "incense-05"], "name": "علبة عود ودهن", "short": "غطاء بنقش بارز لدهن العود والعطور." },
+      { "id": "drawer-sweets-box", "cat": "sweets", "img": ["sweets-04", "sweets-06", "sweets-02"], "badge": "مميز", "name": "علبة حلويات بدرج", "short": "درج منزلق وحواجز داخلية لترتيب القطع." },
+      { "id": "chocolate-box", "cat": "sweets", "img": ["sweets-01", "sweets-03", "sweets-05"], "name": "علبة شوكولاتة", "short": "غطاء بشعارك وترتيب أنيق للقطع." },
+      { "id": "gift-box", "cat": "sweets", "img": ["sweets-02", "sweets-05", "sweets-06"], "name": "بوكس هدايا فاخر", "short": "علبة صلبة تحمل اسمك لهدايا المناسبات والشركات." },
+      { "id": "luxury-paper-bags", "cat": "bags", "img": ["bags-01", "bags-06", "bags-03"], "badge": "الأكثر طلباً", "name": "أكياس ورقية فاخرة", "short": "ورق سميك ومقابض قطنية بألوان علامتك." },
+      { "id": "maroon-gift-bag", "cat": "bags", "img": ["bags-05", "bags-02", "bags-03"], "name": "كيس هدايا عنابي", "short": "كيس داكن بشعار بارز للمتاجر والمناسبات." },
+      { "id": "white-bag", "cat": "bags", "img": ["bags-04", "bags-06", "bags-01"], "name": "كيس أبيض بمقبض", "short": "تصميم هادئ يناسب متاجر العطور والملابس." },
+      { "id": "wedding-invitation", "cat": "invitations", "img": ["invitations-03", "invitations-06", "invitations-01"], "name": "دعوة زفاف", "short": "ورق فاخر وخط عربي أنيق لدعوة لا تُنسى." },
+      { "id": "envelope-invitation", "cat": "invitations", "img": ["invitations-01", "invitations-04", "invitations-05"], "name": "دعوة مع ظرف مزخرف", "short": "ظرف مطبوع من الداخل بنقش يناسب المناسبة." },
+      { "id": "wax-seal-invitation", "cat": "invitations", "img": ["invitations-02", "invitations-05", "invitations-03"], "name": "دعوة بختم شمع", "short": "ختم شمع بشعارك أو بحروف العروسين." },
+      { "id": "printed-cups", "cat": "cups", "img": ["cups-01", "cups-04", "cups-06"], "badge": "الأكثر طلباً", "name": "أكواب ورقية مطبوعة", "short": "أكواب بشعارك بثلاثة أحجام للمقاهي والمناسبات." },
+      { "id": "coffee-cup", "cat": "cups", "img": ["cups-02", "cups-05", "cups-03"], "name": "كوب قهوة بغطاء", "short": "كوب يحفظ الحرارة ويحمل علامتك." },
+      { "id": "sleeved-cups", "cat": "cups", "img": ["cups-06", "cups-04", "cups-03"], "name": "أكواب بأكمام مطبوعة", "short": "كمّ ورقي يحمي اليد ويعرض شعارك." },
+      { "id": "sticker-roll", "cat": "stickers", "img": ["stickers-01", "stickers-03", "stickers-06"], "name": "رول ستيكر", "short": "ستيكرات على رول لتغليف الطلبات بسرعة." },
+      { "id": "round-sticker", "cat": "stickers", "img": ["stickers-04", "stickers-03", "stickers-02"], "badge": "جديد", "name": "ستيكر دائري فاخر", "short": "ستيكر بشعارك لإغلاق العلب والأكياس." },
+      { "id": "jar-labels", "cat": "stickers", "img": ["stickers-05", "stickers-02", "stickers-06"], "name": "ستيكر عبوات", "short": "ملصق يلتف على العبوات والعلب الأسطوانية." }
+    ]
+  }
 }

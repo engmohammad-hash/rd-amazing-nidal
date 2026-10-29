@@ -1,0 +1,58 @@
+{# The cart, the favourites, the quick view and the little notices: on every page, filled in by shop.js #}
+{% import "partials/icons.html" as ic %}
+<div class="scrim" id="scrim"></div>
+<aside class="panel" id="panel-cart" role="dialog" aria-modal="true" aria-labelledby="panel-cart-title" inert>
+  <div class="panel-head">
+    <h2 id="panel-cart-title">{{ ic.icon('bag') }} {{ t.cart.cart }} <small data-count-text="cart"></small></h2>
+    <button class="icon-btn" type="button" data-close aria-label="{{ t.cart.close }}">{{ ic.icon('close') }}</button>
+  </div>
+  <div class="panel-body" data-list="cart"></div>
+  <form class="panel-foot order-form" id="order-form" data-foot="cart">
+    <div class="order-fields">
+      <label><span>{{ t.cart.name }}</span><input name="name" autocomplete="name" placeholder="{{ t.cart.name_ph }}"></label>
+      <label><span>{{ t.cart.delivery }}</span><select name="delivery">{% for o in t.cart.delivery_opts %}<option>{{ o }}</option>{% endfor %}</select></label>
+    </div>
+    <label><span>{{ t.cart.notes }}</span><textarea name="notes" rows="2" placeholder="{{ t.cart.notes_ph }}"></textarea></label>
+    <p class="order-note">{{ t.cart.price }}</p>
+    <button class="btn btn-fill order-send" type="submit">{% include "partials/wa-icon.svg" %} {{ t.cart.confirm }}</button>
+    <button class="order-clear" type="button" data-clear>{{ t.cart['clear'] }}</button>
+  </form>
+</aside>
+<aside class="panel" id="panel-favs" role="dialog" aria-modal="true" aria-labelledby="panel-favs-title" inert>
+  <div class="panel-head">
+    <h2 id="panel-favs-title">{{ ic.icon('heart') }} {{ t.cart.favs }} <small data-count-text="favs"></small></h2>
+    <button class="icon-btn" type="button" data-close aria-label="{{ t.cart.close }}">{{ ic.icon('close') }}</button>
+  </div>
+  <div class="panel-body" data-list="favs"></div>
+</aside>
+<div class="qv" id="qv" role="dialog" aria-modal="true" aria-labelledby="qv-name" inert>
+  <div class="qv-box">
+    <button class="icon-btn qv-close" type="button" data-close aria-label="{{ t.cart.close }}">{{ ic.icon('close') }}</button>
+    <div class="qv-gallery">
+      <div class="qv-main"><img alt="" width="1600" height="1200"></div>
+      <div class="qv-thumbs"></div>
+    </div>
+    <form class="qv-info" id="qv-form">
+      <span class="p-cat qv-cat"></span>
+      <h2 id="qv-name"></h2>
+      <p class="qv-short"></p>
+      <p class="qv-price">{{ t.shop.price }}</p>
+      <div class="qv-choices"></div>
+      <div class="qv-qty">
+        <span class="qv-label">{{ t.cart.qty }}</span>
+        <div class="stepper"><button type="button" data-step="-1" aria-label="{{ t.cart.dec }}">−</button><input type="number" name="qty" inputmode="numeric" aria-label="{{ t.cart.qty }}"><button type="button" data-step="1" aria-label="{{ t.cart.inc }}">+</button></div>
+        <small class="qv-min"></small>
+      </div>
+      <div class="qv-buy">
+        <button class="btn btn-fill qv-add" type="submit">{{ ic.icon('bag') }} {{ t.cart.add }}</button>
+        <button class="icon-btn qv-fav" type="button" aria-pressed="false" aria-label="{{ t.cart.fav_add }}">{{ ic.icon('heart') }}</button>
+      </div>
+      <div class="qv-links">
+        <a class="qv-ask" href="#" target="_blank" rel="noopener">{% include "partials/wa-icon.svg" %} {{ t.cart.ask }}</a>
+        <button class="qv-share" type="button">{{ t.cart.share }}</button>
+      </div>
+    </form>
+  </div>
+</div>
+<div class="toast" id="toast" role="status" aria-live="polite"><span class="toast-text"></span><button class="toast-action" type="button" data-open="cart">{{ t.cart.view_cart }}</button></div>
+<script type="application/json" id="shop-data">{{ shop_json | safe }}</script>

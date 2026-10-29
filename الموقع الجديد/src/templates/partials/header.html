@@ -18,10 +18,15 @@
     <nav class="nav" aria-label="{{ t.nav_aria }}">
       {% for n in d.nav %}<a href="{{ anchor(n.id) }}" data-section="{{ n.id }}">{{ n.label }}</a>
       {% endfor %}
+      <a class="nav-shop{% if template == 'shop.html' %} active{% endif %}" href="{{ shop_link }}"{% if template == 'shop.html' %} aria-current="page"{% endif %}>{{ t.shop.nav }}</a>
     </nav>
     <div class="hdr-tools">
       <a class="lang-btn" href="{{ alt_link }}" hreflang="{{ t.other.lang }}" lang="{{ t.other.lang }}" aria-label="{{ t.lang_switch }}">{{ t.other.short }}</a>
       {{ theme_button() }}
+    </div>
+    <div class="hdr-shop">
+      <button class="icon-btn hdr-fav" type="button" data-open="favs" aria-label="{{ t.cart.favs }}">{{ ic.icon('heart') }}<span class="count" data-count="favs" hidden>0</span></button>
+      <button class="icon-btn hdr-cart" type="button" data-open="cart" aria-label="{{ t.cart.cart }}">{{ ic.icon('bag') }}<span class="count" data-count="cart" hidden>0</span></button>
     </div>
     <button class="menu-btn" id="menu-btn" type="button" aria-label="{{ t.menu }}" aria-expanded="false" aria-controls="drawer"><span></span><span></span><span></span></button>
     <a class="call-btn" href="tel:{{ b.phone }}" aria-label="{{ t.call_aria }}: {{ b.phone_display }}">{{ ic.icon('phone') }}<span>{{ t.call }}</span></a>
@@ -30,6 +35,8 @@
 <nav class="drawer" id="drawer" aria-label="{{ t.menu }}">
   {% for n in d.nav %}<a href="{{ anchor(n.id) }}">{{ n.label }}</a>
   {% endfor %}
+  <a href="{{ shop_link }}">{{ t.shop.nav }}</a>
+  <button class="drawer-favs" type="button" data-open="favs">{{ ic.icon('heart') }} {{ t.cart.favs }} <span class="count" data-count="favs" hidden>0</span></button>
   <div class="drawer-tools">
     <a class="btn btn-fill" href="{{ wa(t.quote_msg) }}" target="_blank" rel="noopener">{% include "partials/wa-icon.svg" %} {{ t.quote_btn }}</a>
     <a class="lang-btn" href="{{ alt_link }}" hreflang="{{ t.other.lang }}" lang="{{ t.other.lang }}">{{ t.lang_switch }}</a>

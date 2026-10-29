@@ -8,7 +8,7 @@
     </div>
     <div>
       <h3>{{ t.foot.sections }}</h3>
-      <ul>{% for n in d.nav %}<li><a href="{{ anchor(n.id) }}">{{ n.label }}</a></li>{% endfor %}</ul>
+      <ul>{% for n in d.nav %}<li><a href="{{ anchor(n.id) }}">{{ n.label }}</a></li>{% endfor %}<li><a href="{{ shop_link }}">{{ t.shop.title }}</a></li></ul>
     </div>
     <div>
       <h3>{{ t.foot.services }}</h3>

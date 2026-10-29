@@ -2,6 +2,7 @@
 one tall image (scaled down) so the whole page can be looked over at once.
 
 usage: python -I tools/shoot.py <url> <out.jpg> [--w=1440] [--h=900] [--mobile] [--theme=light|dark] [--scale=.5]
+       [--js=<code to run first>] [--top-only]
 """
 import json
 import subprocess
@@ -66,6 +67,10 @@ try:
     print("page height", total, "info", info, flush=True)
     if total > 20000:
         raise SystemExit("page far too tall, stopping")
+    before = opt("js", "")   # e.g. open the cart before the pictures are taken
+    if before:
+        js(before)
+        time.sleep(1.2)
     shots, y = [], 0
     while True:
         js(f"window.scrollTo({{top: {y}, behavior: 'instant'}})")
@@ -76,7 +81,7 @@ try:
         if len(shots) == 1:   # later shots without the sticky header, so the stitched page reads cleanly
             js("document.head.insertAdjacentHTML('beforeend', '<style>.hdr{position:relative!important}</style>')")
             total = js("document.documentElement.scrollHeight")
-        if y + H >= total:
+        if y + H >= total or "--top-only" in sys.argv:
             break
         y = min(y + H, total - H)
     last_overlap = (len(shots) - 1) * H - (total - H) if len(shots) > 1 else 0
