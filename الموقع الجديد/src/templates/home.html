@@ -23,12 +23,21 @@
       <source media="(max-aspect-ratio: 4/5)" srcset="{{ root }}assets/video/hero-mobile.jpg?v={{ version }}">
       <img class="hero-poster" src="{{ root }}assets/video/hero-desktop.jpg?v={{ version }}" alt="" width="1280" height="720" fetchpriority="high">
     </picture>
-    {# the film's address is in the page itself, so it starts arriving with the page rather than after the scripts #}
-    <video class="hero-video" muted playsinline loop autoplay preload="auto" disablepictureinpicture tabindex="-1">
+    {# the film's address is in the page itself, so it need not wait for the page's scripts #}
+    <video class="hero-video" muted playsinline loop preload="none" disablepictureinpicture tabindex="-1">
       <source src="{{ root }}assets/video/hero-mobile.mp4?v={{ version }}" type="video/mp4" media="(max-aspect-ratio: 4/5)">
       <source src="{{ root }}assets/video/hero-desktop.mp4?v={{ version }}" type="video/mp4">
     </video>
   </div>
+  {# The film starts loading the moment the stylesheet and its first frame are in: on a slow line, fetched any earlier
+     it would take the whole connection and hold the page itself back. It shows on its first moving frame. #}
+  <script>(function () {
+    var v = document.querySelector('.hero-video'), img = document.querySelector('.hero-poster'), css = document.querySelector('link[rel="stylesheet"]'), n = 0;
+    var go = function () { if (++n < 2) return; v.preload = 'auto'; var p = v.play(); if (p && p.catch) p.catch(function () {}); };
+    v.addEventListener('playing', function () { v.classList.add('playing'); });
+    if (img.complete) go(); else { img.addEventListener('load', go); img.addEventListener('error', go); }
+    if (css.sheet) go(); else { css.addEventListener('load', go); css.addEventListener('error', go); }
+  })();</script>
   <div class="wrap hero-in">
     <div class="hero-copy">
       <p class="eyebrow">{{ d.hero.eyebrow }}</p>
