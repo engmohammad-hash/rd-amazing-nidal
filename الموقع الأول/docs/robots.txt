@@ -1,4 +1,4 @@
 User-agent: *
 Allow: /
 
-Sitemap: https://engmohammad-hash.github.io/rd-amazing-nidal/sitemap.xml
+Sitemap: https://engmohammad-hash.github.io/rd-amazing-nidal/v1/sitemap.xml

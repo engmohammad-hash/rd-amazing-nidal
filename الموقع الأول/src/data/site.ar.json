@@ -14,7 +14,7 @@
     "country": "المملكة العربية السعودية",
     "maps": "https://www.google.com/maps/search/?api=1&query=%D9%85%D8%B7%D8%A7%D8%A8%D8%B9+%D8%B1%D9%88%D8%B9%D8%A9+%D8%A7%D9%84%D8%AA%D8%B5%D8%A7%D9%85%D9%8A%D9%85+%D8%A7%D9%84%D8%AF%D9%85%D8%A7%D9%85",
     "hours": { "open": "09:00", "close": "21:00", "closed_day": 5, "label": "يومياً من ٩ صباحاً حتى ٩ مساءً، والجمعة إجازة" },
-    "base_url": "https://engmohammad-hash.github.io/rd-amazing-nidal/"
+    "base_url": "https://engmohammad-hash.github.io/rd-amazing-nidal/v1/"
   },
 
   "credit": { "name": "Sadeem Soft", "url": "https://wa.me/963962841587" },
