@@ -21,7 +21,7 @@
 <meta name="twitter:card" content="summary_large_image">
 <link rel="icon" type="image/png" href="assets/img/logo-color.png">
 <link rel="apple-touch-icon" href="assets/img/logo-color.png">
-<script>(function () { var d = document.documentElement, t = null; try { t = localStorage.getItem('theme'); } catch (e) {} if (t !== 'dark' && t !== 'light') t = matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light'; d.setAttribute('data-theme', t); d.className += ' js'; })();</script>
+<script>(function () { var d = document.documentElement, t = null; try { t = localStorage.getItem('theme'); } catch (e) {} d.setAttribute('data-theme', t === 'dark' ? 'dark' : 'light'); d.className += ' js'; })();</script>
 <link rel="preload" as="font" type="font/woff2" crossorigin href="assets/fonts/alexandria-arabic.woff2">
 <link rel="preload" as="font" type="font/woff2" crossorigin href="assets/fonts/ibm-plex-sans-arabic-400-arabic.woff2">
 <link rel="preload" as="image" href="assets/video/hero-desktop.jpg?v=798b2da3" media="(min-aspect-ratio: 4/5)" fetchpriority="high">
