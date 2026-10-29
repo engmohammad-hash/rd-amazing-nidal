@@ -18,9 +18,11 @@ NEW, OLD = f"{ROOT.name}/docs", "الموقع الأول/docs"
 
 
 def git(*args, stdin=None):
-    # quotepath off, so the folders' Arabic names come back as they are
-    return subprocess.run(["git", "-c", "core.quotepath=false", *args], cwd=REPO, check=True, capture_output=True,
-                          text=True, encoding="utf-8", input=stdin).stdout.strip()
+    # quotepath off, so the folders' Arabic names come back as they are; the input goes as bytes, because text mode
+    # on Windows would turn each newline into \r\n and git would take the \r as part of a name
+    out = subprocess.run(["git", "-c", "core.quotepath=false", *args], cwd=REPO, check=True, capture_output=True,
+                         input=stdin.encode() if stdin is not None else None)
+    return out.stdout.decode("utf-8").strip()
 
 
 for prefix in (NEW, OLD):
@@ -34,10 +36,15 @@ if any(line.split("\t", 1)[1] == "v1" for line in entries):
 entries.append(f"040000 tree {git('rev-parse', f'HEAD:{OLD}')}\tv1")
 tree = git("mktree", stdin="\n".join(entries) + "\n")
 
-parent = []
+git("fetch", "-q", "origin", "main")
+if git("rev-parse", "FETCH_HEAD") != git("rev-parse", "HEAD"):
+    raise SystemExit("push main first: GitHub must already have what is being published")
+# main is a parent too, and the push walks whole trees rather than path by path: that is how git sees that GitHub
+# already has every file (they sit under other folder names in main) and sends a few hundred bytes, not 100 MB
+parents = ["-p", "HEAD"]
 if git("ls-remote", "--heads", "origin", "gh-pages"):
     git("fetch", "-q", "origin", "gh-pages")
-    parent = ["-p", git("rev-parse", "FETCH_HEAD")]
-commit = git("commit-tree", tree, *parent, "-m", f"Publish both sites from main {head}")
-git("push", "origin", f"{commit}:refs/heads/gh-pages")
+    parents = ["-p", git("rev-parse", "FETCH_HEAD")] + parents
+commit = git("commit-tree", tree, *parents, "-m", f"Publish both sites from main {head}")
+git("-c", "pack.useSparse=false", "push", "origin", f"{commit}:refs/heads/gh-pages")
 print("published", commit[:8], "to gh-pages (new site at the root, first site under v1/)")
