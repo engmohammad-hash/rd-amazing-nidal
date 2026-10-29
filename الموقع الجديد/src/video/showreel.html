@@ -13,14 +13,17 @@
 <pre id="log">loading…</pre>
 <canvas id="out"></canvas>
 <script type="module">
-  /* The hero film, from the client's own photos and clips, in the order they set: the shop's front, 1 to 20,
-     and the front again, ending on the very frame it starts with, so the loop has no seam. Silent, nothing laid
-     over the pictures: the site draws the gold frame and the colours around it, light or dark.
+  /* The hero film, behind the whole top of the home page, from the client's own photos and clips in the order they
+     set: the shop's front, 1 to 20, and the front again, ending on the very frame it starts with, so the loop has
+     no seam. Silent. A picture that does not fill the screen sits where the page's copy is not (the left on a
+     laptop, the top on a phone) over a soft blur of itself.
      Sources in tools/out/showreel-src (0.jpg is the front). Each frame is posted to tools/serve.py:
-       showreel.html[?sample=8]   -> tools/out/showreel/desktop/NNNN.jpg */
+       showreel.html?set=desktop|mobile[&sample=8]   -> tools/out/showreel/<set>/NNNN.jpg */
   const q = new URLSearchParams(location.search);
   const sample = Number(q.get('sample') || 0);
-  const FPS = 30, W = 720, H = 900, XF = .7;
+  const SET = q.get('set') === 'mobile' ? 'mobile' : 'desktop';
+  const [W, H] = SET === 'mobile' ? [720, 1280] : [1600, 900];
+  const FPS = 30, XF = .7;
   const MEDIA = '../../tools/out/showreel-src/';
 
   // [file, seconds on screen, extra]; a clip's `from` is where its best moment starts, `box` its clean part
@@ -70,50 +73,67 @@
     return [cx - rw / 2, cy - rh / 2, rw, rh];
   }
 
+  // where a picture that does not fill the screen sits: left of centre on a laptop (the copy is on the right),
+  // in the upper part on a phone (the copy is below)
+  function hole(aspect, front) {
+    if (SET === 'desktop') {
+      let h = H * .88, w = h * aspect;
+      if (w > W * .5) { w = W * .5; h = w / aspect; }
+      return { x: W * .31 - w / 2, y: (H - h) / 2, w, h };
+    }
+    if (front) return { x: 0, y: 0, w: W, h: W / aspect };   // the shop's front, full width at the top
+    let w = W * .94, h = w / aspect;
+    if (h > H * .62) { h = H * .62; w = h * aspect; }
+    return { x: (W - w) / 2, y: Math.max(24, H * .3 - h / 2), w, h };
+  }
+  const SMALL = Object.assign(document.createElement('canvas'), { width: Math.round(W / 10), height: Math.round(H / 10) });
+  const sg = SMALL.getContext('2d');
+  const fills = aspect => (SET === 'desktop' ? aspect >= 1.25 : aspect <= .8);
+
   function drawShot(s, local) {
     const src = s.media, sw = src.videoWidth || src.naturalWidth, sh = src.videoHeight || src.naturalHeight;
-    const k = ease(Math.min(1, local / s.dur)), wide = sw / sh > .9;
-    g.filter = 'saturate(1.06) contrast(1.04)';
-    if (s.front) {
-      // the shop's front: in, it moves closer to the lit sign; out, it comes back to where it began
-      const p = s.front === 'in' ? k : 1 - k;
-      const r = region(sw, sh, s.box, W, H, 1 + .12 * p, 0, -.7 * p);
-      g.drawImage(src, ...r, 0, 0, W, H);
+    const aspect = (s.box[2] * sw) / (s.box[3] * sh), k = ease(Math.min(1, local / s.dur));
+    if (!s.front && fills(aspect)) {
+      // fills the screen and drifts a little, each the other way from the last
+      const dir = s.i % 2 ? 1 : -1;
+      g.filter = 'saturate(1.06) contrast(1.04)';
+      g.drawImage(src, ...region(sw, sh, s.box, W, H, 1.02 + .06 * k, dir * (.5 - k) * .6, dir * (.5 - k) * .6), 0, 0, W, H);
       g.filter = 'none';
-      signGlow(src, r, s.front === 'in' ? (local - 1.1) / 1.8 : (local - .7) / 1.8);
       return;
     }
-    if (wide) {
-      // a wide photo stays whole, over a soft blur of itself
-      g.filter = 'blur(22px) saturate(1.05) brightness(.82)';
-      g.drawImage(src, ...region(sw, sh, s.box, W, H, 1.15, 0, 0), -30, -30, W + 60, H + 60);
-      g.filter = 'saturate(1.06) contrast(1.04)';
-      const z = 1 + .04 * k, w = W * .94 * z, h = w * sh / sw;
-      g.save();
-      g.shadowColor = 'rgba(0,0,0,.4)'; g.shadowBlur = 30; g.shadowOffsetY = 10;
-      g.drawImage(src, (W - w) / 2, (H - h) / 2, w, h);
-      g.restore();
-    } else {
-      // tall and square ones fill the frame and drift a little, each the other way from the last
-      const dir = s.i % 2 ? 1 : -1;
-      g.drawImage(src, ...region(sw, sh, s.box, W, H, 1.02 + .06 * k, 0, dir * (.5 - k) * .8), 0, 0, W, H);
-    }
-    g.filter = 'none';
+    // the rest: a soft blur of the picture across the screen (blurred small and enlarged: the same look, far
+    // quicker than blurring the full frame), the picture itself whole in its place
+    sg.filter = 'blur(3px) saturate(1.05) brightness(.72)';
+    sg.drawImage(src, ...region(sw, sh, s.box, W, H, 1.1, 0, 0), -4, -4, SMALL.width + 8, SMALL.height + 8);
+    g.imageSmoothingQuality = 'high';
+    g.drawImage(SMALL, 0, 0, W, H);
+    const r = hole(aspect, !!s.front);
+    // the shop's front moves in to the lit sign and, at the end, back out to where it began; the rest breathe
+    const p = s.front ? (s.front === 'in' ? k : 1 - k) : k;
+    const zoom = s.front ? 1 + .12 * p : 1 + .05 * k, dy = s.front ? -.7 * p : 0;
+    const part = region(sw, sh, s.box, r.w, r.h, zoom, 0, dy);
+    g.save();
+    g.filter = 'saturate(1.06) contrast(1.04)';
+    g.shadowColor = 'rgba(0,0,0,.45)'; g.shadowBlur = 40; g.shadowOffsetY = 12;
+    g.drawImage(src, ...part, r.x, r.y, r.w, r.h);
+    g.restore();
+    if (s.front) signGlow(src, part, r, s.front === 'in' ? (local - 1.1) / 1.8 : (local - .7) / 1.8);
   }
   // the sign's lit letters bloom softly, and once per shot a gleam crosses them
-  function signGlow(src, r, gleam) {
+  function signGlow(src, part, r, gleam) {
     g.save();
+    g.beginPath(); g.rect(r.x, r.y, r.w, r.h); g.clip();
     g.globalCompositeOperation = 'lighter';
     g.globalAlpha = .3;
     g.filter = 'blur(12px) brightness(1.35)';
-    g.drawImage(src, ...r, 0, 0, W, H);
+    g.drawImage(src, ...part, r.x, r.y, r.w, r.h);
     g.filter = 'none';
     if (gleam > 0 && gleam < 1) {
-      const x = -W * .4 + gleam * W * 1.8;
-      const gl = g.createLinearGradient(x - 140, 0, x + 140, H * .35);
+      const x = r.x - r.w * .4 + gleam * r.w * 1.8;
+      const gl = g.createLinearGradient(x - 140, r.y, x + 140, r.y + r.h * .35);
       gl.addColorStop(0, 'rgba(255,240,210,0)'); gl.addColorStop(.5, 'rgba(255,240,210,.2)'); gl.addColorStop(1, 'rgba(255,240,210,0)');
       g.globalAlpha = Math.sin(gleam * Math.PI);
-      g.fillStyle = gl; g.fillRect(0, 0, W, H * .6);
+      g.fillStyle = gl; g.fillRect(r.x, r.y, r.w, r.h * .6);
     }
     g.restore();
   }
@@ -133,7 +153,7 @@
 
   async function save(i) {
     const blob = await new Promise(r => out.toBlob(r, 'image/jpeg', .93));
-    const url = `/save/showreel/desktop/${String(i).padStart(4, '0')}.jpg`;
+    const url = `/save/showreel/${SET}/${String(i).padStart(4, '0')}.jpg`;
     for (let attempt = 1; ; attempt++) {
       try {
         const res = await fetch(url, { method: 'POST', body: blob });

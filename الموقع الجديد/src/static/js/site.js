@@ -73,29 +73,31 @@
   }
 
   /* ---------- the hero film: the wide or the tall cut, playing only while the hero is on screen ---------- */
+  // The client wants the film moving for every visitor, so it plays even where the device asks for less motion or
+  // less data. It streams: it starts as soon as its first seconds arrive, the poster showing until then.
   var video = doc.querySelector('.hero-video');
-  var saveData = navigator.connection && navigator.connection.saveData;
-  if (video && !reduce && !saveData) {
-    var visible = true;
+  if (video) {
+    var tall = matchMedia('(max-aspect-ratio: 4/5)'), visible = true;
     var play = function () {
-      if (!video.src) return;
+      if (!video.getAttribute('src')) return;
       if (!visible || doc.hidden) { video.pause(); return; }
       var p = video.play();
       if (p && p.catch) p.catch(function () {});
     };
-    // The whole film is fetched before it plays: phones often refuse to buffer a video ahead, and on a slow line a
-    // film that starts early stops and starts again. Until then the poster, its first frame, is on screen.
-    var load = function () {
-      fetch(video.dataset.src).then(function (r) { return r.ok ? r.blob() : Promise.reject(r.status); }).then(function (blob) {
-        video.src = URL.createObjectURL(blob);
-        play();
-      }).catch(function () {});
+    var pick = function () {
+      var src = tall.matches ? video.dataset.tall : video.dataset.wide;
+      if (video.getAttribute('src') === src) return play();
+      video.classList.remove('playing');
+      video.src = src;
+      play();
     };
     video.addEventListener('playing', function () { video.classList.add('playing'); });
+    if (tall.addEventListener) tall.addEventListener('change', pick); else tall.addListener(pick);
     if (io) new IntersectionObserver(function (en) { visible = en[0].isIntersecting; play(); }).observe(video.parentNode);
     doc.addEventListener('visibilitychange', play);
-    // the poster is already showing; the film starts once the rest of the page has arrived
-    if (doc.readyState === 'complete') load(); else addEventListener('load', load);
+    // a phone in power-saving mode may refuse to start a film by itself; the first touch starts it
+    doc.addEventListener('touchstart', play, { once: true, passive: true });
+    pick();
   }
 
   /* ---------- things rise into place as they come into view ---------- */

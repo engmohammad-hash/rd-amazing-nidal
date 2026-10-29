@@ -3,10 +3,10 @@
 Needs tools/serve.py running on port 8767.
 usage: python -I tools/render_video.py [desktop] [mobile]   [--film=showreel|hero|reels-a|reels-b]   [--encode-only]
 
-  showreel  the site's film (the default), from the client's own photos and clips by src/video/showreel.html:
-              one 720 x 900 film for every screen, src/static/video/hero.mp4 and hero.jpg
-  hero      the gold-foil film drawn by src/video/render.html; went straight into the site as:
-              src/static/video/hero-<set>.mp4 and .jpg (the first frame, shown until it plays), src/static/img/og.jpg
+  showreel  the site's film (the default), from the client's own photos and clips by src/video/showreel.html,
+            behind the top of the home page: src/static/video/hero-<set>.mp4 and .jpg (the first frame, shown until
+            it plays), desktop 1600 x 900 and mobile 720 x 1280
+  hero      the gold-foil film drawn by src/video/render.html, the site's first film (same file names)
   reels-a   cut by src/video/reels.html from the shop's Instagram reels in their own style
   reels-b   cut by the same page: the shop's front and its work in a gold frame
             these two go to tools/out/review/ for the client to approve first
@@ -31,10 +31,10 @@ FPS = 30
 STALL = 120
 FILM = next((a.split("=", 1)[1] for a in sys.argv[1:] if a.startswith("--film=")), "showreel")
 FRAMES = ROOT / "tools" / "out" / FILM
-PAGE = {"hero": "render.html?set={set}", "showreel": "showreel.html"}.get(FILM, f"reels.html?cut={FILM[-1]}&set={{set}}")
+PAGE = {"hero": "render.html?set={set}", "showreel": "showreel.html?set={set}"}.get(FILM, f"reels.html?cut={FILM[-1]}&set={{set}}")
 VIDEO = ROOT / "src" / "static" / "video" if FILM in ("hero", "showreel") else ROOT / "tools" / "out" / "review"
 # quality per set: lower crf is sharper and heavier; real footage needs less detail kept than the drawn film
-CRF = {"hero": {"desktop": 22, "mobile": 24}, "showreel": {"desktop": 27}}.get(FILM, {"desktop": 24, "mobile": 25})
+CRF = {"hero": {"desktop": 22, "mobile": 24}, "showreel": {"desktop": 27, "mobile": 27}}.get(FILM, {"desktop": 24, "mobile": 25})
 
 
 def page_title():
@@ -74,8 +74,7 @@ def render(set_name):
 def encode(set_name):
     VIDEO.mkdir(parents=True, exist_ok=True)
     src = FRAMES / set_name
-    # the showreel is one film for every screen, in the hero's frame: hero.mp4
-    name = "hero" if FILM == "showreel" else f"{FILM}-{set_name}"
+    name = f"hero-{set_name}" if FILM == "showreel" else f"{FILM}-{set_name}"
     out = VIDEO / f"{name}.mp4"
     subprocess.run([
         imageio_ffmpeg.get_ffmpeg_exe(), "-y", "-loglevel", "error", "-framerate", str(FPS), "-i", str(src / "%04d.jpg"),
@@ -89,7 +88,7 @@ def encode(set_name):
     print(f"   {out.name}: {out.stat().st_size / 1048576:.2f} MB", flush=True)
 
 
-sets = [a for a in sys.argv[1:] if not a.startswith("--")] or (["desktop"] if FILM == "showreel" else ["desktop", "mobile"])
+sets = [a for a in sys.argv[1:] if not a.startswith("--")] or ["desktop", "mobile"]
 for s in sets:
     print(FILM, s, flush=True)
     if "--encode-only" in sys.argv or render(s):
