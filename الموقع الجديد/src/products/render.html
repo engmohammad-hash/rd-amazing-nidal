@@ -1,0 +1,88 @@
+<!doctype html>
+<html lang="ar">
+<head>
+<meta charset="utf-8">
+<title>product pictures</title>
+<style>
+  @font-face { font-family: 'Alexandria'; font-weight: 400 800; src: url(../static/fonts/alexandria-arabic.woff2) format('woff2'); unicode-range: U+0600-06FF, U+0750-077F, U+FB50-FDFF, U+FE70-FEFC; }
+  @font-face { font-family: 'Alexandria'; font-weight: 400 800; src: url(../static/fonts/alexandria-latin.woff2) format('woff2'); unicode-range: U+0000-00FF, U+2000-206F; }
+  @font-face { font-family: 'IBM Plex Sans Arabic'; font-weight: 400; src: url(../static/fonts/ibm-plex-sans-arabic-400-arabic.woff2) format('woff2'); unicode-range: U+0600-06FF, U+0750-077F, U+FB50-FDFF, U+FE70-FEFC; }
+  @font-face { font-family: 'IBM Plex Sans Arabic'; font-weight: 400; src: url(../static/fonts/ibm-plex-sans-arabic-400-latin.woff2) format('woff2'); unicode-range: U+0000-00FF, U+2000-206F; }
+  @font-face { font-family: 'IBM Plex Sans Arabic'; font-weight: 600; src: url(../static/fonts/ibm-plex-sans-arabic-600-arabic.woff2) format('woff2'); unicode-range: U+0600-06FF, U+0750-077F, U+FB50-FDFF, U+FE70-FEFC; }
+  @font-face { font-family: 'IBM Plex Sans Arabic'; font-weight: 600; src: url(../static/fonts/ibm-plex-sans-arabic-600-latin.woff2) format('woff2'); unicode-range: U+0000-00FF, U+2000-206F; }
+  @font-face { font-family: 'Aref Ruqaa'; font-weight: 700; src: url(../video/aref-ruqaa-700-arabic.woff2) format('woff2'); }
+  body { margin: 0; background: #111; color: #ddd; font: 13px/1.5 Consolas, monospace; }
+  canvas { display: block; max-width: 100%; height: auto; }
+  pre { padding: 8px 12px; margin: 0; }
+</style>
+</head>
+<body>
+<pre id="log">loading…</pre>
+<canvas id="gl"></canvas>
+<canvas id="out"></canvas>
+<script type="importmap">{ "imports": { "three": "../video/three.module.min.js" } }</script>
+<script type="module">
+  /* Renders product pictures and posts each to tools/serve.py, which files it in src/static/img/products/.
+     http://localhost:8767/src/products/render.html?kinds=tshirt,cap        (or ?kinds=all)
+     [&only=1] renders just that shot of each, [&nosave=1] only shows them, for a quick look.
+     Every picture is drawn at 1.5x and scaled down to 1600 x 1200, for clean edges. */
+  import { createStage, reseed } from './stage.js';
+
+  const GROUPS = ['paper', 'paper2', 'pack', 'wear', 'gifts', 'signs'];
+  const q = new URLSearchParams(location.search);
+  const only = Number(q.get('only') || 0), nosave = q.has('nosave');
+  const OUT_W = 1600, OUT_H = 1200, SS = 1.5;
+  const logEl = document.getElementById('log');
+  const log = m => { logEl.textContent = m; document.title = m; };
+  const gl = document.getElementById('gl'), out = document.getElementById('out'), octx = out.getContext('2d', { alpha: false });
+
+  async function save(name, quality = .88) {
+    out.width = OUT_W; out.height = OUT_H;
+    octx.imageSmoothingQuality = 'high';
+    octx.drawImage(gl, 0, 0, OUT_W, OUT_H);
+    if (nosave) return 0;
+    const blob = await new Promise(r => out.toBlob(r, 'image/jpeg', quality));
+    for (let attempt = 1; ; attempt++) {
+      try {
+        const res = await fetch(`/save-product/${name}.jpg`, { method: 'POST', body: blob });
+        if (res.ok) return blob.size;
+        throw new Error(`saving ${name} failed: ${res.status}`);
+      } catch (e) {
+        if (attempt === 5) throw e;
+        await new Promise(r => setTimeout(r, 400 * attempt));
+      }
+    }
+  }
+
+  try {
+    const all = {};
+    for (const g of GROUPS) Object.assign(all, (await import(`./${g}.js`)).kinds);
+    const want = (q.get('kinds') || 'all') === 'all' ? Object.keys(all) : q.get('kinds').split(',');
+    const S = await createStage(gl, { assets: '../static/img/' });
+    let bytes = 0, n = 0;
+    for (const name of want) {
+      if (!all[name]) throw new Error('no such kind: ' + name);
+      S.clear(); reseed(name.split('').reduce((a, c) => a * 31 + c.charCodeAt(0), 7));
+      const shots = await all[name](S);
+      for (let k = 0; k < shots.length; k++) {
+        if (only && only !== k + 1) continue;
+        const shot = shots[k];
+        S.resize(OUT_W * SS, OUT_H * SS, shot.look || 'cream');
+        shot.set();
+        S.fitShadow(shot.shadow ?? .8);
+        S.render();
+        bytes += await save(`${name}-${String(k + 1).padStart(2, '0')}`);
+        n++;
+        log(`${name} ${k + 1}/${shots.length} · ${n} pictures · ${(bytes / 1048576).toFixed(1)} MB`);
+      }
+    }
+    log(`ALL DONE ${n} pictures · ${(bytes / 1048576).toFixed(1)} MB`);
+    window.__done = { ok: true, n };
+  } catch (e) {
+    console.error(e);
+    log('FAILED: ' + (e && e.message || e));
+    window.__done = { ok: false, error: String(e) };
+  }
+</script>
+</body>
+</html>

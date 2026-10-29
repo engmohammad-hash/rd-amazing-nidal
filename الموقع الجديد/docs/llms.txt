@@ -12,22 +12,114 @@
 
 ## الخدمات
 
-- البوكسات وعلب التغليف: بوكسات هارد كفر، بوكسات ورق مقوى، بوكسات طعام، بوكسات عطورات، علب حلا
-- الأكياس: أكياس ورق مقوى، أكياس ورق كرافت، أكياس قماش، أكياس بلاستيكية، توت باق قماش
-- الاستكر اللاصق: استكر بارز TDF، استكر بلاستك، استكر ورقي، استكر شيت، استكر واجهة محل، رولات استكر للمطاعم والمناحل وشركات المياه، استكر سيارات، تفريغ استكر شفاف
-- مطبوعات خاصة للكافيهات: أكواب ورقية، أكواب بلاستك، حامل أكواب، أغطية أكواب، بوكسات حلا، ورق زبدة، استكرات، جيك سفري مع كيس ألمنيوم حافظ حرارة
-- مطبوعات خاصة للمطاعم والمخابز: بوكسات لقيمات وخلية نحل وورق عنب، كيس ورقي، منيو، بروشورات افتتاحية وعروضات، ورق طاولة، استكرات، مناديل
-- خدمات طباعة سريعة: بزنز كارت، كارت شكر، بطاقات تعريفية ID، جواز سفر بمناسبة الافتتاح، كروت طاولة وتعليقة مياه
-- خدمات طباعة تعريفية وتسويقية للشركات: فولدرات، بروشورات، كتالوجات
-- خدمات طباعة للمدارس والجمعيات: كتب، أجندات، شهادات تكريم، نوت بوك
-- خدمات طباعة تنظيمية وللمحاسبة: فواتير، سند صرف، سند قبض، أختام، ورق فاخر للمراسلات
-- خدمات التطريز والطباعة الحرارية: تيشيرتات، قبعات، أكياس قماشية للمناسبات، سفتي شركات
-- الهدايا الدعائية: دروع تكريم كرستال، جلد، خشب، أكريليك، شهادات تكريم مع كفر، ماغ حراري، أقلام، أجندات، ميداليات، كوب سيراميك
-- خدمات تسوير مشاريع: بنر، فلكس Flex، فينيل Vinyl، استكر
-- خدمات تنظيم Event: معارض، مؤتمرات، حفلات، مباريات رياضية، ورش جامعات
-- خدمات اللوحات الاسمية: لوحات ضوئية أكريليك، لوحات ضوئية زنكور وأكريليك، لوحات ستيل، تركيب كلادينغ، تركيب جيبسوم بورد (بلاستر بورد)
-- خدمات الأكريليك والفوركس والفلين: قص أكريليك، حفر ليزر على الأكريليك، تركيب استكر لاصق على الأكريليك، ستاندات أكريليك، قص فوركس، تركيب استكر على الفوركس، قص فلين، تركيب استكر على الفلين
-- خدمات طباعة بكج لمحلات العبايات وللمصورات: بوكسات، أكياس ورقية، أكياس قماش، ليبل قماش، ليبل حراري، تاق ورق، استكر لاصق، ورق تغليف، شرايط
+- [البوكسات وعلب التغليف](https://engmohammad-hash.github.io/rd-amazing-nidal/services/boxes/): علب بمقاساتك وتشطيبات فاخرة، تحمل اسمك قبل أن تُفتح.
+  - [بوكسات هارد كفر](https://engmohammad-hash.github.io/rd-amazing-nidal/services/boxes/hard-cover-boxes/): علب صلبة مغلّفة بورق فاخر، بغطاء أو درج أو مغناطيس.
+  - [بوكسات ورق مقوى](https://engmohammad-hash.github.io/rd-amazing-nidal/services/boxes/cardboard-boxes/): علب كرتون مطبوعة تُطوى وتُشحن بسهولة، لكل الاستخدامات.
+  - [بوكسات طعام](https://engmohammad-hash.github.io/rd-amazing-nidal/services/boxes/food-boxes/): علب آمنة للطعام بطباعة واضحة، للوجبات والحلويات والمعجنات.
+  - [بوكسات عطورات](https://engmohammad-hash.github.io/rd-amazing-nidal/services/boxes/perfume-boxes/): علب عطور وبخور ودهن عود بتشطيب ذهبي وبطانة داخلية.
+  - [علب حلا](https://engmohammad-hash.github.io/rd-amazing-nidal/services/boxes/sweets-boxes/): علب حلويات وشوكولاتة بفواصل داخلية وطباعة تفتح الشهية.
+- [الأكياس](https://engmohammad-hash.github.io/rd-amazing-nidal/services/bags/): أكياس تحمل اسمك في كل مشوار: ورقية وكرافت وقماش وبلاستيك.
+  - [أكياس ورق مقوى](https://engmohammad-hash.github.io/rd-amazing-nidal/services/bags/cardboard-paper-bags/): ورق سميك ومقابض حبل أو شريطة، بألوان علامتك.
+  - [أكياس ورق كرافت](https://engmohammad-hash.github.io/rd-amazing-nidal/services/bags/kraft-bags/): ورق كرافت طبيعي متين بطباعة لون أو لونين.
+  - [أكياس قماش](https://engmohammad-hash.github.io/rd-amazing-nidal/services/bags/cloth-bags/): أكياس قماش تُستعمل مرات كثيرة، فتبقى علامتك أمام الناس.
+  - [أكياس بلاستيكية](https://engmohammad-hash.github.io/rd-amazing-nidal/services/bags/plastic-bags/): أكياس بلاستيك بمقبض مقصوص أو حبل، بطباعة لامعة.
+  - [توت باق قماش](https://engmohammad-hash.github.io/rd-amazing-nidal/services/bags/tote-bags/): حقيبة توت من قماش الكانفس بطباعة أو تطريز.
+- [الاستكر اللاصق](https://engmohammad-hash.github.io/rd-amazing-nidal/services/stickers/): استكرات بكل خامة وشكل، من ختم العلبة إلى واجهة المحل والسيارة.
+  - [استكر بارز TDF](https://engmohammad-hash.github.io/rd-amazing-nidal/services/stickers/tdf-stickers/): استكر بحروف بارزة ولمعة ذهبية أو فضية، يُلصق على أي سطح.
+  - [استكر بلاستك](https://engmohammad-hash.github.io/rd-amazing-nidal/services/stickers/plastic-stickers/): استكر مقاوم للماء والرطوبة، للعبوات والمنتجات.
+  - [استكر ورقي](https://engmohammad-hash.github.io/rd-amazing-nidal/services/stickers/paper-stickers/): استكر ورقي اقتصادي بألوان دقيقة، لختم العلب والأكياس.
+  - [استكر شيت](https://engmohammad-hash.github.io/rd-amazing-nidal/services/stickers/sticker-sheets/): مجموعة استكرات على ورقة واحدة، مقصوصة على الشكل.
+  - [استكر واجهة محل](https://engmohammad-hash.github.io/rd-amazing-nidal/services/stickers/shopfront-stickers/): استكر للزجاج والواجهات يعرّف بمحلك من بعيد، مع التركيب.
+  - [رولات استكر للمطاعم والمناحل وشركات المياه](https://engmohammad-hash.github.io/rd-amazing-nidal/services/stickers/sticker-rolls/): استكر على رول لتغليف الطلبات وعبوات العسل والمياه بسرعة.
+  - [استكر سيارات](https://engmohammad-hash.github.io/rd-amazing-nidal/services/stickers/car-stickers/): استكر لسيارات الشركات والتوصيل، يتحمل الشمس والغسيل.
+  - [تفريغ استكر شفاف](https://engmohammad-hash.github.io/rd-amazing-nidal/services/stickers/clear-cut-stickers/): حروف وشعارات مفرّغة بلا خلفية، تظهر كأنها مطبوعة على السطح.
+- [مطبوعات خاصة للكافيهات](https://engmohammad-hash.github.io/rd-amazing-nidal/services/cafes/): كل ما يحمل اسم الكافيه بين يدي العميل: أكواب وأغطية وحوامل وتغليف.
+  - [أكواب ورقية](https://engmohammad-hash.github.io/rd-amazing-nidal/services/cafes/paper-cups/): أكواب ورقية مطبوعة بشعارك، بطبقة أو طبقتين وبعدة مقاسات.
+  - [أكواب بلاستك](https://engmohammad-hash.github.io/rd-amazing-nidal/services/cafes/plastic-cups/): أكواب شفافة للمشروبات الباردة بطباعة شعارك.
+  - [حامل أكواب](https://engmohammad-hash.github.io/rd-amazing-nidal/services/cafes/cup-holders/): حوامل كرتون لكوبين أو أربعة، مطبوعة باسمك.
+  - [أغطية أكواب](https://engmohammad-hash.github.io/rd-amazing-nidal/services/cafes/cup-lids/): أغطية محكمة للأكواب الحارة والباردة بمقاسات الأكواب.
+  - [بوكسات حلا](https://engmohammad-hash.github.io/rd-amazing-nidal/services/cafes/cafe-sweets-boxes/): علب للكيك والحلا تناسب واجهة الكافيه والطلبات الخارجية.
+  - [ورق زبدة](https://engmohammad-hash.github.io/rd-amazing-nidal/services/cafes/butter-paper/): ورق مقاوم للدهون مطبوع بشعارك، للتغليف والتقديم.
+  - [استكرات](https://engmohammad-hash.github.io/rd-amazing-nidal/services/cafes/cafe-stickers/): استكرات لختم الأكياس والعلب وتمييز الطلبات.
+  - [جيك سفري مع كيس ألمنيوم حافظ حرارة](https://engmohammad-hash.github.io/rd-amazing-nidal/services/cafes/takeaway-jug/): جيك قهوة سفري بكيس ألمنيوم داخلي يحفظ الحرارة.
+- [مطبوعات خاصة للمطاعم والمخابز](https://engmohammad-hash.github.io/rd-amazing-nidal/services/restaurants/): تغليف ومطبوعات تكمل طعم أطباقك، من العلبة إلى الطاولة.
+  - [بوكسات لقيمات وخلية نحل وورق عنب](https://engmohammad-hash.github.io/rd-amazing-nidal/services/restaurants/snack-boxes/): علب مقاسة لأصنافك، بنوافذ عرض وطباعة باسم المطعم.
+  - [كيس ورقي](https://engmohammad-hash.github.io/rd-amazing-nidal/services/restaurants/restaurant-paper-bags/): أكياس ورقية للطلبات الخارجية بمقابض أو بدونها.
+  - [منيو](https://engmohammad-hash.github.io/rd-amazing-nidal/services/restaurants/menus/): منيو مطبوع بخامة مقاومة، مطوي أو كرت واحد.
+  - [بروشورات افتتاحية وعروضات](https://engmohammad-hash.github.io/rd-amazing-nidal/services/restaurants/opening-brochures/): بروشورات وفلايرات للافتتاح والعروض، تصل لعملائك الجدد.
+  - [ورق طاولة](https://engmohammad-hash.github.io/rd-amazing-nidal/services/restaurants/table-paper/): مفارش ورقية للطاولات تحمل شعارك وتحمي السطح.
+  - [استكرات](https://engmohammad-hash.github.io/rd-amazing-nidal/services/restaurants/restaurant-stickers/): استكرات لإغلاق العلب والأكياس وتمييز الأصناف.
+  - [مناديل](https://engmohammad-hash.github.io/rd-amazing-nidal/services/restaurants/napkins/): مناديل مطبوعة بشعار المطعم بلون أو لونين.
+- [خدمات طباعة سريعة](https://engmohammad-hash.github.io/rd-amazing-nidal/services/quick-print/): مطبوعات يومية تجهز بسرعة، بنفس عناية مطبوعاتنا الفاخرة.
+  - [بزنز كارت](https://engmohammad-hash.github.io/rd-amazing-nidal/services/quick-print/business-cards/): كروت شخصية بورق فاخر وتشطيب ذهبي أو بارز.
+  - [كارت شكر](https://engmohammad-hash.github.io/rd-amazing-nidal/services/quick-print/thank-you-cards/): كرت صغير يرافق طلباتك ويترك أثراً طيباً.
+  - [بطاقات تعريفية ID](https://engmohammad-hash.github.io/rd-amazing-nidal/services/quick-print/id-cards/): بطاقات موظفين وزوار بلاستيكية مع حبل تعليق.
+  - [جواز سفر بمناسبة الافتتاح](https://engmohammad-hash.github.io/rd-amazing-nidal/services/quick-print/opening-passport/): كتيّب على شكل جواز سفر لحملات الافتتاح وجمع الأختام.
+  - [كروت طاولة وتعليقة مياه](https://engmohammad-hash.github.io/rd-amazing-nidal/services/quick-print/table-cards/): كروت للطاولات وتعليقات لقوارير المياه في المناسبات.
+- [خدمات طباعة تعريفية وتسويقية للشركات](https://engmohammad-hash.github.io/rd-amazing-nidal/services/corporate/): مطبوعات تقدّم شركتك كما يليق بها في كل اجتماع ومعرض.
+  - [فولدرات](https://engmohammad-hash.github.io/rd-amazing-nidal/services/corporate/folders/): فولدرات بجيب داخلي لحفظ الأوراق والعروض.
+  - [بروشورات](https://engmohammad-hash.github.io/rd-amazing-nidal/services/corporate/corporate-brochures/): بروشورات مطوية تعرّف بخدماتك بوضوح.
+  - [كتالوجات](https://engmohammad-hash.github.io/rd-amazing-nidal/services/corporate/catalogues/): كتالوجات بعدة صفحات لعرض منتجاتك بغلاف فاخر.
+- [خدمات طباعة للمدارس والجمعيات](https://engmohammad-hash.github.io/rd-amazing-nidal/services/schools/): مطبوعات المدرسة والجمعية طوال العام، بأسعار خاصة.
+  - [كتب](https://engmohammad-hash.github.io/rd-amazing-nidal/services/schools/books/): طباعة وتجليد الكتب والمذكرات بأعداد صغيرة أو كبيرة.
+  - [أجندات](https://engmohammad-hash.github.io/rd-amazing-nidal/services/schools/school-planners/): أجندات سنوية بغلاف مطبوع باسم المدرسة أو الجمعية.
+  - [شهادات تكريم](https://engmohammad-hash.github.io/rd-amazing-nidal/services/schools/certificates/): شهادات بورق فاخر وطباعة ذهبية لتكريم المتميزين.
+  - [نوت بوك](https://engmohammad-hash.github.io/rd-amazing-nidal/services/schools/notebooks/): دفاتر سلك أو مخيطة بغلاف خاص.
+- [خدمات طباعة تنظيمية وللمحاسبة](https://engmohammad-hash.github.io/rd-amazing-nidal/services/office/): مطبوعات تنظّم عملك اليومي وتعطي معاملاتك طابعاً رسمياً.
+  - [فواتير](https://engmohammad-hash.github.io/rd-amazing-nidal/services/office/invoices/): دفاتر فواتير مرقّمة بنسخ كربونية.
+  - [سند صرف](https://engmohammad-hash.github.io/rd-amazing-nidal/services/office/payment-vouchers/): دفاتر سندات صرف مرقّمة باسم منشأتك.
+  - [سند قبض](https://engmohammad-hash.github.io/rd-amazing-nidal/services/office/receipt-vouchers/): دفاتر سندات قبض مرقّمة بنسختين أو ثلاث.
+  - [أختام](https://engmohammad-hash.github.io/rd-amazing-nidal/services/office/stamps/): أختام حبر ذاتي بشعار منشأتك وبياناتها.
+  - [ورق فاخر للمراسلات](https://engmohammad-hash.github.io/rd-amazing-nidal/services/office/letter-paper/): ورق مراسلات وظروف بشعارك على ورق فاخر.
+- [خدمات التطريز والطباعة الحرارية](https://engmohammad-hash.github.io/rd-amazing-nidal/services/embroidery/): شعارك مطرّز أو مطبوع على ملابس فريقك وهدايا مناسباتك.
+  - [تيشيرتات](https://engmohammad-hash.github.io/rd-amazing-nidal/services/embroidery/t-shirts/): تيشيرتات قطن بطباعة حرارية أو تطريز للفرق والمناسبات.
+  - [قبعات](https://engmohammad-hash.github.io/rd-amazing-nidal/services/embroidery/caps/): قبعات بتطريز الشعار للموظفين والفعاليات.
+  - [أكياس قماشية للمناسبات](https://engmohammad-hash.github.io/rd-amazing-nidal/services/embroidery/event-cloth-bags/): أكياس قماش للتوزيع في المناسبات والمؤتمرات.
+  - [سفتي شركات](https://engmohammad-hash.github.io/rd-amazing-nidal/services/embroidery/safety-vests/): سترات سلامة عاكسة مطبوعة باسم الشركة.
+- [الهدايا الدعائية](https://engmohammad-hash.github.io/rd-amazing-nidal/services/gifts/): هدايا تحمل اسمك وتبقى عند عملائك وموظفيك طويلاً.
+  - [دروع تكريم كرستال، جلد، خشب، أكريليك](https://engmohammad-hash.github.io/rd-amazing-nidal/services/gifts/awards/): دروع تكريم بخامات مختلفة مع حفر أو طباعة الاسم.
+  - [شهادات تكريم مع كفر](https://engmohammad-hash.github.io/rd-amazing-nidal/services/gifts/certificates-with-covers/): شهادة فاخرة داخل كفر جلد أو مخمل.
+  - [ماغ حراري](https://engmohammad-hash.github.io/rd-amazing-nidal/services/gifts/heat-mugs/): ماغ يتغير لونه مع الحرارة ليظهر شعارك.
+  - [أقلام](https://engmohammad-hash.github.io/rd-amazing-nidal/services/gifts/pens/): أقلام معدنية وبلاستيكية بطباعة أو حفر الشعار.
+  - [أجندات](https://engmohammad-hash.github.io/rd-amazing-nidal/services/gifts/gift-planners/): أجندات جلد فاخرة بشعارك، هدية لعملائك.
+  - [ميداليات](https://engmohammad-hash.github.io/rd-amazing-nidal/services/gifts/keyrings/): ميداليات معدن وجلد وأكريليك بشعارك.
+  - [كوب سيراميك](https://engmohammad-hash.github.io/rd-amazing-nidal/services/gifts/ceramic-mugs/): أكواب سيراميك بطباعة دائمة لا تزول بالغسيل.
+- [خدمات تسوير مشاريع](https://engmohammad-hash.github.io/rd-amazing-nidal/services/hoardings/): سواتر مطبوعة تحمي موقع مشروعك وتعلن عنه في الوقت نفسه.
+  - [بنر](https://engmohammad-hash.github.io/rd-amazing-nidal/services/hoardings/banners/): بنرات كبيرة بألوان ثابتة تتحمل الشمس والرياح.
+  - [فلكس Flex](https://engmohammad-hash.github.io/rd-amazing-nidal/services/hoardings/flex/): طباعة فلكس بعرض كبير للسواتر واللوحات الخارجية.
+  - [فينيل Vinyl](https://engmohammad-hash.github.io/rd-amazing-nidal/services/hoardings/vinyl/): فينيل لاصق للأسطح المعدنية والخشبية في المشاريع.
+  - [استكر](https://engmohammad-hash.github.io/rd-amazing-nidal/services/hoardings/hoarding-stickers/): استكرات تحذيرية وتعريفية لمواقع العمل.
+- [خدمات تنظيم Event](https://engmohammad-hash.github.io/rd-amazing-nidal/services/events/): نجهّز فعاليتك بمطبوعاتها كاملة، من الخلفية إلى طاولة الاستقبال.
+  - [معارض](https://engmohammad-hash.github.io/rd-amazing-nidal/services/events/exhibitions/): أجنحة معارض بخلفيات بوب آب ورول آب وطاولات مطبوعة.
+  - [مؤتمرات](https://engmohammad-hash.github.io/rd-amazing-nidal/services/events/conferences/): خلفيات مسرح ومنصات وبطاقات حضور للمؤتمرات.
+  - [حفلات](https://engmohammad-hash.github.io/rd-amazing-nidal/services/events/parties/): خلفيات تصوير ولوحات ترحيب وتنسيق لمطبوعات الحفل.
+  - [مباريات رياضية](https://engmohammad-hash.github.io/rd-amazing-nidal/services/events/sports-matches/): أعلام سارية ولوحات إعلانية حول الملاعب.
+  - [ورش جامعات](https://engmohammad-hash.github.io/rd-amazing-nidal/services/events/university-workshops/): رول آب وأعلام مكتبية ولوحات فوركس للورش والملتقيات.
+- [خدمات اللوحات الاسمية](https://engmohammad-hash.github.io/rd-amazing-nidal/services/signs/): لوحات تضيء اسمك ليلاً ونهاراً، مع التصنيع والتركيب.
+  - [لوحات ضوئية أكريليك](https://engmohammad-hash.github.io/rd-amazing-nidal/services/signs/acrylic-light-signs/): حروف أكريليك مضيئة بإضاءة LED ثابتة.
+  - [لوحات ضوئية زنكور وأكريليك](https://engmohammad-hash.github.io/rd-amazing-nidal/services/signs/zincor-light-signs/): حروف زنكور بوجه أكريليك مضيء، مصنوعة لتدوم.
+  - [لوحات ستيل](https://engmohammad-hash.github.io/rd-amazing-nidal/services/signs/steel-signs/): حروف ستانلس ستيل ذهبية أو فضية بلمعة فاخرة.
+  - [تركيب كلادينغ](https://engmohammad-hash.github.io/rd-amazing-nidal/services/signs/cladding/): تكسية واجهات المحلات بألواح الكلادينغ بألوان علامتك.
+  - [تركيب جيبسوم بورد (بلاستر بورد)](https://engmohammad-hash.github.io/rd-amazing-nidal/services/signs/gypsum-board/): أسقف وجدران جبسية بإضاءة مخفية للمحلات والمكاتب.
+- [خدمات الأكريليك والفوركس والفلين](https://engmohammad-hash.github.io/rd-amazing-nidal/services/acrylic/): قص وحفر وطباعة على الأكريليك والفوركس والفلين بأي شكل تريده.
+  - [قص أكريليك](https://engmohammad-hash.github.io/rd-amazing-nidal/services/acrylic/acrylic-cutting/): قص ليزر دقيق للأكريليك الشفاف والملون بأي شكل.
+  - [حفر ليزر على الأكريليك](https://engmohammad-hash.github.io/rd-amazing-nidal/services/acrylic/laser-engraving/): حفر الشعارات والنصوص على الأكريليك بلمسة ناعمة.
+  - [تركيب استكر لاصق على الأكريليك](https://engmohammad-hash.github.io/rd-amazing-nidal/services/acrylic/acrylic-stickers/): لوحات أكريليك بطباعة استكر ملونة لامعة.
+  - [ستاندات أكريليك](https://engmohammad-hash.github.io/rd-amazing-nidal/services/acrylic/acrylic-stands/): ستاندات للمنيو والباركود والبروشورات على الكاونتر.
+  - [قص فوركس](https://engmohammad-hash.github.io/rd-amazing-nidal/services/acrylic/forex-cutting/): ألواح فوركس خفيفة مقصوصة بأي شكل للعرض والديكور.
+  - [تركيب استكر على الفوركس](https://engmohammad-hash.github.io/rd-amazing-nidal/services/acrylic/forex-stickers/): لوحات فوركس مطبوعة للإرشادات والإعلانات الداخلية.
+  - [قص فلين](https://engmohammad-hash.github.io/rd-amazing-nidal/services/acrylic/foam-cutting/): قص فلين بأشكال وحروف للمناسبات والديكور.
+  - [تركيب استكر على الفلين](https://engmohammad-hash.github.io/rd-amazing-nidal/services/acrylic/foam-stickers/): لوحات فلين خفيفة مطبوعة للمعارض والمدارس.
+- [خدمات طباعة بكج لمحلات العبايات وللمصورات](https://engmohammad-hash.github.io/rd-amazing-nidal/services/abaya-packaging/): بكج متكامل يليق بعباياتك وصورك، من العلبة إلى الشريطة.
+  - [بوكسات](https://engmohammad-hash.github.io/rd-amazing-nidal/services/abaya-packaging/abaya-boxes/): علب فاخرة للعبايات والألبومات بمقاسات خاصة.
+  - [أكياس ورقية](https://engmohammad-hash.github.io/rd-amazing-nidal/services/abaya-packaging/abaya-paper-bags/): أكياس ورقية أنيقة بمقابض شريطة أو حبل.
+  - [أكياس قماش](https://engmohammad-hash.github.io/rd-amazing-nidal/services/abaya-packaging/abaya-cloth-bags/): أكياس قماش تحفظ العباية من الغبار.
+  - [ليبل قماش](https://engmohammad-hash.github.io/rd-amazing-nidal/services/abaya-packaging/woven-labels/): ليبل منسوج باسم علامتك يُخاط داخل القطعة.
+  - [ليبل حراري](https://engmohammad-hash.github.io/rd-amazing-nidal/services/abaya-packaging/heat-labels/): ليبل يُطبع بالحرارة داخل القطعة بلا خياطة.
+  - [تاق ورق](https://engmohammad-hash.github.io/rd-amazing-nidal/services/abaya-packaging/hang-tags/): تاقات ورقية سميكة بخيط أو شريطة.
+  - [استكر لاصق](https://engmohammad-hash.github.io/rd-amazing-nidal/services/abaya-packaging/abaya-stickers/): استكرات لختم ورق التغليف والعلب بشعارك.
+  - [ورق تغليف](https://engmohammad-hash.github.io/rd-amazing-nidal/services/abaya-packaging/wrapping-paper/): ورق تغليف رقيق مطبوع بشعارك يلف القطعة بعناية.
+  - [شرايط](https://engmohammad-hash.github.io/rd-amazing-nidal/services/abaya-packaging/ribbons/): شرايط ساتان مطبوعة باسم علامتك.
 
 ### المتجر الإلكتروني (https://engmohammad-hash.github.io/rd-amazing-nidal/shop/)
 
@@ -55,22 +147,114 @@
 
 ## Services
 
-- Boxes and packaging: Hard-cover boxes, Cardboard boxes, Food boxes, Perfume boxes, Sweets boxes
-- Bags: Cardboard paper bags, Kraft paper bags, Cloth bags, Plastic bags, Cloth tote bags
-- Stickers: Raised TDF stickers, Plastic stickers, Paper stickers, Sticker sheets, Shopfront stickers, Sticker rolls for restaurants, apiaries and water companies, Car stickers, Clear cut-out stickers
-- Café print: Paper cups, Plastic cups, Cup holders, Cup lids, Sweets boxes, Butter paper, Stickers, Takeaway jug with a heat-keeping foil bag
-- Restaurant and bakery print: Boxes for luqaimat, honeycomb bread and vine leaves, Paper bags, Menus, Opening and offer brochures, Table paper, Stickers, Napkins
-- Quick print: Business cards, Thank-you cards, ID cards, Opening-day passports, Table cards and water bottle tags
-- Corporate identity and marketing print: Folders, Brochures, Catalogues
-- Print for schools and associations: Books, Planners, Certificates, Notebooks
-- Office and accounting print: Invoices, Payment vouchers, Receipt vouchers, Stamps, Fine letter paper
-- Embroidery and heat printing: T-shirts, Caps, Cloth bags for occasions, Company safety vests
-- Promotional gifts: Crystal, leather, wood and acrylic awards, Certificates with covers, Heat-change mugs, Pens, Planners, Keyrings, Ceramic mugs
-- Project hoardings: Banners, Flex, Vinyl, Stickers
-- Event services: Exhibitions, Conferences, Parties, Sports matches, University workshops
-- Name signs: Acrylic light signs, Zincor and acrylic light signs, Steel signs, Cladding installation, Gypsum board (plasterboard) installation
-- Acrylic, Forex and foam board: Acrylic cutting, Laser engraving on acrylic, Stickers mounted on acrylic, Acrylic stands, Forex cutting, Stickers mounted on Forex, Foam board cutting, Stickers mounted on foam board
-- Packaging for abaya shops and photographers: Boxes, Paper bags, Cloth bags, Fabric labels, Heat-transfer labels, Paper tags, Stickers, Wrapping paper, Ribbons
+- [Boxes and packaging](https://engmohammad-hash.github.io/rd-amazing-nidal/en/services/boxes/): Boxes made to your size with luxury finishes, carrying your name before they are opened.
+  - [Hard-cover boxes](https://engmohammad-hash.github.io/rd-amazing-nidal/en/services/boxes/hard-cover-boxes/): Rigid boxes wrapped in fine paper, with a lid, a drawer or a magnetic close.
+  - [Cardboard boxes](https://engmohammad-hash.github.io/rd-amazing-nidal/en/services/boxes/cardboard-boxes/): Printed carton boxes that fold flat and ship easily, for any use.
+  - [Food boxes](https://engmohammad-hash.github.io/rd-amazing-nidal/en/services/boxes/food-boxes/): Food-safe boxes with crisp print, for meals, sweets and pastries.
+  - [Perfume boxes](https://engmohammad-hash.github.io/rd-amazing-nidal/en/services/boxes/perfume-boxes/): Boxes for perfume, incense and oud oil, with gold foil and an inner lining.
+  - [Sweets boxes](https://engmohammad-hash.github.io/rd-amazing-nidal/en/services/boxes/sweets-boxes/): Sweets and chocolate boxes with inner dividers and appetising print.
+- [Bags](https://engmohammad-hash.github.io/rd-amazing-nidal/en/services/bags/): Bags that carry your name wherever they go: paper, kraft, cloth and plastic.
+  - [Cardboard paper bags](https://engmohammad-hash.github.io/rd-amazing-nidal/en/services/bags/cardboard-paper-bags/): Heavy paper with rope or ribbon handles, in your brand's colours.
+  - [Kraft paper bags](https://engmohammad-hash.github.io/rd-amazing-nidal/en/services/bags/kraft-bags/): Strong natural kraft paper printed in one or two colours.
+  - [Cloth bags](https://engmohammad-hash.github.io/rd-amazing-nidal/en/services/bags/cloth-bags/): Cloth bags used again and again, keeping your brand in sight.
+  - [Plastic bags](https://engmohammad-hash.github.io/rd-amazing-nidal/en/services/bags/plastic-bags/): Plastic bags with a cut-out or rope handle and glossy print.
+  - [Cloth tote bags](https://engmohammad-hash.github.io/rd-amazing-nidal/en/services/bags/tote-bags/): Canvas tote bags, printed or embroidered.
+- [Stickers](https://engmohammad-hash.github.io/rd-amazing-nidal/en/services/stickers/): Stickers in every material and shape, from sealing a box to a shopfront or a car.
+  - [Raised TDF stickers](https://engmohammad-hash.github.io/rd-amazing-nidal/en/services/stickers/tdf-stickers/): Raised lettering in gold or silver shine that sticks to any surface.
+  - [Plastic stickers](https://engmohammad-hash.github.io/rd-amazing-nidal/en/services/stickers/plastic-stickers/): Water- and damp-proof stickers for bottles and products.
+  - [Paper stickers](https://engmohammad-hash.github.io/rd-amazing-nidal/en/services/stickers/paper-stickers/): Economical paper stickers in true colour, for sealing boxes and bags.
+  - [Sticker sheets](https://engmohammad-hash.github.io/rd-amazing-nidal/en/services/stickers/sticker-sheets/): A set of stickers on one sheet, die-cut to shape.
+  - [Shopfront stickers](https://engmohammad-hash.github.io/rd-amazing-nidal/en/services/stickers/shopfront-stickers/): Glass and shopfront stickers that announce your shop from afar, fitted by us.
+  - [Sticker rolls for restaurants, apiaries and water companies](https://engmohammad-hash.github.io/rd-amazing-nidal/en/services/stickers/sticker-rolls/): Stickers on a roll for orders, honey jars and water bottles, applied fast.
+  - [Car stickers](https://engmohammad-hash.github.io/rd-amazing-nidal/en/services/stickers/car-stickers/): Stickers for company and delivery cars that stand up to sun and washing.
+  - [Clear cut-out stickers](https://engmohammad-hash.github.io/rd-amazing-nidal/en/services/stickers/clear-cut-stickers/): Cut-out letters and logos with no background, as if printed on the surface.
+- [Café print](https://engmohammad-hash.github.io/rd-amazing-nidal/en/services/cafes/): Everything that puts your café's name in the customer's hand: cups, lids, holders and packaging.
+  - [Paper cups](https://engmohammad-hash.github.io/rd-amazing-nidal/en/services/cafes/paper-cups/): Paper cups printed with your logo, single or double wall, in several sizes.
+  - [Plastic cups](https://engmohammad-hash.github.io/rd-amazing-nidal/en/services/cafes/plastic-cups/): Clear cups for cold drinks, printed with your logo.
+  - [Cup holders](https://engmohammad-hash.github.io/rd-amazing-nidal/en/services/cafes/cup-holders/): Card carriers for two or four cups, printed with your name.
+  - [Cup lids](https://engmohammad-hash.github.io/rd-amazing-nidal/en/services/cafes/cup-lids/): Tight-fitting lids for hot and cold cups, sized to match.
+  - [Sweets boxes](https://engmohammad-hash.github.io/rd-amazing-nidal/en/services/cafes/cafe-sweets-boxes/): Boxes for cake and sweets, for the counter and takeaway.
+  - [Butter paper](https://engmohammad-hash.github.io/rd-amazing-nidal/en/services/cafes/butter-paper/): Grease-proof paper printed with your logo, for wrapping and serving.
+  - [Stickers](https://engmohammad-hash.github.io/rd-amazing-nidal/en/services/cafes/cafe-stickers/): Stickers to seal bags and boxes and mark orders.
+  - [Takeaway jug with a heat-keeping foil bag](https://engmohammad-hash.github.io/rd-amazing-nidal/en/services/cafes/takeaway-jug/): A takeaway coffee jug with an inner foil bag that keeps the heat in.
+- [Restaurant and bakery print](https://engmohammad-hash.github.io/rd-amazing-nidal/en/services/restaurants/): Packaging and print that finish your dishes, from the box to the table.
+  - [Boxes for luqaimat, honeycomb bread and vine leaves](https://engmohammad-hash.github.io/rd-amazing-nidal/en/services/restaurants/snack-boxes/): Boxes sized for your dishes, with display windows and your name.
+  - [Paper bags](https://engmohammad-hash.github.io/rd-amazing-nidal/en/services/restaurants/restaurant-paper-bags/): Paper takeaway bags, with or without handles.
+  - [Menus](https://engmohammad-hash.github.io/rd-amazing-nidal/en/services/restaurants/menus/): Printed menus on durable stock, folded or a single card.
+  - [Opening and offer brochures](https://engmohammad-hash.github.io/rd-amazing-nidal/en/services/restaurants/opening-brochures/): Brochures and flyers for your opening and offers, to reach new customers.
+  - [Table paper](https://engmohammad-hash.github.io/rd-amazing-nidal/en/services/restaurants/table-paper/): Paper table mats that carry your logo and protect the table.
+  - [Stickers](https://engmohammad-hash.github.io/rd-amazing-nidal/en/services/restaurants/restaurant-stickers/): Stickers to close boxes and bags and mark each dish.
+  - [Napkins](https://engmohammad-hash.github.io/rd-amazing-nidal/en/services/restaurants/napkins/): Napkins printed with your restaurant's logo in one or two colours.
+- [Quick print](https://engmohammad-hash.github.io/rd-amazing-nidal/en/services/quick-print/): Everyday print ready fast, with the same care as our luxury work.
+  - [Business cards](https://engmohammad-hash.github.io/rd-amazing-nidal/en/services/quick-print/business-cards/): Business cards on fine paper with gold foil or embossing.
+  - [Thank-you cards](https://engmohammad-hash.github.io/rd-amazing-nidal/en/services/quick-print/thank-you-cards/): A small card that goes with your orders and leaves a warm impression.
+  - [ID cards](https://engmohammad-hash.github.io/rd-amazing-nidal/en/services/quick-print/id-cards/): Plastic staff and visitor cards with a lanyard.
+  - [Opening-day passports](https://engmohammad-hash.github.io/rd-amazing-nidal/en/services/quick-print/opening-passport/): A passport-style booklet for opening campaigns and stamp collecting.
+  - [Table cards and water bottle tags](https://engmohammad-hash.github.io/rd-amazing-nidal/en/services/quick-print/table-cards/): Table cards and bottle tags for events and occasions.
+- [Corporate identity and marketing print](https://engmohammad-hash.github.io/rd-amazing-nidal/en/services/corporate/): Print that presents your company as it deserves at every meeting and exhibition.
+  - [Folders](https://engmohammad-hash.github.io/rd-amazing-nidal/en/services/corporate/folders/): Folders with an inner pocket for papers and proposals.
+  - [Brochures](https://engmohammad-hash.github.io/rd-amazing-nidal/en/services/corporate/corporate-brochures/): Folded brochures that explain your services clearly.
+  - [Catalogues](https://engmohammad-hash.github.io/rd-amazing-nidal/en/services/corporate/catalogues/): Multi-page catalogues to show your products, with a luxury cover.
+- [Print for schools and associations](https://engmohammad-hash.github.io/rd-amazing-nidal/en/services/schools/): School and association print all year round, at special prices.
+  - [Books](https://engmohammad-hash.github.io/rd-amazing-nidal/en/services/schools/books/): Books printed and bound in small or large runs.
+  - [Planners](https://engmohammad-hash.github.io/rd-amazing-nidal/en/services/schools/school-planners/): Yearly planners with a cover printed with your school's name.
+  - [Certificates](https://engmohammad-hash.github.io/rd-amazing-nidal/en/services/schools/certificates/): Certificates on fine paper with gold print to honour the best.
+  - [Notebooks](https://engmohammad-hash.github.io/rd-amazing-nidal/en/services/schools/notebooks/): Spiral or sewn notebooks with your own cover.
+- [Office and accounting print](https://engmohammad-hash.github.io/rd-amazing-nidal/en/services/office/): Print that keeps your daily work in order and gives your paperwork an official look.
+  - [Invoices](https://engmohammad-hash.github.io/rd-amazing-nidal/en/services/office/invoices/): Numbered invoice books with carbonless copies.
+  - [Payment vouchers](https://engmohammad-hash.github.io/rd-amazing-nidal/en/services/office/payment-vouchers/): Numbered payment voucher books in your company's name.
+  - [Receipt vouchers](https://engmohammad-hash.github.io/rd-amazing-nidal/en/services/office/receipt-vouchers/): Numbered receipt voucher books in two or three copies.
+  - [Stamps](https://engmohammad-hash.github.io/rd-amazing-nidal/en/services/office/stamps/): Self-inking stamps with your company's logo and details.
+  - [Fine letter paper](https://engmohammad-hash.github.io/rd-amazing-nidal/en/services/office/letter-paper/): Letterheads and envelopes with your logo on fine paper.
+- [Embroidery and heat printing](https://engmohammad-hash.github.io/rd-amazing-nidal/en/services/embroidery/): Your logo embroidered or printed on your team's clothing and event gifts.
+  - [T-shirts](https://engmohammad-hash.github.io/rd-amazing-nidal/en/services/embroidery/t-shirts/): Cotton T-shirts with heat print or embroidery, for teams and events.
+  - [Caps](https://engmohammad-hash.github.io/rd-amazing-nidal/en/services/embroidery/caps/): Caps with an embroidered logo for staff and events.
+  - [Cloth bags for occasions](https://engmohammad-hash.github.io/rd-amazing-nidal/en/services/embroidery/event-cloth-bags/): Cloth bags to hand out at occasions and conferences.
+  - [Company safety vests](https://engmohammad-hash.github.io/rd-amazing-nidal/en/services/embroidery/safety-vests/): Reflective safety vests printed with your company's name.
+- [Promotional gifts](https://engmohammad-hash.github.io/rd-amazing-nidal/en/services/gifts/): Gifts that carry your name and stay with your clients and staff for a long time.
+  - [Crystal, leather, wood and acrylic awards](https://engmohammad-hash.github.io/rd-amazing-nidal/en/services/gifts/awards/): Awards in a choice of materials, engraved or printed with the name.
+  - [Certificates with covers](https://engmohammad-hash.github.io/rd-amazing-nidal/en/services/gifts/certificates-with-covers/): A fine certificate inside a leather or velvet cover.
+  - [Heat-change mugs](https://engmohammad-hash.github.io/rd-amazing-nidal/en/services/gifts/heat-mugs/): A mug that changes colour with heat to reveal your logo.
+  - [Pens](https://engmohammad-hash.github.io/rd-amazing-nidal/en/services/gifts/pens/): Metal and plastic pens printed or engraved with your logo.
+  - [Planners](https://engmohammad-hash.github.io/rd-amazing-nidal/en/services/gifts/gift-planners/): Fine leather planners with your logo, a gift for your clients.
+  - [Keyrings](https://engmohammad-hash.github.io/rd-amazing-nidal/en/services/gifts/keyrings/): Metal, leather and acrylic keyrings with your logo.
+  - [Ceramic mugs](https://engmohammad-hash.github.io/rd-amazing-nidal/en/services/gifts/ceramic-mugs/): Ceramic mugs with print that lasts through washing.
+- [Project hoardings](https://engmohammad-hash.github.io/rd-amazing-nidal/en/services/hoardings/): Printed hoardings that guard your site and advertise it at the same time.
+  - [Banners](https://engmohammad-hash.github.io/rd-amazing-nidal/en/services/hoardings/banners/): Large banners in fast colours that stand up to sun and wind.
+  - [Flex](https://engmohammad-hash.github.io/rd-amazing-nidal/en/services/hoardings/flex/): Wide-format flex for hoardings and outdoor signs.
+  - [Vinyl](https://engmohammad-hash.github.io/rd-amazing-nidal/en/services/hoardings/vinyl/): Adhesive vinyl for metal and wooden site panels.
+  - [Stickers](https://engmohammad-hash.github.io/rd-amazing-nidal/en/services/hoardings/hoarding-stickers/): Safety and information stickers for work sites.
+- [Event services](https://engmohammad-hash.github.io/rd-amazing-nidal/en/services/events/): We dress your event in all its print, from the backdrop to the welcome desk.
+  - [Exhibitions](https://engmohammad-hash.github.io/rd-amazing-nidal/en/services/events/exhibitions/): Exhibition stands with pop-up backdrops, roll-ups and printed counters.
+  - [Conferences](https://engmohammad-hash.github.io/rd-amazing-nidal/en/services/events/conferences/): Stage backdrops, lecterns and badges for conferences.
+  - [Parties](https://engmohammad-hash.github.io/rd-amazing-nidal/en/services/events/parties/): Photo backdrops, welcome boards and matching print for your party.
+  - [Sports matches](https://engmohammad-hash.github.io/rd-amazing-nidal/en/services/events/sports-matches/): Tall pole flags and pitch-side boards.
+  - [University workshops](https://engmohammad-hash.github.io/rd-amazing-nidal/en/services/events/university-workshops/): Roll-ups, desk flags and Forex boards for workshops and forums.
+- [Name signs](https://engmohammad-hash.github.io/rd-amazing-nidal/en/services/signs/): Signs that light up your name day and night, made and fitted by us.
+  - [Acrylic light signs](https://engmohammad-hash.github.io/rd-amazing-nidal/en/services/signs/acrylic-light-signs/): Illuminated acrylic letters with steady LED light.
+  - [Zincor and acrylic light signs](https://engmohammad-hash.github.io/rd-amazing-nidal/en/services/signs/zincor-light-signs/): Zincor letters with a glowing acrylic face, built to last.
+  - [Steel signs](https://engmohammad-hash.github.io/rd-amazing-nidal/en/services/signs/steel-signs/): Gold or silver stainless steel letters with a luxury shine.
+  - [Cladding installation](https://engmohammad-hash.github.io/rd-amazing-nidal/en/services/signs/cladding/): Shopfronts clad in panels in your brand's colours.
+  - [Gypsum board (plasterboard) installation](https://engmohammad-hash.github.io/rd-amazing-nidal/en/services/signs/gypsum-board/): Plasterboard ceilings and walls with hidden lighting for shops and offices.
+- [Acrylic, Forex and foam board](https://engmohammad-hash.github.io/rd-amazing-nidal/en/services/acrylic/): Cutting, engraving and print on acrylic, Forex and foam board, in any shape you want.
+  - [Acrylic cutting](https://engmohammad-hash.github.io/rd-amazing-nidal/en/services/acrylic/acrylic-cutting/): Precise laser cutting of clear and coloured acrylic in any shape.
+  - [Laser engraving on acrylic](https://engmohammad-hash.github.io/rd-amazing-nidal/en/services/acrylic/laser-engraving/): Logos and text engraved into acrylic with a soft frosted finish.
+  - [Stickers mounted on acrylic](https://engmohammad-hash.github.io/rd-amazing-nidal/en/services/acrylic/acrylic-stickers/): Acrylic panels faced with glossy colour stickers.
+  - [Acrylic stands](https://engmohammad-hash.github.io/rd-amazing-nidal/en/services/acrylic/acrylic-stands/): Counter stands for menus, QR codes and brochures.
+  - [Forex cutting](https://engmohammad-hash.github.io/rd-amazing-nidal/en/services/acrylic/forex-cutting/): Light Forex boards cut to any shape for display and decor.
+  - [Stickers mounted on Forex](https://engmohammad-hash.github.io/rd-amazing-nidal/en/services/acrylic/forex-stickers/): Printed Forex boards for indoor signs and adverts.
+  - [Foam board cutting](https://engmohammad-hash.github.io/rd-amazing-nidal/en/services/acrylic/foam-cutting/): Foam board cut into shapes and letters for occasions and decor.
+  - [Stickers mounted on foam board](https://engmohammad-hash.github.io/rd-amazing-nidal/en/services/acrylic/foam-stickers/): Light printed foam boards for exhibitions and schools.
+- [Packaging for abaya shops and photographers](https://engmohammad-hash.github.io/rd-amazing-nidal/en/services/abaya-packaging/): A complete package worthy of your abayas and photos, from the box to the ribbon.
+  - [Boxes](https://engmohammad-hash.github.io/rd-amazing-nidal/en/services/abaya-packaging/abaya-boxes/): Luxury boxes for abayas and albums, made to size.
+  - [Paper bags](https://engmohammad-hash.github.io/rd-amazing-nidal/en/services/abaya-packaging/abaya-paper-bags/): Elegant paper bags with ribbon or rope handles.
+  - [Cloth bags](https://engmohammad-hash.github.io/rd-amazing-nidal/en/services/abaya-packaging/abaya-cloth-bags/): Cloth bags that keep an abaya safe from dust.
+  - [Fabric labels](https://engmohammad-hash.github.io/rd-amazing-nidal/en/services/abaya-packaging/woven-labels/): Woven labels with your brand's name, sewn inside each piece.
+  - [Heat-transfer labels](https://engmohammad-hash.github.io/rd-amazing-nidal/en/services/abaya-packaging/heat-labels/): Labels heat-pressed inside the garment, with no stitching.
+  - [Paper tags](https://engmohammad-hash.github.io/rd-amazing-nidal/en/services/abaya-packaging/hang-tags/): Thick paper hang tags with a string or ribbon.
+  - [Stickers](https://engmohammad-hash.github.io/rd-amazing-nidal/en/services/abaya-packaging/abaya-stickers/): Stickers to seal wrapping paper and boxes with your logo.
+  - [Wrapping paper](https://engmohammad-hash.github.io/rd-amazing-nidal/en/services/abaya-packaging/wrapping-paper/): Fine tissue printed with your logo to wrap each piece with care.
+  - [Ribbons](https://engmohammad-hash.github.io/rd-amazing-nidal/en/services/abaya-packaging/ribbons/): Satin ribbons printed with your brand's name.
 
 ### Online shop (https://engmohammad-hash.github.io/rd-amazing-nidal/en/shop/)
 

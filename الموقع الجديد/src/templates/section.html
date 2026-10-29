@@ -1,0 +1,38 @@
+{% extends "base.html" %}
+{% import "partials/icons.html" as ic %}
+{% import "partials/catalog.html" as cat with context %}
+{% block main %}
+{% set items = svc['items'] %}
+<section class="page-band cat-band">
+  <div class="wrap">
+    <nav class="crumbs" aria-label="{{ t.nav_aria }}">
+      <a href="{{ home }}">{{ t.shop.crumb_home }}</a><span aria-hidden="true">/</span>
+      <a href="{{ anchor('services') }}">{{ t.services.eyebrow_short }}</a><span aria-hidden="true">/</span>
+      <span aria-current="page">{{ svc.name }}</span>
+    </nav>
+    <div class="cat-head">
+      <div class="cat-title">
+        <span class="cat-num">{{ '%02d' % (svc_index + 1) }}</span>
+        <h1>{{ svc.name }}</h1>
+        <p>{{ svc.lead }}</p>
+        {% if svc.get('note') %}<p class="cat-note">{{ ic.icon('star') }}<span>{{ svc.note }}</span></p>{% endif %}
+      </div>
+      <div class="cat-side">
+        <span class="cat-count"><b>{{ items | length }}</b> {{ (t.catalog.count | fill(n='')).strip() }}</span>
+        <a class="btn btn-light" href="{{ wa(t.catalog.quote_section_msg | fill(section=svc.name)) }}" target="_blank" rel="noopener">{% include "partials/wa-icon.svg" %} {{ t.catalog.quote_section }}</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="section cat" aria-labelledby="cat-title">
+  <div class="wrap">
+    <h2 class="sr-only" id="cat-title">{{ t.catalog.products }}</h2>
+    <div class="c-grid">
+      {% for it in items %}{{ cat.card(it, svc, loop.index0) }}{% endfor %}
+    </div>
+  </div>
+</section>
+
+{{ cat.sections(svc.id) }}
+{% endblock %}

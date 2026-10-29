@@ -1,0 +1,36 @@
+{# What the section and product pages share: a product's card, and the list of all sixteen sections. #}
+{% import "partials/icons.html" as ic %}
+
+{# a product: its picture, name and line, then the two buttons the client asked for: order on WhatsApp, and see it #}
+{% macro card(it, svc, i, compact=false) %}
+{% set p = pic(it.img[0]) %}{% set link = svc_link(svc.id, it.id) %}
+<article class="c-card rv{% if compact %} c-compact{% endif %}" style="--i: {{ i % 4 }}">
+  <a class="c-media" href="{{ link }}" tabindex="-1" aria-hidden="true">
+    <img src="{{ p.thumb }}" alt="" width="720" height="540" loading="{{ 'eager' if i < 4 and not compact else 'lazy' }}" decoding="async">
+    {% if it.img | length > 1 %}<img class="c-alt" src="{{ pic(it.img[1]).thumb }}" alt="" width="720" height="540" loading="lazy" decoding="async">{% endif %}
+  </a>
+  <div class="c-body">
+    <h3><a href="{{ link }}">{{ it.name }}</a></h3>
+    {% if not compact %}<p>{{ it.short }}</p>{% endif %}
+    <div class="c-actions">
+      {% if not compact %}<a class="c-btn c-order" href="{{ wa(t.catalog.order_msg | fill(name=it.name, section=svc.name)) }}" target="_blank" rel="noopener">{% include "partials/wa-icon.svg" %}<span>{{ t.catalog.order }}</span></a>{% endif %}
+      <a class="c-btn c-see" href="{{ link }}"><span>{{ t.catalog.see | fill(name=it.name | lcfirst) }}</span>{{ ic.icon('arrow') }}</a>
+    </div>
+  </div>
+</article>
+{% endmacro %}
+
+{% macro sections(current) %}
+<section class="section section-alt all-secs" aria-labelledby="all-secs-title">
+  <div class="wrap">
+    <div class="all-head">
+      <h2 id="all-secs-title">{{ t.catalog.all }}</h2>
+      <p>{{ t.catalog.all_lead }}</p>
+    </div>
+    <ul class="sec-links">
+      {% for s in d.services %}<li><a href="{{ svc_link(s.id) }}"{% if s.id == current %} aria-current="page"{% endif %}><b>{{ '%02d' % loop.index }}</b><span>{{ s.name }}</span></a></li>
+      {% endfor %}
+    </ul>
+  </div>
+</section>
+{% endmacro %}

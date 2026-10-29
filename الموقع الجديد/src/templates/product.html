@@ -1,0 +1,64 @@
+{% extends "base.html" %}
+{% import "partials/icons.html" as ic %}
+{% import "partials/catalog.html" as cat with context %}
+{% block main %}
+{% set items = svc['items'] %}
+{% set order = wa(t.catalog.order_msg | fill(name=item.name, section=svc.name)) %}
+{# on top, the product as its card shows it, with the order button; below it, its pictures #}
+<section class="page-band pd-band">
+  <div class="wrap">
+    <nav class="crumbs" aria-label="{{ t.nav_aria }}">
+      <a href="{{ home }}">{{ t.shop.crumb_home }}</a><span aria-hidden="true">/</span>
+      <a href="{{ anchor('services') }}">{{ t.services.eyebrow_short }}</a><span aria-hidden="true">/</span>
+      <a href="{{ svc_link(svc.id) }}">{{ svc.name }}</a><span aria-hidden="true">/</span>
+      <span aria-current="page">{{ item.name }}</span>
+    </nav>
+    <div class="pd-head">
+      <div class="pd-title">
+        <a class="pd-sec" href="{{ svc_link(svc.id) }}"><b>{{ '%02d' % (svc_index + 1) }}</b>{{ svc.name }}</a>
+        <h1>{{ item.name }}</h1>
+        <p>{{ item.short }}</p>
+        <ul class="pd-assure">{% for a in t.catalog.assure %}<li>{{ ic.icon('check') }}{{ a }}</li>{% endfor %}</ul>
+      </div>
+      <div class="pd-actions">
+        <a class="btn btn-light" href="{{ order }}" target="_blank" rel="noopener">{% include "partials/wa-icon.svg" %} {{ t.catalog.order }}</a>
+        <a class="btn btn-ghost" href="{{ svc_link(svc.id) }}">{{ ic.icon('next') }} {{ t.catalog.back }}</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="section pd" aria-labelledby="pd-photos">
+  <div class="wrap">
+    <h2 class="sr-only" id="pd-photos">{{ t.catalog.photos }}</h2>
+    <div class="pd-gallery n{{ item.img | length }}">
+      {% for key in item.img %}{% set p = pic(key) %}
+      <a class="pd-shot rv" style="--i: {{ loop.index0 }}" href="{{ p.full }}" data-lightbox data-caption="{{ item.name }}" aria-label="{{ t.js.lightbox }}: {{ item.name }} {{ loop.index }}">
+        <img src="{{ p.md if loop.first else p.thumb }}" alt="{{ item.name }}" width="{{ 1200 if loop.first else 720 }}" height="{{ 900 if loop.first else 540 }}"{% if not loop.first %} loading="lazy"{% endif %} decoding="async">
+        <span class="pd-zoom">{{ ic.icon('zoom') }}</span>
+      </a>
+      {% endfor %}
+    </div>
+    <p class="pd-note">{{ t.catalog.photos_note }}</p>
+    <nav class="pd-pager" aria-label="{{ svc.name }}">
+      {% set prev = items[item_index - 1] if item_index > 0 else none %}{% set next = items[item_index + 1] if item_index + 1 < items | length else none %}
+      {% if prev %}<a class="pd-prev" href="{{ svc_link(svc.id, prev.id) }}" rel="prev">{{ ic.icon('prev') }}<span><small>{{ t.catalog.prev }}</small>{{ prev.name }}</span></a>{% else %}<span></span>{% endif %}
+      {% if next %}<a class="pd-next" href="{{ svc_link(svc.id, next.id) }}" rel="next"><span><small>{{ t.catalog.next }}</small>{{ next.name }}</span>{{ ic.icon('next') }}</a>{% endif %}
+    </nav>
+  </div>
+</section>
+
+{% if items | length > 1 %}
+<section class="section section-alt pd-more" aria-labelledby="pd-more-title">
+  <div class="wrap">
+    <div class="all-head">
+      <h2 id="pd-more-title">{{ t.catalog.more }}</h2>
+      <a class="link-arrow" href="{{ svc_link(svc.id) }}">{{ svc.name }} {{ ic.icon('arrow') }}</a>
+    </div>
+    <div class="c-grid c-grid-more">
+      {% for it in items if it.id != item.id %}{{ cat.card(it, svc, loop.index0, true) }}{% endfor %}
+    </div>
+  </div>
+</section>
+{% endif %}
+{% endblock %}

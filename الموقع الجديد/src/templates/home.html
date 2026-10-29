@@ -51,7 +51,6 @@
         <a class="hero-browse" href="#services">{{ t.hero.browse }} {{ ic.icon('down') }}</a>
         <a class="hero-browse" href="{{ shop_link }}">{{ ic.icon('bag') }} {{ t.shop.home_cta }}</a>
       </div>
-      <p class="hero-note">{{ d.hero.note }}</p>
     </div>
   </div>
 </section>
@@ -65,15 +64,16 @@
 <section class="section" id="services" aria-labelledby="services-title">
   <div class="wrap">
     {{ head('services', 'services') }}
+    {# each section is a picture and its name; its products and their details are on its own page #}
     <div class="svc-grid">
-      {% for s in d.services %}
-      <article class="svc rv" style="--i: {{ loop.index0 % 4 }}">
-        <span class="svc-num">{{ '%02d' % loop.index }}</span>
-        <h3>{{ s.name }}</h3>
-        <ul class="svc-items">{% for it in s['items'] %}<li>{{ it }}</li>{% endfor %}</ul>
-        {% if s.get('note') %}<p class="svc-note">{{ ic.icon('star') }}<span>{{ s.note }}</span></p>{% endif %}
-        <a class="svc-quote" href="{{ wa(t.services.quote_msg | fill(name=s.name)) }}" target="_blank" rel="noopener">{{ t.services.quote }} {{ ic.icon('arrow') }}</a>
-      </article>
+      {% for s in d.services %}{% set cover = pic(s['items'][0].img[0]) %}
+      <a class="svc rv" href="{{ svc_link(s.id) }}" style="--i: {{ loop.index0 % 4 }}">
+        <span class="svc-media"><img src="{{ cover.thumb }}" alt="" width="720" height="540" loading="lazy" decoding="async"><span class="svc-num">{{ '%02d' % loop.index }}</span></span>
+        <span class="svc-body">
+          <h3>{{ s.name }}</h3>
+          <span class="svc-foot"><span>{{ t.catalog.count | fill(n=s['items'] | length) }}</span>{{ ic.icon('arrow') }}</span>
+        </span>
+      </a>
       {% endfor %}
     </div>
     <div class="svc-more rv">
@@ -87,16 +87,15 @@
   <div class="wrap">
     {{ head('works', 'works') }}
     <div class="works-grid">
-      {% for w in d.works %}
+      {% for w in d.works %}{% set p = pic(w.img) %}
       <figure class="work rv" style="--i: {{ loop.index0 % 3 }}">
-        <a href="{{ root }}assets/img/works/{{ w.img }}.jpg" data-lightbox data-caption="{{ w.title }}" aria-label="{{ t.js.lightbox }}: {{ w.title }}">
-          <img src="{{ root }}assets/img/works/{{ w.img }}-thumb.jpg" alt="{{ w.title }}" width="720" height="540" loading="lazy" decoding="async">
+        <a href="{{ p.full }}" data-lightbox data-caption="{{ w.title }}" aria-label="{{ t.js.lightbox }}: {{ w.title }}">
+          <img src="{{ p.thumb }}" alt="{{ w.title }}" width="720" height="540" loading="lazy" decoding="async">
         </a>
         <figcaption><span>{{ w.title }}</span><b>{{ '%02d' % loop.index }}</b></figcaption>
       </figure>
       {% endfor %}
     </div>
-    <p class="works-note">{{ t.works.note }}</p>
   </div>
 </section>
 
@@ -117,7 +116,7 @@
 
 <section class="section section-alt" id="process" aria-labelledby="process-title">
   <div class="wrap">
-    {{ head('process', 'process') }}
+    {{ head('process', 'process', false) }}
     <ol class="steps">
       {% for s in d.steps %}<li class="rv" style="--i: {{ loop.index0 }}"><span class="step-num">{{ '%02d' % loop.index }}</span><h3>{{ s.title }}</h3><p>{{ s.text }}</p></li>
       {% endfor %}

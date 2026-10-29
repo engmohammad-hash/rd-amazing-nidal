@@ -12,7 +12,7 @@
     </div>
     <div>
       <h3>{{ t.foot.services }}</h3>
-      <ul>{% for s in d.services[:6] %}<li><a href="{{ anchor('services') }}">{{ s.name }}</a></li>{% endfor %}</ul>
+      <ul>{% for s in d.services[:6] %}<li><a href="{{ svc_link(s.id) }}">{{ s.name }}</a></li>{% endfor %}<li><a class="foot-all" href="{{ anchor('services') }}">{{ t.catalog.all }}</a></li></ul>
     </div>
     <div>
       <h3>{{ t.foot.contact }}</h3>

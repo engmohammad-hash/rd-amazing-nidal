@@ -2,6 +2,7 @@
   "business": {
     "name": "RD Amazing",
     "tagline": "Complete Print Solutions",
+    "sales": { "label": "Sales manager", "name": "Nidal Abu Al-Majd" },
     "about_short": "A print house in Dammam for every kind of paper and plastic print, and maker of printed paper cups, with luxury finishes worthy of your brand.",
     "city": "Dammam",
     "region": "Eastern Province",
@@ -22,53 +23,160 @@
   "hero": {
     "eyebrow": "RD Amazing · Dammam",
     "title": ["Complete printing,", "finished in luxury"],
-    "lead": "From business cards to incense and sweet boxes and printed cups: we design, print and pack under one roof, with chosen materials and finishes worthy of your name.",
-    "note": "We go over the design, size and quantity with you, and print only once you approve."
+    "lead": "We design, print and pack under one roof, with chosen materials and finishes worthy of your name."
   },
 
   "strip": ["Boxes and packaging", "Bags", "Stickers", "Café and restaurant print", "Promotional gifts", "Name signs", "Events", "Acrylic and Forex"],
 
   "services": [
-    {"name": "Boxes and packaging", "items": ["Hard-cover boxes", "Cardboard boxes", "Food boxes", "Perfume boxes", "Sweets boxes"]},
-    {"name": "Bags", "items": ["Cardboard paper bags", "Kraft paper bags", "Cloth bags", "Plastic bags", "Cloth tote bags"]},
-    {"name": "Stickers", "items": ["Raised TDF stickers", "Plastic stickers", "Paper stickers", "Sticker sheets", "Shopfront stickers", "Sticker rolls for restaurants, apiaries and water companies", "Car stickers", "Clear cut-out stickers"], "note": "Sticker fitting available"},
-    {"name": "Café print", "items": ["Paper cups", "Plastic cups", "Cup holders", "Cup lids", "Sweets boxes", "Butter paper", "Stickers", "Takeaway jug with a heat-keeping foil bag"], "note": "Foil stamping and wrap printing on cups"},
-    {"name": "Restaurant and bakery print", "items": ["Boxes for luqaimat, honeycomb bread and vine leaves", "Paper bags", "Menus", "Opening and offer brochures", "Table paper", "Stickers", "Napkins"]},
-    {"name": "Quick print", "items": ["Business cards", "Thank-you cards", "ID cards", "Opening-day passports", "Table cards and water bottle tags"]},
-    {"name": "Corporate identity and marketing print", "items": ["Folders", "Brochures", "Catalogues"]},
-    {"name": "Print for schools and associations", "items": ["Books", "Planners", "Certificates", "Notebooks"], "note": "Special prices for schools and associations"},
-    {"name": "Office and accounting print", "items": ["Invoices", "Payment vouchers", "Receipt vouchers", "Stamps", "Fine letter paper"]},
-    {"name": "Embroidery and heat printing", "items": ["T-shirts", "Caps", "Cloth bags for occasions", "Company safety vests"]},
-    {"name": "Promotional gifts", "items": ["Crystal, leather, wood and acrylic awards", "Certificates with covers", "Heat-change mugs", "Pens", "Planners", "Keyrings", "Ceramic mugs"], "note": "Raised UV, spot UV and heat printing available"},
-    {"name": "Project hoardings", "items": ["Banners", "Flex", "Vinyl", "Stickers"], "note": "Steel frames on concrete footings fitted"},
-    {"name": "Event services", "items": ["Exhibitions", "Conferences", "Parties", "Sports matches", "University workshops"], "note": "Including print of pop-ups, roll-ups, Forex boards, Flexo boards, tall pole flags and desk flags"},
-    {"name": "Name signs", "items": ["Acrylic light signs", "Zincor and acrylic light signs", "Steel signs", "Cladding installation", "Gypsum board (plasterboard) installation"]},
-    {"name": "Acrylic, Forex and foam board", "items": ["Acrylic cutting", "Laser engraving on acrylic", "Stickers mounted on acrylic", "Acrylic stands", "Forex cutting", "Stickers mounted on Forex", "Foam board cutting", "Stickers mounted on foam board"]},
-    {"name": "Packaging for abaya shops and photographers", "items": ["Boxes", "Paper bags", "Cloth bags", "Fabric labels", "Heat-transfer labels", "Paper tags", "Stickers", "Wrapping paper", "Ribbons"]}
+    {"name": "Boxes and packaging", "lead": "Boxes made to your size with luxury finishes, carrying your name before they are opened.", "items": [
+      {"name": "Hard-cover boxes", "short": "Rigid boxes wrapped in fine paper, with a lid, a drawer or a magnetic close."},
+      {"name": "Cardboard boxes", "short": "Printed carton boxes that fold flat and ship easily, for any use."},
+      {"name": "Food boxes", "short": "Food-safe boxes with crisp print, for meals, sweets and pastries."},
+      {"name": "Perfume boxes", "short": "Boxes for perfume, incense and oud oil, with gold foil and an inner lining."},
+      {"name": "Sweets boxes", "short": "Sweets and chocolate boxes with inner dividers and appetising print."}
+    ]},
+    {"name": "Bags", "lead": "Bags that carry your name wherever they go: paper, kraft, cloth and plastic.", "items": [
+      {"name": "Cardboard paper bags", "short": "Heavy paper with rope or ribbon handles, in your brand's colours."},
+      {"name": "Kraft paper bags", "short": "Strong natural kraft paper printed in one or two colours."},
+      {"name": "Cloth bags", "short": "Cloth bags used again and again, keeping your brand in sight."},
+      {"name": "Plastic bags", "short": "Plastic bags with a cut-out or rope handle and glossy print."},
+      {"name": "Cloth tote bags", "short": "Canvas tote bags, printed or embroidered."}
+    ]},
+    {"name": "Stickers", "lead": "Stickers in every material and shape, from sealing a box to a shopfront or a car.", "note": "Sticker fitting available", "items": [
+      {"name": "Raised TDF stickers", "short": "Raised lettering in gold or silver shine that sticks to any surface."},
+      {"name": "Plastic stickers", "short": "Water- and damp-proof stickers for bottles and products."},
+      {"name": "Paper stickers", "short": "Economical paper stickers in true colour, for sealing boxes and bags."},
+      {"name": "Sticker sheets", "short": "A set of stickers on one sheet, die-cut to shape."},
+      {"name": "Shopfront stickers", "short": "Glass and shopfront stickers that announce your shop from afar, fitted by us."},
+      {"name": "Sticker rolls for restaurants, apiaries and water companies", "short": "Stickers on a roll for orders, honey jars and water bottles, applied fast."},
+      {"name": "Car stickers", "short": "Stickers for company and delivery cars that stand up to sun and washing."},
+      {"name": "Clear cut-out stickers", "short": "Cut-out letters and logos with no background, as if printed on the surface."}
+    ]},
+    {"name": "Café print", "lead": "Everything that puts your café's name in the customer's hand: cups, lids, holders and packaging.", "note": "Foil stamping and wrap printing on cups", "items": [
+      {"name": "Paper cups", "short": "Paper cups printed with your logo, single or double wall, in several sizes."},
+      {"name": "Plastic cups", "short": "Clear cups for cold drinks, printed with your logo."},
+      {"name": "Cup holders", "short": "Card carriers for two or four cups, printed with your name."},
+      {"name": "Cup lids", "short": "Tight-fitting lids for hot and cold cups, sized to match."},
+      {"name": "Sweets boxes", "short": "Boxes for cake and sweets, for the counter and takeaway."},
+      {"name": "Butter paper", "short": "Grease-proof paper printed with your logo, for wrapping and serving."},
+      {"name": "Stickers", "short": "Stickers to seal bags and boxes and mark orders."},
+      {"name": "Takeaway jug with a heat-keeping foil bag", "short": "A takeaway coffee jug with an inner foil bag that keeps the heat in."}
+    ]},
+    {"name": "Restaurant and bakery print", "lead": "Packaging and print that finish your dishes, from the box to the table.", "items": [
+      {"name": "Boxes for luqaimat, honeycomb bread and vine leaves", "short": "Boxes sized for your dishes, with display windows and your name."},
+      {"name": "Paper bags", "short": "Paper takeaway bags, with or without handles."},
+      {"name": "Menus", "short": "Printed menus on durable stock, folded or a single card."},
+      {"name": "Opening and offer brochures", "short": "Brochures and flyers for your opening and offers, to reach new customers."},
+      {"name": "Table paper", "short": "Paper table mats that carry your logo and protect the table."},
+      {"name": "Stickers", "short": "Stickers to close boxes and bags and mark each dish."},
+      {"name": "Napkins", "short": "Napkins printed with your restaurant's logo in one or two colours."}
+    ]},
+    {"name": "Quick print", "lead": "Everyday print ready fast, with the same care as our luxury work.", "items": [
+      {"name": "Business cards", "short": "Business cards on fine paper with gold foil or embossing."},
+      {"name": "Thank-you cards", "short": "A small card that goes with your orders and leaves a warm impression."},
+      {"name": "ID cards", "short": "Plastic staff and visitor cards with a lanyard."},
+      {"name": "Opening-day passports", "short": "A passport-style booklet for opening campaigns and stamp collecting."},
+      {"name": "Table cards and water bottle tags", "short": "Table cards and bottle tags for events and occasions."}
+    ]},
+    {"name": "Corporate identity and marketing print", "lead": "Print that presents your company as it deserves at every meeting and exhibition.", "items": [
+      {"name": "Folders", "short": "Folders with an inner pocket for papers and proposals."},
+      {"name": "Brochures", "short": "Folded brochures that explain your services clearly."},
+      {"name": "Catalogues", "short": "Multi-page catalogues to show your products, with a luxury cover."}
+    ]},
+    {"name": "Print for schools and associations", "lead": "School and association print all year round, at special prices.", "note": "Special prices for schools and associations", "items": [
+      {"name": "Books", "short": "Books printed and bound in small or large runs."},
+      {"name": "Planners", "short": "Yearly planners with a cover printed with your school's name."},
+      {"name": "Certificates", "short": "Certificates on fine paper with gold print to honour the best."},
+      {"name": "Notebooks", "short": "Spiral or sewn notebooks with your own cover."}
+    ]},
+    {"name": "Office and accounting print", "lead": "Print that keeps your daily work in order and gives your paperwork an official look.", "items": [
+      {"name": "Invoices", "short": "Numbered invoice books with carbonless copies."},
+      {"name": "Payment vouchers", "short": "Numbered payment voucher books in your company's name."},
+      {"name": "Receipt vouchers", "short": "Numbered receipt voucher books in two or three copies."},
+      {"name": "Stamps", "short": "Self-inking stamps with your company's logo and details."},
+      {"name": "Fine letter paper", "short": "Letterheads and envelopes with your logo on fine paper."}
+    ]},
+    {"name": "Embroidery and heat printing", "lead": "Your logo embroidered or printed on your team's clothing and event gifts.", "items": [
+      {"name": "T-shirts", "short": "Cotton T-shirts with heat print or embroidery, for teams and events."},
+      {"name": "Caps", "short": "Caps with an embroidered logo for staff and events."},
+      {"name": "Cloth bags for occasions", "short": "Cloth bags to hand out at occasions and conferences."},
+      {"name": "Company safety vests", "short": "Reflective safety vests printed with your company's name."}
+    ]},
+    {"name": "Promotional gifts", "lead": "Gifts that carry your name and stay with your clients and staff for a long time.", "note": "Raised UV, spot UV and heat printing available", "items": [
+      {"name": "Crystal, leather, wood and acrylic awards", "short": "Awards in a choice of materials, engraved or printed with the name."},
+      {"name": "Certificates with covers", "short": "A fine certificate inside a leather or velvet cover."},
+      {"name": "Heat-change mugs", "short": "A mug that changes colour with heat to reveal your logo."},
+      {"name": "Pens", "short": "Metal and plastic pens printed or engraved with your logo."},
+      {"name": "Planners", "short": "Fine leather planners with your logo, a gift for your clients."},
+      {"name": "Keyrings", "short": "Metal, leather and acrylic keyrings with your logo."},
+      {"name": "Ceramic mugs", "short": "Ceramic mugs with print that lasts through washing."}
+    ]},
+    {"name": "Project hoardings", "lead": "Printed hoardings that guard your site and advertise it at the same time.", "note": "Steel frames on concrete footings fitted", "items": [
+      {"name": "Banners", "short": "Large banners in fast colours that stand up to sun and wind."},
+      {"name": "Flex", "short": "Wide-format flex for hoardings and outdoor signs."},
+      {"name": "Vinyl", "short": "Adhesive vinyl for metal and wooden site panels."},
+      {"name": "Stickers", "short": "Safety and information stickers for work sites."}
+    ]},
+    {"name": "Event services", "lead": "We dress your event in all its print, from the backdrop to the welcome desk.", "note": "Including print of pop-ups, roll-ups, Forex boards, Flexo boards, tall pole flags and desk flags", "items": [
+      {"name": "Exhibitions", "short": "Exhibition stands with pop-up backdrops, roll-ups and printed counters."},
+      {"name": "Conferences", "short": "Stage backdrops, lecterns and badges for conferences."},
+      {"name": "Parties", "short": "Photo backdrops, welcome boards and matching print for your party."},
+      {"name": "Sports matches", "short": "Tall pole flags and pitch-side boards."},
+      {"name": "University workshops", "short": "Roll-ups, desk flags and Forex boards for workshops and forums."}
+    ]},
+    {"name": "Name signs", "lead": "Signs that light up your name day and night, made and fitted by us.", "items": [
+      {"name": "Acrylic light signs", "short": "Illuminated acrylic letters with steady LED light."},
+      {"name": "Zincor and acrylic light signs", "short": "Zincor letters with a glowing acrylic face, built to last."},
+      {"name": "Steel signs", "short": "Gold or silver stainless steel letters with a luxury shine."},
+      {"name": "Cladding installation", "short": "Shopfronts clad in panels in your brand's colours."},
+      {"name": "Gypsum board (plasterboard) installation", "short": "Plasterboard ceilings and walls with hidden lighting for shops and offices."}
+    ]},
+    {"name": "Acrylic, Forex and foam board", "lead": "Cutting, engraving and print on acrylic, Forex and foam board, in any shape you want.", "items": [
+      {"name": "Acrylic cutting", "short": "Precise laser cutting of clear and coloured acrylic in any shape."},
+      {"name": "Laser engraving on acrylic", "short": "Logos and text engraved into acrylic with a soft frosted finish."},
+      {"name": "Stickers mounted on acrylic", "short": "Acrylic panels faced with glossy colour stickers."},
+      {"name": "Acrylic stands", "short": "Counter stands for menus, QR codes and brochures."},
+      {"name": "Forex cutting", "short": "Light Forex boards cut to any shape for display and decor."},
+      {"name": "Stickers mounted on Forex", "short": "Printed Forex boards for indoor signs and adverts."},
+      {"name": "Foam board cutting", "short": "Foam board cut into shapes and letters for occasions and decor."},
+      {"name": "Stickers mounted on foam board", "short": "Light printed foam boards for exhibitions and schools."}
+    ]},
+    {"name": "Packaging for abaya shops and photographers", "lead": "A complete package worthy of your abayas and photos, from the box to the ribbon.", "items": [
+      {"name": "Boxes", "short": "Luxury boxes for abayas and albums, made to size."},
+      {"name": "Paper bags", "short": "Elegant paper bags with ribbon or rope handles."},
+      {"name": "Cloth bags", "short": "Cloth bags that keep an abaya safe from dust."},
+      {"name": "Fabric labels", "short": "Woven labels with your brand's name, sewn inside each piece."},
+      {"name": "Heat-transfer labels", "short": "Labels heat-pressed inside the garment, with no stitching."},
+      {"name": "Paper tags", "short": "Thick paper hang tags with a string or ribbon."},
+      {"name": "Stickers", "short": "Stickers to seal wrapping paper and boxes with your logo."},
+      {"name": "Wrapping paper", "short": "Fine tissue printed with your logo to wrap each piece with care."},
+      {"name": "Ribbons", "short": "Satin ribbons printed with your brand's name."}
+    ]}
   ],
 
   "works": [
+    { "title": "Hard-cover box with silver print" },
+    { "title": "Paper bags for a fashion store" },
+    { "title": "Food boxes in three sizes" },
+    { "title": "Boxes with a sliding drawer" },
     { "title": "Business cards with gold foil" },
-    { "title": "Luxury incense box" },
-    { "title": "Sweets box with a drawer" },
-    { "title": "Luxury paper bags" },
-    { "title": "Printed paper cups" },
-    { "title": "Wedding invitation" }
+    { "title": "Paper bags in several sizes" }
   ],
 
   "about": {
-    "text": "A print house in Dammam for paper and plastic print and printed paper cups, from the smallest card to the finest box. We care about what makes the difference: the material, the finish, true colour and delivery on time.",
+    "text": "A Dammam print house that cares about what makes the difference: the material, the finish, true colour and delivery on time.",
     "points": [
-      { "title": "Design and print under one roof", "text": "We prepare the design or adjust your file, then print and pack in one place." },
-      { "title": "Luxury finishes", "text": "Gold and silver foil, embossing and debossing, matt and gloss lamination, and die-cutting." },
-      { "title": "A clear price and a date we keep", "text": "We agree the price and delivery date before we start, and we keep to them." }
+      { "title": "Design and print under one roof", "text": "We prepare the design, print and pack in one place." },
+      { "title": "Luxury finishes", "text": "Gold and silver foil, embossing, lamination and die-cutting." },
+      { "title": "A clear price and a date we keep", "text": "We fix the price and date before we start, and keep to them." }
     ]
   },
 
   "steps": [
-    { "title": "Send your request", "text": "Tell us the product, quantity and size, and send the design file if you have one." },
-    { "title": "We review and confirm", "text": "We agree the material, finish and price, and you see a proof before anything is printed." },
-    { "title": "We print and deliver", "text": "Printing starts once you approve, and you receive it on the agreed date." }
+    { "title": "Send your request", "text": "The product, quantity and size, and your design file if you have one." },
+    { "title": "We review and confirm", "text": "We agree the material and price, and you see a proof first." },
+    { "title": "We print and deliver", "text": "We print once you approve, and deliver on the agreed date." }
   ],
 
   "shop": {

@@ -4,8 +4,10 @@
   data/site.en.json   the English text only, laid over the Arabic by key (lists of objects by position)
   data/ui.<lang>.json the words of the interface: buttons, section headings, page titles
 
-One long page per language, like the reference site: Arabic at the site root, English under en/.
-The hero film (static/video) comes from tools/render_video.py; this script only copies it.
+Arabic at the site root, English under en/. Each has the long home page, the shop, a page for each of the sixteen
+service sections (services/<section>/) and one for every product in them (services/<section>/<product>/).
+The hero film (static/video) comes from tools/render_video.py, the product pictures from tools/render_products.py
+and the shop's own photos from tools/photos.py; this script only copies them.
 
 Run from this folder:  python -I src/build.py
 """
@@ -49,6 +51,8 @@ WHATSAPP = AR["business"]["whatsapp"]
 env = Environment(loader=FileSystemLoader(SRC / "templates"), autoescape=True, undefined=StrictUndefined,
                   trim_blocks=True, lstrip_blocks=True)
 env.filters["fill"] = lambda s, **kw: fill(s, **kw)
+# "See our {name}" reads "See our business cards" in English; names that start with a capitalised word (ID cards) stay
+env.filters["lcfirst"] = lambda s: s[:1].lower() + s[1:] if s[1:2].islower() and s[:1].isascii() else s
 
 
 def fill(s, **kw):
@@ -96,6 +100,24 @@ def lqip(name, size):
 HERO_LQIP = {"desktop": lqip("hero-desktop.jpg", (48, 27)), "mobile": lqip("hero-mobile.jpg", (27, 48))}
 
 
+# a picture is named by where it comes from: "photo/12" the shop's own photos, "shop/bags-01" the shop page's renders,
+# "p/tshirt-01" the product renders. Each has a full size (the lightbox), a 4:3 "md" and a 720 x 540 thumbnail.
+PIC_DIRS = {"photo": "photos", "shop": "shop", "p": "products"}
+MISSING = set()
+
+
+def pic(key, root):
+    kind, name = key.split("/", 1)
+    folder = PIC_DIRS[kind]
+    base = SRC / "static" / "img" / folder / name
+    for suffix in ("", "-thumb") + (("-md",) if kind == "photo" else ()):
+        if not base.with_name(base.name + suffix + ".jpg").exists():
+            MISSING.add(f"{folder}/{name}{suffix}.jpg")
+    url = f"{root}assets/img/{folder}/{name}"
+    return {"key": key, "full": url + ".jpg", "md": url + ("-md.jpg" if kind == "photo" else ".jpg"), "thumb": url + "-thumb.jpg",
+            "abs": BASE + f"assets/img/{folder}/{name}.jpg"}
+
+
 def jsonld(*nodes):
     return json.dumps({"@context": "https://schema.org", "@graph": list(nodes)}, ensure_ascii=False, separators=(",", ":")).replace("</", "<\\/")
 
@@ -125,8 +147,10 @@ class Site:
                                            "opens": b["hours"]["open"], "closes": b["hours"]["close"]}],
             "sameAs": [f"https://www.instagram.com/{b['instagram']}/"],
             "hasOfferCatalog": {"@type": "OfferCatalog", "name": self.t["services"]["title"][0], "itemListElement": [
-                {"@type": "OfferCatalog", "name": s["name"], "itemListElement": [
-                    {"@type": "Offer", "itemOffered": {"@type": "Service", "name": item}} for item in s["items"]]}
+                {"@type": "OfferCatalog", "name": s["name"], "url": BASE + self.prefix + f"services/{s['id']}/", "itemListElement": [
+                    {"@type": "Offer", "itemOffered": {"@type": "Service", "name": item["name"],
+                                                       "url": BASE + self.prefix + f"services/{s['id']}/{item['id']}/"}}
+                    for item in s["items"]]}
                 for s in self.data["services"]]},
         }
 
@@ -156,10 +180,14 @@ class Site:
             "t": t, "lang": t["lang"], "dir": t["dir"], "b": self.b, "d": self.data, "credit": self.data["credit"],
             "root": root, "home": home, "path": full, "version": VERSION, "wa": wa, "template": template, "hero_lqip": HERO_LQIP,
             "shop": self.data["shop"], "shop_link": root + self.prefix + "shop/", "shop_json": self.shop_json(root),
+            # where a section's or a product's page is, from any page; and its pictures as seen from this page
+            "svc_link": lambda sid, pid=None, base=root + self.prefix: f"{base}services/{sid}/" + (f"{pid}/" if pid else ""),
+            "pic": lambda key, r=root: pic(key, r),
             "cat_names": {c["id"]: c["name"] for c in self.data["shop"]["categories"]},
             # on the home page a section link is just its anchor; elsewhere it leads back home first
             "anchor": (lambda id: "#" + id) if template == "home.html" else (lambda id, h=home: h + "#" + id),
-            "alt_link": (root + t["other"]["prefix"] + path) or "./",
+            # the 404 page exists in Arabic only: its language switch goes to the English home page
+            "alt_link": (root + t["other"]["prefix"] + ("" if template == "404.html" else path)) or "./",
             "alternates": {"ar": BASE + path, "en": BASE + "en/" + path},
         }
         page.update(ctx)
@@ -187,10 +215,42 @@ class Site:
                      "image": BASE + f"assets/img/shop/{p['img'][0]}.jpg"}
                     for i, p in enumerate(self.data["shop"]["products"])]}),
         })
+        self.build_services(names)
         if self.code == "ar":   # GitHub Pages has a single 404 page for the whole site
             self.render("404.html", "404.html", {
                 "title": fill(m["notfound_title"], **names), "description": m["notfound_desc"], "jsonld": jsonld(),
             })
+
+
+    def crumbs(self, *trail):
+        """BreadcrumbList from the home page down: (name, path) pairs, path inside this language."""
+        home = (self.t["shop"]["crumb_home"], "")
+        return {"@type": "BreadcrumbList", "itemListElement": [
+            {"@type": "ListItem", "position": i + 1, "name": name, "item": BASE + self.prefix + path}
+            for i, (name, path) in enumerate((home,) + trail)]}
+
+    def build_services(self, names):
+        t, c, svcs = self.t, self.t["catalog"], self.data["services"]
+        for k, s in enumerate(svcs):
+            spath = f"services/{s['id']}/"
+            self.render("section.html", spath, {
+                "title": fill(c["meta_section"], section=s["name"], **names), "description": s["lead"],
+                "svc": s, "svc_index": k, "jsonld": jsonld(
+                    self.crumbs((t["services"]["eyebrow_short"], "#services"), (s["name"], spath)),
+                    {"@type": "ItemList", "name": s["name"], "itemListElement": [
+                        {"@type": "ListItem", "position": i + 1, "name": it["name"], "url": BASE + self.prefix + spath + it["id"] + "/"}
+                        for i, it in enumerate(s["items"])]}),
+            })
+            for i, it in enumerate(s["items"]):
+                ppath = spath + it["id"] + "/"
+                self.render("product.html", ppath, {
+                    "title": fill(c["meta_product"], product=it["name"], section=s["name"], **names), "description": it["short"],
+                    "svc": s, "svc_index": k, "item": it, "item_index": i, "jsonld": jsonld(
+                        self.crumbs((t["services"]["eyebrow_short"], "#services"), (s["name"], spath), (it["name"], ppath)),
+                        {"@type": "Service", "name": it["name"], "description": it["short"], "serviceType": s["name"],
+                         "url": BASE + self.prefix + ppath, "image": [pic(key, "")["abs"] for key in it["img"]],
+                         "provider": {"@id": ORG_ID}, "areaServed": {"@type": "City", "name": self.b["city"]}}),
+                })
 
 
 def write_meta(sites):
@@ -217,7 +277,9 @@ def write_meta(sites):
              f"- ساعات العمل / Hours: {b['hours']['label']} ({en.b['hours']['label']})", ""]
     for s, head in ((ar, "الخدمات"), (en, "Services")):
         lines += [f"## {head}", ""]
-        lines += [f"- {svc['name']}: {'، '.join(svc['items']) if s is ar else ', '.join(svc['items'])}" for svc in s.data["services"]]
+        for svc in s.data["services"]:
+            lines += [f"- [{svc['name']}]({BASE}{s.prefix}services/{svc['id']}/): {svc['lead']}"]
+            lines += [f"  - [{it['name']}]({BASE}{s.prefix}services/{svc['id']}/{it['id']}/): {it['short']}" for it in svc["items"]]
         lines += ["", f"### {s.t['shop']['title']} ({BASE}{s.prefix}shop/)", ""]
         lines += [f"- {p['name']}: {p['short']}" for p in s.data["shop"]["products"]]
         lines += [""]
@@ -233,3 +295,5 @@ if __name__ == "__main__":
         s.build()
     write_meta(sites)
     print(f"built {len(PAGES)} pages into {OUT} (v{VERSION})")
+    if MISSING:
+        print(f"{len(MISSING)} pictures still to make, e.g. {', '.join(sorted(MISSING)[:6])}")

@@ -25,17 +25,43 @@
 
   "services": {
     "eyebrow": "01 / Services",
+    "eyebrow_short": "Services",
     "title": ["What we", "print"],
-    "lead": "Sixteen departments covering the print, packaging, signs and gifts your brand needs. Ask us about sizes, materials and price for any product.",
+    "lead": "Sixteen sections. Choose one to see its products.",
     "quote": "Get a quote",
     "quote_msg": "Hello RD Amazing, I would like a quote for {name}.",
     "more": "Can't find what you need? Ask us on WhatsApp"
   },
+  "catalog": {
+      "count": "{n} products",
+      "browse": "View products",
+      "order": "Order now",
+      "see": "See our {name}",
+      "order_msg": "Hello RD Amazing 🌷\nI would like to order “{name}” from your {section} section.\nCould you send me the details and prices? Thank you.",
+      "quote_section": "Get a quote",
+      "quote_section_msg": "Hello RD Amazing 🌷\nI would like to ask about your {section} products.",
+      "products": "Products in this section",
+      "photos": "Photos",
+      "photos_note": "Some pictures are illustrations; we can send you samples of our own work on request.",
+      "assure": [
+          "We go over the design with you before printing",
+          "Sizes and materials to your order",
+          "A clear price and a delivery date we keep"
+      ],
+      "back": "Back to the section",
+      "prev": "Previous product",
+      "next": "Next product",
+      "more": "More in this section",
+      "all": "All sections",
+      "all_lead": "Move between the print house's sixteen sections.",
+      "meta_section": "{section} | {name}",
+      "meta_product": "{product} | {name}"
+  },
+
   "works": {
     "eyebrow": "02 / Our work",
     "title": ["Samples", "of our work"],
-    "lead": "Finishes and materials from our print. Tap any image to enlarge it.",
-    "note": "These images are illustrations for now, and will be replaced with photos of our own work."
+    "lead": "Pieces we have made for our clients."
   },
   "about": {
     "eyebrow": "03 / About",

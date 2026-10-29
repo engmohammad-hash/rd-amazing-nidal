@@ -13,7 +13,7 @@
         <img class="on-light" src="{{ root }}assets/img/logo-color-sm.png" alt="" width="46" height="50">
         <img class="on-dark" src="{{ root }}assets/img/logo-beige-sm.png" alt="" width="46" height="50">
       </span>
-      <span class="brand-name"><b>{{ b.name }}</b><small>{{ b.tagline }}{% if lang == 'ar' %} · RD Amazing{% endif %}</small></span>
+      <span class="brand-name"><b>{{ b.name }}</b><small class="brand-sales">{{ b.sales.label }}: <span>{{ b.sales.name }}</span></small></span>
     </a>
     <nav class="nav" aria-label="{{ t.nav_aria }}">
       {% for n in d.nav %}<a href="{{ anchor(n.id) }}" data-section="{{ n.id }}">{{ n.label }}</a>

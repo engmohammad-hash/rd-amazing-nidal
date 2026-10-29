@@ -1,6 +1,7 @@
 """Local server for the new site: serves this folder and saves the hero film's frames.
 
   POST /save/<film>/<desktop|mobile>/<NNNN>.jpg   -> tools/out/<film>/<set>/NNNN.jpg   (film: hero, reels-a, reels-b)
+  POST /save-product/<kind>-<NN>.jpg              -> src/static/img/products/<kind>-NN.jpg  (src/products/render.html)
 
 Run:  python -I tools/serve.py
 then  http://localhost:8767/docs/            the built site
@@ -14,11 +15,19 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parent.parent
 OUT = ROOT / "tools" / "out"
 SAVE = re.compile(r"^/save/([a-z0-9-]+)/(desktop|mobile)/(\d{4})\.jpg$")
+SAVE_PRODUCT = re.compile(r"^/save-product/([a-z0-9]+-\d{2})\.jpg$")
+PRODUCTS = ROOT / "src" / "static" / "img" / "products"
 
 
 class Handler(SimpleHTTPRequestHandler):
     def do_POST(self):
         body = self.rfile.read(int(self.headers.get("Content-Length", 0)))
+        if p := SAVE_PRODUCT.match(self.path):
+            PRODUCTS.mkdir(parents=True, exist_ok=True)
+            (PRODUCTS / f"{p.group(1)}.jpg").write_bytes(body)
+            self.send_response(204)
+            self.end_headers()
+            return
         m = SAVE.match(self.path)
         if not m:
             self.send_error(404, "unknown save path")
