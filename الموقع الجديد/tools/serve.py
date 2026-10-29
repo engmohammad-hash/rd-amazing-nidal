@@ -1,6 +1,6 @@
 """Local server for the new site: serves this folder and saves the hero film's frames.
 
-  POST /save/hero/<desktop|mobile>/<NNNN>.jpg   -> tools/out/hero/<set>/NNNN.jpg
+  POST /save/<film>/<desktop|mobile>/<NNNN>.jpg   -> tools/out/<film>/<set>/NNNN.jpg   (film: hero, reels-a, reels-b)
 
 Run:  python -I tools/serve.py
 then  http://localhost:8767/docs/            the built site
@@ -13,7 +13,7 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parent.parent
 OUT = ROOT / "tools" / "out"
-SAVE = re.compile(r"^/save/(hero)/(desktop|mobile)/(\d{4})\.jpg$")
+SAVE = re.compile(r"^/save/([a-z0-9-]+)/(desktop|mobile)/(\d{4})\.jpg$")
 
 
 class Handler(SimpleHTTPRequestHandler):

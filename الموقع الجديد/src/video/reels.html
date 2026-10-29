@@ -1,0 +1,321 @@
+<!doctype html>
+<html lang="ar">
+<head>
+<meta charset="utf-8">
+<title>reels film renderer</title>
+<style>
+  @font-face { font-family: "Alexandria"; font-weight: 400 800; src: url(../static/fonts/alexandria-arabic.woff2) format("woff2"); unicode-range: U+0600-06FF, U+0750-077F, U+200C-200E, U+FB50-FDFF, U+FE70-FEFF; }
+  @font-face { font-family: "Alexandria"; font-weight: 400 800; src: url(../static/fonts/alexandria-latin.woff2) format("woff2"); unicode-range: U+0000-00FF, U+2000-206F; }
+  body { margin: 0; background: #111; color: #ddd; font: 13px/1.5 Consolas, monospace; }
+  canvas { display: block; max-width: 100%; height: auto; }
+  pre { padding: 8px 12px; margin: 0; }
+</style>
+</head>
+<body>
+<pre id="log">loading…</pre>
+<canvas id="out"></canvas>
+<script type="module">
+  /* Two background films cut from the shop's own Instagram reels and the photo of its front, frame by frame,
+     each JPEG posted to tools/serve.py:  reels.html?cut=a|b&set=desktop|mobile[&sample=6]
+       a  their way: real product footage side by side, each with a label in the style of their reels
+       b  ours: the shop's front and its work in one gold-framed picture on maroon, with gold dust and the
+          four services from the shop sign
+     The reels sit in tools/out/ig (downloaded from instagram.com/printingsticker2022); their burned-in phone
+     labels are cropped away. Every timeline wraps, so the last frame runs into the first. */
+  const q = new URLSearchParams(location.search);
+  const CUT = q.get('cut') === 'b' ? 'b' : 'a';
+  const SET = q.get('set') === 'mobile' ? 'mobile' : 'desktop';
+  const sample = Number(q.get('sample') || 0);
+  const FPS = 30;
+  const SIZE = { a: { desktop: [1920, 1080], mobile: [720, 1280] }, b: { desktop: [1920, 1080], mobile: [1080, 1920] } }[CUT][SET];
+  const [W, H] = SIZE;
+  const MEDIA = '../../tools/out/ig/';
+  const COL = { maroon: '#4B0129', deep: '#2A0016', night: '#12000A', beige: '#D6C1A0', light: '#EADCC2', gold: '#E4C690', goldDeep: '#B8955F' };
+
+  // the clean part of each source (fractions of the frame, below the burned-in labels) and when it is clean
+  const CLIPS = {
+    bags: { file: 'DdecBa1KnIR.mp4', box: [0, .27, 1, .73], from: .4, to: 7 },
+    holo: { file: 'DcW9EbUKJ6H.mp4', box: [0, .04, 1, .96], from: 3, to: 9.6 },
+    acrylic: { file: 'Db9gHvaq4nx.mp4', box: [0, 0, 1, 1], from: 10, to: 17.8 },
+    boxes: { file: 'De5u0uKIfD_.mp4', box: [0, .28, 1, .72], from: .5, to: 14.5 },
+    stickers: { file: 'Dcy9CrMuKF1.mp4', box: [0, .25, 1, .75], from: 9, to: 29.5 },
+    front: { image: 'storefront.jpg', box: [0, 0, 1, 1] },
+    sign: { image: 'storefront.jpg', box: [0, 0, 1, .56] },
+  };
+  const LABEL = {
+    bags: 'أكياس وأغلفة فاخرة', holo: 'توزيعات الألماسة', acrylic: 'طباعة وقص أكريليك',
+    boxes: 'بوكسات مطاعم', stickers: 'ستيكرات حسب الطلب',
+  };
+
+  /* ---------- timelines: [clip, seconds on screen]; consecutive shots overlap by XF and the last runs into the first ---------- */
+  const XF = CUT === 'a' ? .7 : 1.2;
+  const PLANS = {
+    a: {
+      desktop: { period: 18, panels: [
+        [['bags', 6], ['stickers', 6], ['holo', 6]],
+        [['acrylic', 6], ['boxes', 6], ['bags', 6]],
+        [['boxes', 6], ['holo', 6], ['acrylic', 6]],
+      ], offsets: [0, 2, 4] },
+      mobile: { period: 21, panels: [[['bags', 3.5], ['acrylic', 3.5], ['holo', 3.5], ['boxes', 3.5], ['stickers', 3.5], ['holo', 3.5]]], offsets: [0] },
+    },
+    b: {
+      desktop: { period: 24, panels: [[['front', 6], ['bags', 4.5], ['holo', 4.5], ['acrylic', 4.5], ['boxes', 4.5]]], offsets: [-1.7] },
+      mobile: { period: 24, panels: [[['sign', 6], ['bags', 4.5], ['holo', 4.5], ['acrylic', 4.5], ['boxes', 4.5]]], offsets: [-1.7] },
+    },
+  };
+  const CAPTION = { front: 'مطابع روعة التصاميم', sign: 'مطابع روعة التصاميم', bags: 'تصميم و طباعة', holo: 'هدايا دعائية', acrylic: 'قص و حفر ليزر', boxes: 'خدمات إعلانية' };
+  const plan = PLANS[CUT][SET], T = plan.period, FRAMES = Math.round(T * FPS);
+  // each shot gets its own video element, so shots of the same reel never fight over one playhead
+  const shots = plan.panels.map((list, p) => {
+    let at = (plan.offsets[p] % T + T) % T;
+    return list.map(([clip, dur]) => { const s = { clip, start: at % T, len: dur + XF, dur }; at += dur; return s; });
+  });
+
+  const logEl = document.getElementById('log');
+  const log = m => { logEl.textContent = m; document.title = m; };
+  const out = document.getElementById('out'), g = out.getContext('2d', { alpha: false });
+  out.width = W; out.height = H;
+  const cnv = (w, h) => Object.assign(document.createElement('canvas'), { width: w, height: h });
+
+  async function loadVideo(file) {
+    const v = document.createElement('video');
+    v.muted = true; v.preload = 'auto'; v.playsInline = true; v.src = MEDIA + file;
+    await new Promise((res, rej) => { v.onloadeddata = res; v.onerror = () => rej(new Error('cannot load ' + file)); });
+    return v;
+  }
+  const loadImage = file => new Promise((res, rej) => { const i = new Image(); i.onload = () => res(i); i.onerror = rej; i.src = MEDIA + file; });
+  function seek(v, t) {
+    return new Promise(res => {
+      if (Math.abs(v.currentTime - t) < 1e-3 && v.readyState >= 2) return res();
+      v.addEventListener('seeked', () => res(), { once: true });
+      v.currentTime = t;
+    });
+  }
+
+  // the part of a source to draw into a w x h hole: the clean box, cut to the hole's shape, zoomed and drifted
+  function region(srcW, srcH, box, w, h, zoom, driftX, driftY) {
+    const bx = box[0] * srcW, by = box[1] * srcH, bw = box[2] * srcW, bh = box[3] * srcH;
+    let rw = bw, rh = rw * h / w;
+    if (rh > bh) { rh = bh; rw = rh * w / h; }
+    rw /= zoom; rh /= zoom;
+    const cx = bx + bw / 2 + driftX * (bw - rw) / 2, cy = by + bh / 2 + driftY * (bh - rh) / 2;
+    return [cx - rw / 2, cy - rh / 2, rw, rh];
+  }
+
+  /* ---------- the pieces of a frame ---------- */
+  function roundRect(x, y, w, h, r) { g.beginPath(); g.roundRect(x, y, w, h, r); }
+  function chip(text, cx, y, scale, alpha) {
+    // a label in the style of their reels: a soft beige pill with maroon lettering
+    const fs = 30 * scale;
+    g.save();
+    g.globalAlpha = alpha;
+    g.font = `700 ${fs}px Alexandria`; g.direction = 'rtl'; g.textAlign = 'center'; g.textBaseline = 'middle';
+    const tw = g.measureText(text).width, ph = fs * 2, pw = tw + fs * 1.6;
+    g.shadowColor = 'rgba(0,0,0,.35)'; g.shadowBlur = 18 * scale; g.shadowOffsetY = 6 * scale;
+    g.fillStyle = 'rgba(234,220,194,.94)';
+    roundRect(cx - pw / 2, y, pw, ph, ph / 2); g.fill();
+    g.shadowColor = 'transparent';
+    g.fillStyle = COL.maroon;
+    g.fillText(text, cx, y + ph / 2 + fs * .06);
+    g.restore();
+  }
+  function goldLine(x0, x1, y, alpha) {
+    const gr = g.createLinearGradient(x0, 0, x1, 0);
+    gr.addColorStop(0, 'rgba(228,198,144,0)'); gr.addColorStop(.5, `rgba(228,198,144,${alpha})`); gr.addColorStop(1, 'rgba(228,198,144,0)');
+    g.fillStyle = gr; g.fillRect(x0, y, x1 - x0, 2);
+  }
+  function caption(text, cx, y, scale, alpha) {
+    g.save();
+    g.globalAlpha = alpha;
+    const fs = 34 * scale;
+    g.font = `600 ${fs}px Alexandria`; g.direction = 'rtl'; g.textAlign = 'center'; g.textBaseline = 'middle';
+    const tw = g.measureText(text).width;
+    g.fillStyle = COL.gold; g.shadowColor = 'rgba(0,0,0,.5)'; g.shadowBlur = 12 * scale;
+    g.fillText(text, cx, y);
+    g.shadowColor = 'transparent';
+    goldLine(cx - tw / 2 - 170 * scale, cx - tw / 2 - 24 * scale, y - 1, .9);
+    goldLine(cx + tw / 2 + 24 * scale, cx + tw / 2 + 170 * scale, y - 1, .9);
+    g.restore();
+  }
+  // gold dust: each mote circles its own spot once per period, so the loop has no seam
+  const DUST = Array.from({ length: CUT === 'b' ? 90 : 0 }, (_, i) => {
+    const r = n => (Math.sin(i * 127.1 + n * 311.7) * 43758.5453) % 1;
+    const a = x => Math.abs(r(x));
+    return { x: a(1) * W, y: a(2) * H, rad: 20 + a(3) * 60, ph: a(4) * Math.PI * 2, size: 1 + a(5) * 2.6, alpha: .25 + a(6) * .5 };
+  });
+  function dust(phase) {
+    g.save(); g.globalCompositeOperation = 'lighter';
+    for (const d of DUST) {
+      const a = phase * Math.PI * 2 + d.ph, x = d.x + Math.cos(a) * d.rad, y = d.y + Math.sin(a) * d.rad * 1.4;
+      const tw = .55 + .45 * Math.sin(a * 3);
+      const gr = g.createRadialGradient(x, y, 0, x, y, d.size * 4);
+      gr.addColorStop(0, `rgba(240,214,160,${d.alpha * tw})`); gr.addColorStop(1, 'rgba(240,214,160,0)');
+      g.fillStyle = gr; g.fillRect(x - d.size * 4, y - d.size * 4, d.size * 8, d.size * 8);
+    }
+    g.restore();
+  }
+  const blurC = cnv(Math.round(W / 8), Math.round(H / 8)), bg = blurC.getContext('2d');
+
+  /* ---------- one frame ---------- */
+  async function frame(i) {
+    const t = i / FPS, phase = t / T;
+    const holes = layout();
+    // which shots are on screen in each hole, oldest first, and how far into each we are
+    const drawList = [];
+    for (let p = 0; p < shots.length; p++) {
+      for (const s of shots[p]) {
+        const local = ((t - s.start) % T + T) % T;
+        if (local < s.len) drawList.push({ p, s, local });
+      }
+    }
+    drawList.sort((a, b) => a.p - b.p || b.local - a.local);
+    for (const d of drawList) {
+      const c = CLIPS[d.s.clip];
+      if (c.file) await seek(d.s.video, Math.min(c.from + d.local * (CUT === 'b' ? .8 : 1), c.to));
+    }
+
+    g.fillStyle = COL.night; g.fillRect(0, 0, W, H);
+    if (CUT === 'b') backdrop(drawList, phase);
+    for (const d of drawList) {
+      const hole = holes[d.p], c = CLIPS[d.s.clip], src = d.s.video || d.s.image;
+      const sw = src.videoWidth || src.naturalWidth, sh = src.videoHeight || src.naturalHeight;
+      const k = d.local / d.s.len;
+      const zoom = d.s.clip === 'sign' ? 1 + .04 * k : CUT === 'b' ? 1.02 + .1 * k : 1.04 + .04 * k, drift = CUT === 'b' ? (k - .5) * .5 : 0;
+      const [rx, ry, rw, rh] = region(sw, sh, c.box, hole.w, hole.h, zoom, 0, d.s.clip === 'front' ? -.6 + .9 * k : drift);
+      g.save();
+      g.globalAlpha = Math.min(1, d.local / XF);
+      g.beginPath(); g.rect(hole.x, hole.y, hole.w, hole.h); g.clip();
+      g.filter = 'saturate(1.06) contrast(1.05)';
+      g.drawImage(src, rx, ry, rw, rh, hole.x, hole.y, hole.w, hole.h);
+      g.filter = 'none';
+      if (d.s.clip === 'front' || d.s.clip === 'sign') signGlow(src, rx, ry, rw, rh, hole, phase);
+      g.restore();
+    }
+    for (let p = 0; p < holes.length; p++) finishHole(holes[p], p, drawList.filter(d => d.p === p), phase);
+    if (CUT === 'b') dust(phase);
+    vignette();
+  }
+
+  function layout() {
+    if (CUT === 'a' && SET === 'desktop') {
+      const gap = 6, w = (W - 2 * gap) / 3;
+      return [0, 1, 2].map(p => ({ x: p * (w + gap), y: 0, w, h: H }));
+    }
+    if (CUT === 'a') return [{ x: 0, y: 0, w: W, h: H }];
+    if (SET === 'desktop') return [{ x: 270, y: 96, w: 600, h: 862 }];
+    return [{ x: 70, y: 220, w: W - 140, h: 760 }];
+  }
+  // b: the backdrop is the same picture, blurred and steeped in maroon, behind the frame
+  function backdrop(drawList, phase) {
+    bg.fillStyle = COL.night; bg.fillRect(0, 0, blurC.width, blurC.height);
+    for (const d of drawList) {
+      const src = d.s.video || d.s.image, sw = src.videoWidth || src.naturalWidth, sh = src.videoHeight || src.naturalHeight;
+      bg.globalAlpha = Math.min(1, d.local / XF);
+      bg.drawImage(src, ...region(sw, sh, [0, .1, 1, .9], blurC.width, blurC.height, 1, 0, 0), 0, 0, blurC.width, blurC.height);
+    }
+    bg.globalAlpha = 1;
+    g.save();
+    g.filter = 'blur(28px) saturate(.8) brightness(.55)';
+    g.drawImage(blurC, -60, -60, W + 120, H + 120);
+    g.filter = 'none';
+    g.globalCompositeOperation = 'multiply';
+    const gr = g.createRadialGradient(W * .3, H * .45, 0, W * .3, H * .45, Math.hypot(W, H) * .7);
+    gr.addColorStop(0, '#8A2B57'); gr.addColorStop(.5, '#4B0129'); gr.addColorStop(1, '#1A000D');
+    g.fillStyle = gr; g.fillRect(0, 0, W, H);
+    g.restore();
+    // a slow sheen crossing the whole picture once per period
+    const x = -W * .5 + phase * W * 2;
+    const sheen = g.createLinearGradient(x - 300, 0, x + 300, 0);
+    sheen.addColorStop(0, 'rgba(255,230,190,0)'); sheen.addColorStop(.5, 'rgba(255,230,190,.07)'); sheen.addColorStop(1, 'rgba(255,230,190,0)');
+    g.save(); g.globalCompositeOperation = 'lighter'; g.fillStyle = sheen; g.fillRect(0, 0, W, H); g.restore();
+  }
+  // the lit letters of the shop sign bloom a little, and a gleam passes over them
+  function signGlow(src, rx, ry, rw, rh, hole, phase) {
+    g.globalCompositeOperation = 'lighter';
+    g.globalAlpha *= .35;
+    g.filter = 'blur(14px) brightness(1.4)';
+    g.drawImage(src, rx, ry, rw, rh, hole.x, hole.y, hole.w, hole.h);
+    g.filter = 'none';
+    g.globalCompositeOperation = 'source-over';
+    const x = hole.x - hole.w + ((phase * 2) % 1) * hole.w * 3;
+    const gl = g.createLinearGradient(x - 120, hole.y, x + 120, hole.y + hole.h * .4);
+    gl.addColorStop(0, 'rgba(255,240,210,0)'); gl.addColorStop(.5, 'rgba(255,240,210,.16)'); gl.addColorStop(1, 'rgba(255,240,210,0)');
+    g.globalCompositeOperation = 'lighter'; g.fillStyle = gl; g.fillRect(hole.x, hole.y, hole.w, hole.h);
+    g.globalCompositeOperation = 'source-over';
+  }
+  function finishHole(hole, p, onScreen, phase) {
+    const newest = onScreen.length ? onScreen[onScreen.length - 1] : null;
+    if (CUT === 'a') {
+      // soft shade at the top so the label reads, and the label of what is on screen
+      const sh = g.createLinearGradient(0, hole.y, 0, hole.y + hole.h * .25);
+      sh.addColorStop(0, 'rgba(18,0,10,.45)'); sh.addColorStop(1, 'rgba(18,0,10,0)');
+      g.fillStyle = sh; g.fillRect(hole.x, hole.y, hole.w, hole.h * .25);
+      const scale = SET === 'desktop' ? 1 : .95;
+      for (const d of onScreen) {
+        // the label leaves before the next shot comes in, and the next label waits until it has: never two at once
+        const k = Math.min(1, Math.max(0, (d.local - .35) / .45)), ease = 1 - Math.pow(1 - k, 3);
+        const out = Math.min(1, Math.max(0, (d.s.dur - d.local) / .3));
+        chip(LABEL[d.s.clip], hole.x + hole.w / 2, hole.y + (SET === 'desktop' ? 92 : 120) - 18 * (1 - ease), scale, ease * out);
+      }
+      return;
+    }
+    // b: a double gold frame with diamonds at the corners, and the service written beneath
+    g.save();
+    g.shadowColor = 'rgba(0,0,0,.55)'; g.shadowBlur = 40; g.strokeStyle = 'rgba(228,198,144,.95)'; g.lineWidth = 2.5;
+    g.strokeRect(hole.x - 16, hole.y - 16, hole.w + 32, hole.h + 32);
+    g.shadowColor = 'transparent'; g.lineWidth = 1; g.strokeStyle = 'rgba(228,198,144,.55)';
+    g.strokeRect(hole.x - 7, hole.y - 7, hole.w + 14, hole.h + 14);
+    g.fillStyle = COL.gold;
+    for (const [cx, cy] of [[hole.x - 16, hole.y - 16], [hole.x + hole.w + 16, hole.y - 16], [hole.x - 16, hole.y + hole.h + 16], [hole.x + hole.w + 16, hole.y + hole.h + 16]]) {
+      g.beginPath(); g.moveTo(cx, cy - 9); g.lineTo(cx + 9, cy); g.lineTo(cx, cy + 9); g.lineTo(cx - 9, cy); g.closePath(); g.fill();
+    }
+    g.restore();
+    const capY = SET === 'desktop' ? hole.y + hole.h + 62 : hole.y - 92, scale = SET === 'desktop' ? 1 : 1.25;
+    for (const d of onScreen) {
+      // as with the labels: the caption is gone before the next picture arrives, then the next one rises
+      const a = Math.min(1, Math.max(0, (d.local - .6) / .7)) * Math.min(1, Math.max(0, (d.s.dur - d.local) / .5));
+      caption(CAPTION[d.s.clip], hole.x + hole.w / 2, capY, scale, a);
+    }
+  }
+  function vignette() {
+    const v = g.createRadialGradient(W / 2, H / 2, Math.min(W, H) * .35, W / 2, H / 2, Math.hypot(W, H) * .62);
+    v.addColorStop(0, 'rgba(10,0,5,0)'); v.addColorStop(1, `rgba(10,0,5,${CUT === 'a' ? .35 : .5})`);
+    g.fillStyle = v; g.fillRect(0, 0, W, H);
+  }
+
+  async function save(i) {
+    const blob = await new Promise(r => out.toBlob(r, 'image/jpeg', .93));
+    const url = `/save/reels-${CUT}/${SET}/${String(i).padStart(4, '0')}.jpg`;
+    for (let attempt = 1; ; attempt++) {
+      try {
+        const res = await fetch(url, { method: 'POST', body: blob });
+        if (res.ok) return blob.size;
+        throw new Error(`saving ${url} failed: ${res.status}`);
+      } catch (e) {
+        if (attempt === 5) throw e;
+        await new Promise(r => setTimeout(r, 400 * attempt));
+      }
+    }
+  }
+
+  try {
+    await Promise.all([document.fonts.load('700 30px Alexandria', 'أكياس'), document.fonts.load('600 30px Alexandria', 'طباعة')]);
+    for (const list of shots) for (const s of list) {
+      const c = CLIPS[s.clip];
+      if (c.file) s.video = await loadVideo(c.file); else s.image = await loadImage(c.image);
+    }
+    let bytes = 0;
+    for (let i = 0; i < FRAMES; i++) {
+      if (sample && i % Math.ceil(FRAMES / sample) !== 0) continue;
+      await frame(i);
+      bytes += await save(i);
+      if (i % 10 === 0) log(`reels-${CUT} ${SET} ${i}/${FRAMES} · ${(bytes / 1048576).toFixed(1)} MB`);
+    }
+    log(`ALL DONE reels-${CUT} ${SET} · ${(bytes / 1048576).toFixed(1)} MB`);
+  } catch (e) {
+    console.error(e);
+    log('FAILED: ' + (e && e.message || e));
+  }
+</script>
+</body>
+</html>
