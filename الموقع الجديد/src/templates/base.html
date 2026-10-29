@@ -19,8 +19,8 @@
 <meta property="og:url" content="{{ b.base_url }}{{ path }}">
 <meta property="og:image" content="{{ b.base_url }}assets/img/og.jpg">
 <meta name="twitter:card" content="summary_large_image">
-<link rel="icon" type="image/png" href="{{ root }}assets/img/logo-color.png">
-<link rel="apple-touch-icon" href="{{ root }}assets/img/logo-color.png">
+<link rel="icon" type="image/png" href="{{ root }}assets/img/logo-color-sm.png">
+<link rel="apple-touch-icon" href="{{ root }}assets/img/logo-color-sm.png">
 {# light unless the visitor picked dark with the button; set before anything paints so the page never flashes #}
 <script>(function () { var d = document.documentElement, t = null; try { t = localStorage.getItem('theme'); } catch (e) {} d.setAttribute('data-theme', t === 'dark' ? 'dark' : 'light'); d.className += ' js'; })();</script>
 {% set script = 'arabic' if lang == 'ar' else 'latin' %}

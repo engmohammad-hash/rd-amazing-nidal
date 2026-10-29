@@ -34,7 +34,11 @@ FRAMES = ROOT / "tools" / "out" / FILM
 PAGE = {"hero": "render.html?set={set}", "showreel": "showreel.html?set={set}"}.get(FILM, f"reels.html?cut={FILM[-1]}&set={{set}}")
 VIDEO = ROOT / "src" / "static" / "video" if FILM in ("hero", "showreel") else ROOT / "tools" / "out" / "review"
 # quality per set: lower crf is sharper and heavier; real footage needs less detail kept than the drawn film
-CRF = {"hero": {"desktop": 22, "mobile": 24}, "showreel": {"desktop": 27, "mobile": 27}}.get(FILM, {"desktop": 24, "mobile": 25})
+CRF = {"hero": {"desktop": 22, "mobile": 24}, "showreel": {"desktop": 30, "mobile": 30}}.get(FILM, {"desktop": 24, "mobile": 25})
+# the site's film streams, so it is kept light enough to start at once and play on a slow line: the laptop cut
+# at 1280 x 720, and both capped so a busy stretch of pictures cannot outrun the connection
+EXTRA = {"showreel": {"desktop": ["-vf", "scale=1280:720:flags=lanczos", "-maxrate", "850k", "-bufsize", "1700k"],
+                      "mobile": ["-maxrate", "850k", "-bufsize", "1700k"]}}.get(FILM, {})
 
 
 def page_title():
@@ -78,11 +82,13 @@ def encode(set_name):
     out = VIDEO / f"{name}.mp4"
     subprocess.run([
         imageio_ffmpeg.get_ffmpeg_exe(), "-y", "-loglevel", "error", "-framerate", str(FPS), "-i", str(src / "%04d.jpg"),
-        "-c:v", "libx264", "-preset", "slow", "-crf", str(CRF[set_name]), "-tune", "film",
+        *EXTRA.get(set_name, []), "-c:v", "libx264", "-preset", "slow", "-crf", str(CRF[set_name]), "-tune", "film",
         "-pix_fmt", "yuv420p", "-profile:v", "high", "-g", str(FPS * 2), "-movflags", "+faststart", "-an", str(out),
     ], check=True)
     first = Image.open(src / "0000.jpg").convert("RGB")
-    first.save(VIDEO / f"{name}.jpg", "JPEG", quality=82, optimize=True, progressive=True)
+    if FILM == "showreel" and set_name == "desktop":
+        first = first.resize((1280, 720), Image.LANCZOS)
+    first.save(VIDEO / f"{name}.jpg", "JPEG", quality=74, optimize=True, progressive=True)
     if FILM == "hero" and set_name == "desktop":
         first.resize((1200, 675), Image.LANCZOS).save(ROOT / "src" / "static" / "img" / "og.jpg", "JPEG", quality=84, optimize=True)
     print(f"   {out.name}: {out.stat().st_size / 1048576:.2f} MB", flush=True)

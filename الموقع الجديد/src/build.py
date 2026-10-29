@@ -9,8 +9,10 @@ The hero film (static/video) comes from tools/render_video.py; this script only 
 
 Run from this folder:  python -I src/build.py
 """
+import base64
 import datetime
 import hashlib
+import io
 import json
 import shutil
 import time
@@ -18,6 +20,7 @@ from pathlib import Path
 from urllib.parse import quote
 
 from jinja2 import Environment, FileSystemLoader, StrictUndefined
+from PIL import Image
 
 SRC = Path(__file__).resolve().parent
 ROOT = SRC.parent
@@ -81,6 +84,18 @@ def copy_assets():
     return digest.hexdigest()[:8]
 
 
+def lqip(name, size):
+    """A thumbnail of the film's first frame small enough to sit inside the page (well under a kilobyte)."""
+    im = Image.open(SRC / "static" / "video" / name).convert("RGB")
+    im.thumbnail(size, Image.LANCZOS)
+    buf = io.BytesIO()
+    im.save(buf, "JPEG", quality=60)
+    return "data:image/jpeg;base64," + base64.b64encode(buf.getvalue()).decode()
+
+
+HERO_LQIP = {"desktop": lqip("hero-desktop.jpg", (48, 27)), "mobile": lqip("hero-mobile.jpg", (27, 48))}
+
+
 def jsonld(*nodes):
     return json.dumps({"@context": "https://schema.org", "@graph": list(nodes)}, ensure_ascii=False, separators=(",", ":")).replace("</", "<\\/")
 
@@ -139,7 +154,7 @@ class Site:
         home = (root + self.prefix) or "./"
         page = {
             "t": t, "lang": t["lang"], "dir": t["dir"], "b": self.b, "d": self.data, "credit": self.data["credit"],
-            "root": root, "home": home, "path": full, "version": VERSION, "wa": wa, "template": template,
+            "root": root, "home": home, "path": full, "version": VERSION, "wa": wa, "template": template, "hero_lqip": HERO_LQIP,
             "shop": self.data["shop"], "shop_link": root + self.prefix + "shop/", "shop_json": self.shop_json(root),
             "cat_names": {c["id"]: c["name"] for c in self.data["shop"]["categories"]},
             # on the home page a section link is just its anchor; elsewhere it leads back home first

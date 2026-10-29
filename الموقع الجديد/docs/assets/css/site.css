@@ -190,6 +190,11 @@ html[data-theme="dark"] { --shade: 58, 1, 32; }
 .hero-poster, .hero-video { object-fit: cover; }
 .hero-video { opacity: 0; transition: opacity .8s ease; }
 .hero-video.playing { opacity: 1; }
+/* until the film plays, its first frame drifts slowly closer, so the hero moves from the very first moment; once the
+   film has faded in over it, it rests */
+.hero-poster { transform-origin: 30% 40%; animation: poster-drift 9s ease-in-out infinite alternate; }
+@keyframes poster-drift { to { transform: scale(1.06); } }
+.hero-media:has(.hero-video.playing) .hero-poster { visibility: hidden; animation-play-state: paused; transition: visibility 0s .9s; }
 .hero::after {
   content: ""; position: absolute; inset: 0; z-index: -1; pointer-events: none; transition: background .35s;
   background: linear-gradient(to left, rgba(var(--shade), .96) 0%, rgba(var(--shade), .92) 42%, rgba(var(--shade), .7) 50%, rgba(var(--shade), .2) 55%, rgba(var(--shade), 0) 60%);
@@ -436,6 +441,9 @@ html[data-theme="dark"] .foot { background: #14000A; }
    the strip it leaves at the bottom lies under the shade */
 @media (max-aspect-ratio: 9/16) {
   .hero-poster, .hero-video { object-fit: contain; object-position: 50% 0; }
+}
+@media (max-aspect-ratio: 4/5) {
+  .hero-poster { transform-origin: 50% 22%; }
 }
 /* ---------- the store: header buttons, the shop page, panels, quick view, notices ---------- */
 .sr-only { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }

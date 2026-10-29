@@ -74,30 +74,27 @@
 
   /* ---------- the hero film: the wide or the tall cut, playing only while the hero is on screen ---------- */
   // The client wants the film moving for every visitor, so it plays even where the device asks for less motion or
-  // less data. It streams: it starts as soon as its first seconds arrive, the poster showing until then.
+  // less data. Its address is in the page, so it streams from the first moment and starts as soon as its first
+  // seconds arrive; the poster drifts gently until then. Here it only pauses while off screen.
   var video = doc.querySelector('.hero-video');
   if (video) {
-    var tall = matchMedia('(max-aspect-ratio: 4/5)'), visible = true;
+    var visible = true;
     var play = function () {
-      if (!video.getAttribute('src')) return;
       if (!visible || doc.hidden) { video.pause(); return; }
       var p = video.play();
       if (p && p.catch) p.catch(function () {});
     };
-    var pick = function () {
-      var src = tall.matches ? video.dataset.tall : video.dataset.wide;
-      if (video.getAttribute('src') === src) return play();
-      video.classList.remove('playing');
-      video.src = src;
-      play();
-    };
-    video.addEventListener('playing', function () { video.classList.add('playing'); });
-    if (tall.addEventListener) tall.addEventListener('change', pick); else tall.addListener(pick);
+    // it may already be playing by the time this runs, so the film is shown on its first moving frame either way
+    var shown = function () { video.classList.add('playing'); };
+    video.addEventListener('playing', shown);
+    video.addEventListener('timeupdate', shown, { once: true });
+    if (!video.paused) shown();
+    video.addEventListener('canplay', play);
     if (io) new IntersectionObserver(function (en) { visible = en[0].isIntersecting; play(); }).observe(video.parentNode);
     doc.addEventListener('visibilitychange', play);
     // a phone in power-saving mode may refuse to start a film by itself; the first touch starts it
     doc.addEventListener('touchstart', play, { once: true, passive: true });
-    pick();
+    if (video.readyState >= 2) play();
   }
 
   /* ---------- things rise into place as they come into view ---------- */
