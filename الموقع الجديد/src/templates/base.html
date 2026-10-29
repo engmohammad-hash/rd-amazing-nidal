@@ -21,8 +21,8 @@
 <meta name="twitter:card" content="summary_large_image">
 <link rel="icon" type="image/png" href="{{ root }}assets/img/logo-color.png">
 <link rel="apple-touch-icon" href="{{ root }}assets/img/logo-color.png">
-{# the visitor's theme, set before anything paints so the page never flashes the other one #}
-<script>(function () { var d = document.documentElement, t = null; try { t = localStorage.getItem('theme'); } catch (e) {} if (t !== 'dark' && t !== 'light') t = matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light'; d.setAttribute('data-theme', t); d.className += ' js'; })();</script>
+{# light unless the visitor picked dark with the button; set before anything paints so the page never flashes #}
+<script>(function () { var d = document.documentElement, t = null; try { t = localStorage.getItem('theme'); } catch (e) {} d.setAttribute('data-theme', t === 'dark' ? 'dark' : 'light'); d.className += ' js'; })();</script>
 {% set script = 'arabic' if lang == 'ar' else 'latin' %}
 <link rel="preload" as="font" type="font/woff2" crossorigin href="{{ root }}assets/fonts/alexandria-{{ script }}.woff2">
 <link rel="preload" as="font" type="font/woff2" crossorigin href="{{ root }}assets/fonts/ibm-plex-sans-arabic-400-{{ script }}.woff2">
