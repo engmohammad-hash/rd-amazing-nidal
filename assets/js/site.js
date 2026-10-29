@@ -74,22 +74,18 @@
 
   /* ---------- the hero film: the wide or the tall cut, playing only while the hero is on screen ---------- */
   // The client wants the film moving for every visitor, so it plays even where the device asks for less motion or
-  // less data. Its address is in the page, so it streams from the first moment and starts as soon as its first
-  // seconds arrive; the poster drifts gently until then. Here it only pauses while off screen.
+  // less data. The page itself starts it (see home.html) and the poster drifts gently until then; here it only
+  // pauses while off screen and resumes when back.
   var video = doc.querySelector('.hero-video');
   if (video) {
     var visible = true;
     var play = function () {
+      if (video.preload !== 'auto') return;   // not started yet: the page starts it once its first frame is in
       if (!visible || doc.hidden) { video.pause(); return; }
       var p = video.play();
       if (p && p.catch) p.catch(function () {});
     };
-    // it may already be playing by the time this runs, so the film is shown on its first moving frame either way
-    var shown = function () { video.classList.add('playing'); };
-    video.addEventListener('playing', shown);
-    video.addEventListener('timeupdate', shown, { once: true });
-    if (!video.paused) shown();
-    video.addEventListener('canplay', play);
+    if (!video.paused) video.classList.add('playing');
     if (io) new IntersectionObserver(function (en) { visible = en[0].isIntersecting; play(); }).observe(video.parentNode);
     doc.addEventListener('visibilitychange', play);
     // a phone in power-saving mode may refuse to start a film by itself; the first touch starts it
