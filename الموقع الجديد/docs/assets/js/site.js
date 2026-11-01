@@ -42,8 +42,9 @@
   var waFloat = doc.querySelector('.wa-float'), hero = doc.querySelector('.hero');
   function onScroll() {
     ticking = false;
-    var y = scrollY, show = y > innerHeight * 1.2;
+    var y = scrollY, show = y > innerHeight * 1.2, end = root.scrollHeight - innerHeight;
     hdr.classList.toggle('scrolled', y > 40);
+    toTop.style.setProperty('--p', end > 0 ? Math.min(1, y / end).toFixed(4) : 0);
     if (hero) waFloat.classList.toggle('away', y < hero.offsetTop + hero.offsetHeight * .6);
     if (show !== toTop.classList.contains('show')) {
       toTop.classList.toggle('show', show);
@@ -109,6 +110,104 @@
     risers.forEach(function (el) { rise.observe(el); });
   } else {
     risers.forEach(function (el) { el.classList.remove('rv'); });
+  }
+
+  /* ---------- a warm light follows the pointer across the section cards ---------- */
+  if (matchMedia('(hover: hover) and (pointer: fine)').matches) {
+    doc.querySelectorAll('.svc').forEach(function (card) {
+      card.addEventListener('pointermove', function (e) {
+        var r = card.getBoundingClientRect();
+        card.style.setProperty('--mx', (e.clientX - r.left) + 'px');
+        card.style.setProperty('--my', (e.clientY - r.top) + 'px');
+      });
+      card.addEventListener('pointerleave', function () { card.style.removeProperty('--my'); });
+    });
+  }
+
+  /* ---------- the figures count up from nothing when they come into view ---------- */
+  // like the film, for every visitor; never while the opening screen still covers the page
+  var counters = doc.querySelectorAll('[data-countup]');
+  if (io && counters.length) {
+    var countUp = function (el) {
+      var to = Number(el.dataset.countup), t0 = 0, dur = 1900;
+      var stepFn = function (now) {
+        if (!t0) t0 = now;
+        var k = Math.min(1, (now - t0) / dur), e = 1 - Math.pow(1 - k, 4);
+        el.textContent = Math.round(to * e);
+        if (k < 1) requestAnimationFrame(stepFn);
+        else el.parentNode.classList.add('done');
+      };
+      requestAnimationFrame(stepFn);
+    };
+    var whenOpen = function (fn) {
+      if (!root.classList.contains('intro-on')) fn();
+      else doc.addEventListener('rd:intro', fn, { once: true });
+    };
+    counters.forEach(function (el) { el.textContent = '0'; });
+    var counter = new IntersectionObserver(function (entries) {
+      entries.forEach(function (en) {
+        if (!en.isIntersecting) return;
+        counter.unobserve(en.target);
+        whenOpen(function () { countUp(en.target); });
+      });
+    }, { threshold: .6 });
+    counters.forEach(function (el) { counter.observe(el); });
+  }
+
+  /* ---------- design your order: the ticket fills in as they choose, and the order goes out on WhatsApp ---------- */
+  var bf = doc.getElementById('builder-form');
+  if (bf) {
+    var BD = JSON.parse(doc.getElementById('builder-data').textContent);
+    var ticket = bf.querySelector('.ticket'), lastProduct = '';
+    var put = function (k, v) { bf.querySelector('[data-b="' + k + '"]').textContent = v; };
+    var checked = function (name) { return [].map.call(bf.querySelectorAll('input[name="' + name + '"]:checked'), function (i) { return i.value; }); };
+    var read = function () {
+      var sel = bf.elements.product, opt = sel.options[sel.selectedIndex];
+      var q = checked('qty')[0] || '', other = q === 'other';
+      return {
+        product: sel.value ? opt.text : '', section: sel.value ? opt.getAttribute('data-section') : '', other: other,
+        qty: other ? bf.elements.qty_other.value.trim() : q, finish: checked('finish'), when: checked('when')[0] || '',
+        notes: bf.elements.notes.value.trim(), name: bf.elements.name.value.trim()
+      };
+    };
+    var paint = function () {
+      var s = read();
+      bf.elements.qty_other.hidden = !s.other;
+      ticket.classList.toggle('empty', !s.product);
+      put('product', s.product || BD.empty);
+      put('section', s.section);
+      put('qty', s.qty || '—');
+      put('finish', s.finish.length ? s.finish.join(BD.sep) : BD.none);
+      put('when', s.when);
+      if (s.product && s.product !== lastProduct) {
+        var el = bf.querySelector('[data-b="product"]');
+        el.classList.remove('flash'); void el.offsetWidth; el.classList.add('flash');
+        bf.querySelector('[data-b="err"]').hidden = true;
+      }
+      lastProduct = s.product;
+    };
+    bf.addEventListener('input', paint);
+    bf.addEventListener('change', paint);
+    bf.addEventListener('submit', function (e) {
+      e.preventDefault();
+      var s = read();
+      if (!s.product) {
+        bf.querySelector('[data-b="err"]').hidden = false;
+        bf.elements.product.focus();
+        return;
+      }
+      var lines = [BD.head, '',
+        '▫️ ' + BD.product + ': ' + s.product,
+        '▫️ ' + BD.section + ': ' + s.section,
+        '▫️ ' + BD.qty + ': ' + (s.qty || '—'),
+        '▫️ ' + BD.finish + ': ' + (s.finish.length ? s.finish.join(BD.sep) : BD.none),
+        '▫️ ' + BD.when + ': ' + s.when];
+      if (s.notes) lines.push('▫️ ' + BD.notes + ': ' + s.notes);
+      if (s.name) lines.push('▫️ ' + BD.name + ': ' + s.name);
+      lines.push('', BD.end);
+      window.open('https://wa.me/' + bf.getAttribute('data-wa') + '?text=' + encodeURIComponent(lines.join('\n')), '_blank', 'noopener');
+    });
+    paint();
   }
 
   /* ---------- lightbox for our work ---------- */

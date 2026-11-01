@@ -61,6 +61,20 @@
   </div>
 </div>
 
+{# the print house in numbers; each counts up from nothing when it comes into view. "products" is however many the
+   sixteen sections list, so it stays true as products are added #}
+{% set ns = namespace(products=0) %}{% for s in d.services %}{% set ns.products = ns.products + s['items'] | length %}{% endfor %}
+<section class="stats" aria-label="{{ t.stats_aria }}">
+  <ul class="wrap stats-list">
+    {% for st in d.stats %}{% set n = ns.products if st.value == 'products' else st.value %}
+    <li class="stat rv" style="--i: {{ loop.index0 }}">
+      <b class="stat-num ltr">+<span data-countup="{{ n }}">{{ n }}</span></b>
+      <span class="stat-label">{{ st.label }}</span>
+    </li>
+    {% endfor %}
+  </ul>
+</section>
+
 <section class="section" id="services" aria-labelledby="services-title">
   <div class="wrap">
     {{ head('services', 'services') }}
@@ -80,6 +94,73 @@
       <a class="btn btn-fill" href="{{ shop_link }}">{{ ic.icon('bag') }} {{ t.shop.home_cta }}</a>
       <a class="btn btn-line" href="{{ wa(t.quote_msg) }}" target="_blank" rel="noopener">{% include "partials/wa-icon.svg" %} {{ t.services.more }}</a>
     </div>
+  </div>
+</section>
+
+{# Design your order: the product (any of the sections' products), the quantity, the finishes and when; a ticket beside
+   it fills in as they choose, and the order goes to the sales manager on WhatsApp as a tidy message. No prices. #}
+{% set tb = t.builder %}
+<section class="section builder-sec" id="builder" aria-labelledby="builder-title">
+  <div class="wrap">
+    {{ head('builder', 'builder') }}
+    <form class="builder" id="builder-form" data-wa="{{ b.whatsapp }}" novalidate>
+      <div class="builder-steps rv">
+        <fieldset class="bstep">
+          <legend><span class="bstep-num">1</span>{{ tb.product }}</legend>
+          <div class="bselect">
+            <select name="product" id="b-product" aria-label="{{ tb.product }}">
+              <option value="">{{ tb.product_ph }}</option>
+              {% for s in d.services %}<optgroup label="{{ s.name }}">{% for it in s['items'] %}<option value="{{ s.id }}/{{ it.id }}" data-section="{{ s.name }}">{{ it.name }}</option>{% endfor %}</optgroup>
+              {% endfor %}
+            </select>
+            {{ ic.icon('down') }}
+          </div>
+        </fieldset>
+        <fieldset class="bstep">
+          <legend><span class="bstep-num">2</span>{{ tb.qty }}</legend>
+          <div class="bchips">
+            {% for q in tb.qtys %}<label class="bchip"><input type="radio" name="qty" value="{{ q }}"{% if loop.index == 3 %} checked{% endif %}><span class="ltr">{{ q }}</span></label>{% endfor %}
+            <label class="bchip"><input type="radio" name="qty" value="other"><span>{{ tb.qty_other }}</span></label>
+          </div>
+          <input class="binput bqty-other" type="number" name="qty_other" min="1" inputmode="numeric" placeholder="{{ tb.qty_ph }}" aria-label="{{ tb.qty_ph }}" hidden>
+        </fieldset>
+        <fieldset class="bstep">
+          <legend><span class="bstep-num">3</span>{{ tb.finish }} <small>{{ tb.finish_hint }}</small></legend>
+          <div class="bchips">
+            {% for f in tb.finishes %}<label class="bchip bchip-finish"><input type="checkbox" name="finish" value="{{ f.label }}"><span><i class="sw sw-{{ f.id }}" aria-hidden="true"></i>{{ f.label }}</span></label>{% endfor %}
+          </div>
+        </fieldset>
+        <fieldset class="bstep">
+          <legend><span class="bstep-num">4</span>{{ tb.when }}</legend>
+          <div class="bchips">
+            {% for w in tb.whens %}<label class="bchip"><input type="radio" name="when" value="{{ w }}"{% if loop.first %} checked{% endif %}><span>{{ w }}</span></label>{% endfor %}
+          </div>
+        </fieldset>
+        <fieldset class="bstep">
+          <legend><span class="bstep-num">5</span>{{ tb.more }}</legend>
+          <div class="bmore">
+            <textarea class="binput" name="notes" rows="2" placeholder="{{ tb.notes_ph }}" aria-label="{{ tb.notes_ph }}"></textarea>
+            <input class="binput" type="text" name="name" autocomplete="name" placeholder="{{ tb.name_ph }}" aria-label="{{ tb.name_ph }}">
+          </div>
+        </fieldset>
+      </div>
+      <aside class="ticket rv" style="--i: 1" aria-live="polite">
+        <div class="ticket-in">
+          <p class="ticket-eyebrow">{{ tb.summary }}</p>
+          <h3 class="ticket-product" data-b="product">{{ tb.empty }}</h3>
+          <p class="ticket-section" data-b="section"></p>
+          <dl class="ticket-rows">
+            <div><dt>{{ tb.qty }}</dt><dd data-b="qty" class="ltr">500</dd></div>
+            <div><dt>{{ tb.finish }}</dt><dd data-b="finish">{{ tb.none }}</dd></div>
+            <div><dt>{{ tb.when }}</dt><dd data-b="when">{{ tb.whens[0] }}</dd></div>
+          </dl>
+          <button class="btn btn-fill ticket-send" type="submit">{% include "partials/wa-icon.svg" %} {{ tb.send }}</button>
+          <p class="ticket-err" data-b="err" hidden>{{ tb.need_product }}</p>
+          <p class="ticket-note">{{ tb.note }}</p>
+        </div>
+      </aside>
+      <script type="application/json" id="builder-data">{{ {'empty': tb.empty, 'none': tb.none, 'sep': tb.sep, 'head': tb.msg_head, 'product': tb.msg_product, 'section': tb.msg_section, 'qty': tb.msg_qty, 'finish': tb.msg_finish, 'when': tb.msg_when, 'notes': tb.msg_notes, 'name': tb.msg_name, 'end': tb.msg_end} | tojson }}</script>
+    </form>
   </div>
 </section>
 

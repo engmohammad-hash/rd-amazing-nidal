@@ -21,6 +21,8 @@
   "quote_msg": "Hello RD Amazing, I would like a quote for printing.",
   "topbar_call": "To order:",
   "tiktok": "TikTok",
+  "stats_aria": "RD Amazing in numbers",
+  "intro_tag": "Design · Print · Luxury packaging",
 
   "hero": { "browse": "Browse services", "call": "Call us" },
 
@@ -59,23 +61,67 @@
       "meta_product": "{product} | {name}"
   },
 
+  "builder": {
+    "eyebrow": "02 / Design your order",
+    "title": ["Design your order", "with a luxury finish"],
+    "lead": "Choose the product, quantity and finish, and we send your order to our sales manager, ready, on WhatsApp.",
+    "product": "Product",
+    "product_ph": "Choose a product",
+    "qty": "Quantity",
+    "qtys": [100, 250, 500, 1000, 2500],
+    "qty_other": "Other",
+    "qty_ph": "Type a quantity",
+    "finish": "Finishes",
+    "finish_hint": "Pick what you like, or leave it and we will suggest",
+    "finishes": [
+      { "id": "gold", "label": "Gold foil" },
+      { "id": "silver", "label": "Silver foil" },
+      { "id": "emboss", "label": "Embossing" },
+      { "id": "uv", "label": "Spot UV" },
+      { "id": "velvet", "label": "Soft touch" },
+      { "id": "matte", "label": "Matte lamination" },
+      { "id": "gloss", "label": "Gloss lamination" },
+      { "id": "laser", "label": "Laser cut" }
+    ],
+    "when": "Delivery",
+    "whens": ["No rush", "Within a week", "Urgent"],
+    "more": "More details",
+    "notes_ph": "Size, colours, design idea…",
+    "name_ph": "Your name or business",
+    "summary": "Your order",
+    "empty": "Choose a product to begin",
+    "none": "We will suggest",
+    "send": "Send the order on WhatsApp",
+    "note": "Nidal Abu Al-Majd replies with the price and details. If you have a design, send it in the chat.",
+    "need_product": "Choose a product first",
+    "msg_head": "Hello RD Amazing 🌷\nI would like to place this order:",
+    "msg_product": "Product",
+    "msg_section": "Section",
+    "msg_qty": "Quantity",
+    "msg_finish": "Finishes",
+    "msg_when": "Delivery",
+    "msg_notes": "Details",
+    "msg_name": "Name",
+    "msg_end": "Could you send me the price? Thank you.",
+    "sep": ", "
+  },
   "clients": {
-    "eyebrow": "02 / Clients",
+    "eyebrow": "03 / Clients",
     "title": ["Our clients", "and partners"],
     "lead": "Cafés, restaurants, clinics and companies that trust us with their print."
   },
   "works": {
-    "eyebrow": "03 / Our work",
+    "eyebrow": "04 / Our work",
     "title": ["Samples", "of our work"],
     "lead": "Pieces we have made for our clients."
   },
   "about": {
-    "eyebrow": "04 / About",
+    "eyebrow": "05 / About",
     "title": ["About", "RD Amazing"],
     "link": "Ask about our services"
   },
   "process": {
-    "eyebrow": "05 / How to order",
+    "eyebrow": "06 / How to order",
     "title": ["How to order", "your print"],
     "lead": "From your first message to your order in hand, in three clear steps."
   },

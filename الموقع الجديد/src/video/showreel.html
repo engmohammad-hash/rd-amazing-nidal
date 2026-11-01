@@ -30,17 +30,27 @@
   // `whole` keeps a picture whole in its frame instead of filling the screen (and cutting the product's edges)
   // The client's cut (1 Nov 2026): 4, 6, 8, 9, 13, 16, 18, 19 and 20 out; their Um Saif bag (24) third, and the
   // OVALS boxes (21), the Nas box (23) and the Nova folder (22) in the middle, their labels cropped off.
+  // Later the same day: on the site the copy covers the lower part of the phone's hero and the right of the laptop's,
+  // and a picture that filled the screen showed walls and plants there while its product sat under the copy. So now
+  // every picture is cut to its product (`box`: x, y, width, height as fractions) and shown whole in a gold frame
+  // where the copy is not.
   const SHOTS = [
     ['0.jpg', 4.5, { front: 'in' }],
-    ['1.jpg', 2.5], ['2.jpg', 2.5],
-    ['24.jpg', 2.5, { whole: true }],
-    ['3.jpg', 2.5], ['5.jpg', 2.5],
-    ['7.mp4', 3.5, { from: 3.2 }],
-    ['10.jpg', 2.5],
-    ['21.jpg', 2.5, { whole: true }], ['23.jpg', 2.5, { whole: true }], ['22.jpg', 2.5, { whole: true }],
-    ['11.jpg', 2.5], ['12.jpg', 2.5], ['14.jpg', 2.5], ['15.jpg', 2.5], ['17.jpg', 2.5],
+    ['1.jpg', 2.5, { box: [.05, .08, .9, .84] }],     // business cards
+    ['2.jpg', 2.5, { box: [0, .22, 1, .76] }],        // bags, cups and boxes, without the plants
+    ['24.jpg', 2.5, { box: [0, .15, 1, .8] }],        // Um Saif bag
+    ['3.jpg', 2.5, { box: [0, .4, 1, .6] }],          // the plaque
+    ['5.jpg', 2.5, { box: [0, .17, 1, .68] }],        // boxes on the shelf
+    ['7.mp4', 3.5, { from: 3.2, box: [0, .4, 1, .6] }],
+    ['10.jpg', 2.5, { box: [0, .25, 1, .72] }],       // Marka & Finjal bags and boxes
+    ['21.jpg', 2.5], ['23.jpg', 2.5, { box: [0, .05, 1, .95] }], ['22.jpg', 2.5, { box: [0, 0, 1, .95] }],
+    ['11.jpg', 2.5, { box: [.03, .18, .94, .8] }],    // purple bags, without the bookshelf
+    ['12.jpg', 2.5, { box: [0, .3, 1, .66] }],        // box with a handle
+    ['14.jpg', 2.5, { box: [0, .1, 1, .88] }],        // Kubba wa Khalia boxes
+    ['15.jpg', 2.5, { box: [0, .55, 1, .45] }],       // the red tray, without the shelves
+    ['17.jpg', 2.5, { box: [0, .36, 1, .6] }],        // tissue box
     ['0.jpg', 4, { front: 'out' }],
-  ].map(([file, dur, extra = {}], i) => ({ file, dur, i, box: [0, 0, 1, 1], ...extra }));
+  ].map(([file, dur, extra = {}], i) => ({ file, dur, i, box: [0, 0, 1, 1], whole: true, ...extra }));
   let at = 0;
   for (const s of SHOTS) { s.start = at; at += s.dur - XF; }
   const T = SHOTS[SHOTS.length - 1].start + SHOTS[SHOTS.length - 1].dur, FRAMES = Math.round(T * FPS);
@@ -84,9 +94,10 @@
       return { x: W * .31 - w / 2, y: (H - h) / 2, w, h };
     }
     if (front) return { x: 0, y: 0, w: W, h: W / aspect };   // the shop's front, full width at the top
-    let w = W * .94, h = w / aspect;
-    if (h > H * .62) { h = H * .62; w = h * aspect; }
-    return { x: (W - w) / 2, y: Math.max(24, H * .3 - h / 2), w, h };
+    // above the copy, which starts about half way down the phone's hero
+    let w = W * .9, h = w / aspect;
+    if (h > H * .45) { h = H * .45; w = h * aspect; }
+    return { x: (W - w) / 2, y: Math.max(56, H * .265 - h / 2), w, h };
   }
   const SMALL = Object.assign(document.createElement('canvas'), { width: Math.round(W / 10), height: Math.round(H / 10) });
   const sg = SMALL.getContext('2d');
@@ -119,7 +130,24 @@
     g.shadowColor = 'rgba(0,0,0,.45)'; g.shadowBlur = 40; g.shadowOffsetY = 12;
     g.drawImage(src, ...part, r.x, r.y, r.w, r.h);
     g.restore();
+    if (!s.front) goldFrame(r);
     if (s.front) signGlow(src, part, r, s.front === 'in' ? (local - 1.1) / 1.8 : (local - .7) / 1.8);
+  }
+  // a fine gold frame a little outside the picture, double ruled with a square at each corner, like the opening screen
+  function goldFrame(r) {
+    const o = SET === 'mobile' ? 13 : 15, x = r.x - o, y = r.y - o, w = r.w + 2 * o, h = r.h + 2 * o;
+    g.save();
+    g.strokeStyle = 'rgba(255, 244, 220, .22)'; g.lineWidth = 1;
+    g.strokeRect(r.x + .5, r.y + .5, r.w - 1, r.h - 1);
+    g.shadowColor = 'rgba(228, 198, 144, .5)'; g.shadowBlur = 8;
+    g.strokeStyle = 'rgba(228, 198, 144, .9)'; g.lineWidth = 1.6;
+    g.strokeRect(x, y, w, h);
+    g.shadowBlur = 0;
+    g.strokeStyle = 'rgba(228, 198, 144, .38)'; g.lineWidth = 1;
+    g.strokeRect(x + 6, y + 6, w - 12, h - 12);
+    g.fillStyle = '#E4C690';
+    for (const [cx, cy] of [[x, y], [x + w, y], [x, y + h], [x + w, y + h]]) g.fillRect(cx - 4, cy - 4, 8, 8);
+    g.restore();
   }
   // the sign's lit letters bloom softly, and once per shot a gleam crosses them
   function signGlow(src, part, r, gleam) {

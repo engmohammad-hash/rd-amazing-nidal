@@ -28,6 +28,11 @@
   },
 
   "strip": ["Boxes and packaging", "Bags", "Stickers", "Café and restaurant print", "Promotional gifts", "Name signs", "Events", "Acrylic and Forex"],
+  "stats": [
+    { "label": "clients who trust us" },
+    { "label": "years of experience" },
+    { "label": "print and packaging products" }
+  ],
 
   "services": [
     {"name": "Boxes and packaging", "lead": "Boxes made to your size with luxury finishes, carrying your name before they are opened.", "items": [

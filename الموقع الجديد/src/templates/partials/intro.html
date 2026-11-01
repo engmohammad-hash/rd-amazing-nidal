@@ -1,0 +1,46 @@
+{# The opening screen, shown once a visit: the lid of a gift box in the shop's maroon, a gold frame like an
+   invitation card, the logo in gold foil inside a ring that draws itself, and the name revealed from its middle.
+   Then a line of light splits it and the two halves open like a box's doors onto the page.
+   Each door holds the whole face, cut to its half, so the logo parts down the middle as they open.
+   base.html's first script decides whether it shows (html.intro-on); without scripts it never does. #}
+<div class="intro" id="intro" aria-hidden="true">
+  {% for side in ('l', 'r') %}
+  <div class="intro-door intro-{{ side }}">
+    <div class="intro-face">
+      <span class="intro-frame"></span>
+      <div class="intro-center">
+        <span class="intro-emblem">
+          <svg class="intro-ring" viewBox="0 0 200 200"><circle cx="100" cy="100" r="97" pathLength="1"/></svg>
+          <img src="{{ root }}assets/img/logo-gold.png" alt="" width="111" height="120" decoding="sync">
+        </span>
+        <span class="intro-name">{{ b.name }}</span>
+        <span class="intro-tag">{{ t.intro_tag }}</span>
+        <span class="intro-bar"><i></i></span>
+      </div>
+    </div>
+  </div>
+  {% endfor %}
+  <span class="intro-seam"></span>
+</div>
+<script>(function () {
+  var d = document, r = d.documentElement, el = d.getElementById('intro');
+  if (!/(^|\s)intro-on(\s|$)/.test(r.className)) { el.parentNode.removeChild(el); return; }
+  // long enough for the logo and the name to arrive; then it opens once the page beneath is ready, and never later than MAX
+  var t0 = Date.now(), MIN = 2400, MAX = 5500;
+  if (/[?&]intro=hold\b/.test(location.search)) MIN = MAX = 1e9;   // stays shut, to look at it closely
+  var ready = function () {
+    if (d.readyState === 'loading') return false;
+    var poster = d.querySelector('.hero-poster');
+    if (poster && !poster.complete) return false;
+    return !d.fonts || d.fonts.status === 'loaded';
+  };
+  var open = function () {
+    el.classList.add('open');
+    setTimeout(function () { r.classList.remove('intro-on'); d.dispatchEvent(new Event('rd:intro')); }, 900);
+    setTimeout(function () { if (el.parentNode) el.parentNode.removeChild(el); }, 1900);
+  };
+  (function wait() {
+    var t = Date.now() - t0;
+    if (t >= MAX || (t >= MIN && ready())) open(); else setTimeout(wait, 100);
+  })();
+})();</script>
