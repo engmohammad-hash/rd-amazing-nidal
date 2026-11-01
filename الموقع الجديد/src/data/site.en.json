@@ -12,6 +12,7 @@
 
   "nav": [
     { "label": "Services" },
+    { "label": "Clients" },
     { "label": "Our work" },
     { "label": "About" },
     { "label": "How to order" },
@@ -177,6 +178,22 @@
     { "title": "Send your request", "text": "The product, quantity and size, and your design file if you have one." },
     { "title": "We review and confirm", "text": "We agree the material and price, and you see a proof first." },
     { "title": "We print and deliver", "text": "We print once you approve, and deliver on the agreed date." }
+  ],
+
+  "clients": [
+    { "name": "Nas Café", "place": "Khobar and Dammam" },
+    { "name": "Marka & Finjal Café" },
+    { "name": "BeFine Café" },
+    { "name": "Qaf Roastery" },
+    { "name": "DOMATCHA Café", "place": "Ras Tanura" },
+    { "name": "Nova Dental Complex" },
+    { "name": "Al-Muhaidib Dental Complex" },
+    { "name": "Aaji Dental Complex" },
+    { "name": "Vera Company", "place": "Khobar" },
+    { "name": "Sakka Baloot Cards" },
+    { "name": "Gutit Restaurant" },
+    { "name": "LOLETA Sweets", "place": "Jubail" },
+    { "name": "Bashayer Al-Saad Photography" }
   ],
 
   "shop": {

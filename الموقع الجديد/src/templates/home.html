@@ -64,15 +64,15 @@
 <section class="section" id="services" aria-labelledby="services-title">
   <div class="wrap">
     {{ head('services', 'services') }}
-    {# each section is a picture and its name; its products and their details are on its own page #}
+    {# each section is a card listing its products (and its starred note); the whole card opens the section's own page #}
     <div class="svc-grid">
-      {% for s in d.services %}{% set cover = pic(s['items'][0].img[0]) %}
+      {% for s in d.services %}
       <a class="svc rv" href="{{ svc_link(s.id) }}" style="--i: {{ loop.index0 % 4 }}">
-        <span class="svc-media"><img src="{{ cover.thumb }}" alt="" width="720" height="540" loading="lazy" decoding="async"><span class="svc-num">{{ '%02d' % loop.index }}</span></span>
-        <span class="svc-body">
-          <h3>{{ s.name }}</h3>
-          <span class="svc-foot"><span>{{ t.catalog.count | fill(n=s['items'] | length) }}</span>{{ ic.icon('arrow') }}</span>
-        </span>
+        <span class="svc-num">{{ '%02d' % loop.index }}</span>
+        <h3>{{ s.name }}</h3>
+        <ul class="svc-items">{% for it in s['items'] %}<li>{{ it.name }}</li>{% endfor %}</ul>
+        {% if s.get('note') %}<p class="svc-note">{{ ic.icon('star') }}<span>{{ s.note }}</span></p>{% endif %}
+        <span class="svc-foot"><span>{{ t.catalog.browse }}</span>{{ ic.icon('arrow') }}</span>
       </a>
       {% endfor %}
     </div>
@@ -83,7 +83,22 @@
   </div>
 </section>
 
-<section class="section section-alt" id="works" aria-labelledby="works-title">
+<section class="section section-alt" id="clients" aria-labelledby="clients-title">
+  <div class="wrap">
+    {{ head('clients', 'clients') }}
+    {# a client's logo once we have it (static/img/clients/<logo>.png); until then its name set as a wordmark #}
+    <ul class="clients">
+      {% for c in d.clients %}
+      <li class="client rv" style="--i: {{ loop.index0 % 5 }}">
+        <span class="client-logo">{% if c.logo %}<img src="{{ root }}assets/img/clients/{{ c.logo }}" alt="" loading="lazy" decoding="async">{% else %}<span class="client-mark" aria-hidden="true">{{ c.mark }}</span>{% endif %}</span>
+        <span class="client-name">{{ c.name }}{% if c.place %}<small>{{ c.place }}</small>{% endif %}</span>
+      </li>
+      {% endfor %}
+    </ul>
+  </div>
+</section>
+
+<section class="section" id="works" aria-labelledby="works-title">
   <div class="wrap">
     {{ head('works', 'works') }}
     <div class="works-grid">
@@ -99,7 +114,7 @@
   </div>
 </section>
 
-<section class="section" id="about" aria-labelledby="about-title">
+<section class="section section-alt" id="about" aria-labelledby="about-title">
   <div class="wrap about-grid">
     <div class="about-text rv">
       <p class="sec-eyebrow">{{ t.about.eyebrow }}</p>
@@ -114,7 +129,7 @@
   </div>
 </section>
 
-<section class="section section-alt" id="process" aria-labelledby="process-title">
+<section class="section" id="process" aria-labelledby="process-title">
   <div class="wrap">
     {{ head('process', 'process', false) }}
     <ol class="steps">
@@ -140,8 +155,10 @@
     <ul class="contact-cards">
       <li class="rv" style="--i: 0"><a href="mailto:{{ b.email }}">{{ ic.icon('mail') }}<span class="ltr">{{ b.email }}</span></a></li>
       <li class="rv" style="--i: 1"><a href="https://www.instagram.com/{{ b.instagram }}/" target="_blank" rel="noopener">{{ ic.icon('ig') }}<span class="ltr">@{{ b.instagram }}</span></a></li>
-      <li class="rv" style="--i: 2"><a href="{{ b.maps }}" target="_blank" rel="noopener">{{ ic.icon('pin') }}<span>{{ b.city }}{{ '، ' if lang == 'ar' else ', ' }}{{ b.region }}</span></a></li>
-      <li class="rv" style="--i: 3"><span class="contact-hours">{{ ic.icon('clock') }}<span>{{ b.hours.label }}</span></span></li>
+      {# TikTok: its place is ready; it becomes a link once business.tiktok has the account's address #}
+      <li class="rv" style="--i: 2">{% if b.tiktok %}<a href="{{ b.tiktok }}" target="_blank" rel="noopener">{{ ic.icon('tiktok') }}<span>{{ t.tiktok }}</span></a>{% else %}<span class="contact-hours">{{ ic.icon('tiktok') }}<span>{{ t.tiktok }}</span></span>{% endif %}</li>
+      <li class="rv" style="--i: 3"><a href="{{ b.maps }}" target="_blank" rel="noopener">{{ ic.icon('pin') }}<span>{{ b.city }}{{ '، ' if lang == 'ar' else ', ' }}{{ b.region }}</span></a></li>
+      <li class="rv contact-wide" style="--i: 4"><span class="contact-hours">{{ ic.icon('clock') }}<span>{{ b.hours.label }}</span></span></li>
     </ul>
   </div>
 </section>

@@ -21,6 +21,7 @@
         <li><a href="tel:{{ b.phone }}">{{ t.foot.call }}: <span class="ltr">{{ b.phone_display }}</span></a></li>
         <li><a href="mailto:{{ b.email }}"><span class="ltr">{{ b.email }}</span></a></li>
         <li><a href="https://www.instagram.com/{{ b.instagram }}/" target="_blank" rel="noopener">{{ t.foot.ig }}: <span class="ltr">@{{ b.instagram }}</span></a></li>
+        {% if b.tiktok %}<li><a href="{{ b.tiktok }}" target="_blank" rel="noopener">{{ t.tiktok }}</a></li>{% endif %}
         <li><a href="{{ b.maps }}" target="_blank" rel="noopener">{{ b.city }}{{ sep }}{{ b.region }}</a></li>
         <li>{{ b.hours.label }}</li>
       </ul>

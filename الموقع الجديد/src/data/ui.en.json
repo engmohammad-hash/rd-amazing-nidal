@@ -19,7 +19,8 @@
   "wa_float_msg": "Hello RD Amazing, I have a question.",
   "quote_btn": "Get a quote",
   "quote_msg": "Hello RD Amazing, I would like a quote for printing.",
-  "topbar_call": "Orders and questions",
+  "topbar_call": "To order:",
+  "tiktok": "TikTok",
 
   "hero": { "browse": "Browse services", "call": "Call us" },
 
@@ -58,24 +59,29 @@
       "meta_product": "{product} | {name}"
   },
 
+  "clients": {
+    "eyebrow": "02 / Clients",
+    "title": ["Our clients", "and partners"],
+    "lead": "Cafés, restaurants, clinics and companies that trust us with their print."
+  },
   "works": {
-    "eyebrow": "02 / Our work",
+    "eyebrow": "03 / Our work",
     "title": ["Samples", "of our work"],
     "lead": "Pieces we have made for our clients."
   },
   "about": {
-    "eyebrow": "03 / About",
+    "eyebrow": "04 / About",
     "title": ["About", "RD Amazing"],
     "link": "Ask about our services"
   },
   "process": {
-    "eyebrow": "04 / How to order",
+    "eyebrow": "05 / How to order",
     "title": ["How to order", "your print"],
     "lead": "From your first message to your order in hand, in three clear steps."
   },
   "cta": {
     "eyebrow": "Orders and quotes",
-    "title": "Talk to RD Amazing",
+    "title": "Talk to our sales manager, Nidal Abu Al-Majd",
     "text": "Tell us the product, quantity and size, and we will reply with a quote.",
     "wa": "Get a quote on WhatsApp",
     "or_call": "or call us directly"

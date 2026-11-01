@@ -10,6 +10,7 @@
     "whatsapp": "966535843085",
     "email": "printingvip11@gmail.com",
     "instagram": "printingsticker2022",
+    "tiktok": "",
     "city": "الدمام",
     "region": "المنطقة الشرقية",
     "country": "المملكة العربية السعودية",
@@ -22,6 +23,7 @@
 
   "nav": [
     { "label": "خدماتنا", "id": "services" },
+    { "label": "عملاؤنا", "id": "clients" },
     { "label": "أعمالنا", "id": "works" },
     { "label": "عن المطبعة", "id": "about" },
     { "label": "خطوات الطلب", "id": "process" },
@@ -187,6 +189,22 @@
     { "title": "أرسل طلبك", "text": "نوع المنتج والكمية والمقاس، وملف التصميم إن وُجد." },
     { "title": "نراجع ونعتمد", "text": "نتفق على الخامة والسعر، وترى النموذج قبل الطباعة." },
     { "title": "نطبع ونسلّم", "text": "نطبع بعد موافقتك، ونسلّم في الموعد المتفق عليه." }
+  ],
+
+  "clients": [
+    { "name": "مقهى نص", "place": "الخبر والدمام", "mark": "نص", "logo": "" },
+    { "name": "مقهى مركى وفنجال", "place": "", "mark": "مركى", "logo": "" },
+    { "name": "مقهى BeFine", "place": "", "mark": "BeFine", "logo": "" },
+    { "name": "محمصة قاف", "place": "", "mark": "قاف", "logo": "" },
+    { "name": "كافيه DOMATCHA", "place": "رأس تنورة", "mark": "DOMATCHA", "logo": "" },
+    { "name": "مجمع نوفا لطب الأسنان", "place": "", "mark": "نوفا", "logo": "" },
+    { "name": "مجمع المهيدب لطب الأسنان", "place": "", "mark": "المهيدب", "logo": "" },
+    { "name": "مجمع عاجي لطب الأسنان", "place": "", "mark": "عاجي", "logo": "" },
+    { "name": "شركة فيرا", "place": "الخبر", "mark": "فيرا", "logo": "" },
+    { "name": "شركة صكة لورق البلوت", "place": "", "mark": "صكة", "logo": "" },
+    { "name": "مطعم Gutit", "place": "", "mark": "Gutit", "logo": "" },
+    { "name": "حلويات LOLETA", "place": "الجبيل", "mark": "LOLETA", "logo": "" },
+    { "name": "المصورة بشاير السعد", "place": "", "mark": "بشاير", "logo": "" }
   ],
 
   "shop": {

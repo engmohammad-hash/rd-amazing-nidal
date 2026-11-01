@@ -145,7 +145,7 @@ class Site:
             "areaServed": [{"@type": "City", "name": b["city"]}, {"@type": "AdministrativeArea", "name": b["region"]}],
             "openingHoursSpecification": [{"@type": "OpeningHoursSpecification", "dayOfWeek": DAYS,
                                            "opens": b["hours"]["open"], "closes": b["hours"]["close"]}],
-            "sameAs": [f"https://www.instagram.com/{b['instagram']}/"],
+            "sameAs": [f"https://www.instagram.com/{b['instagram']}/"] + ([b["tiktok"]] if b.get("tiktok") else []),
             "hasOfferCatalog": {"@type": "OfferCatalog", "name": self.t["services"]["title"][0], "itemListElement": [
                 {"@type": "OfferCatalog", "name": s["name"], "url": BASE + self.prefix + f"services/{s['id']}/", "itemListElement": [
                     {"@type": "Offer", "itemOffered": {"@type": "Service", "name": item["name"],
