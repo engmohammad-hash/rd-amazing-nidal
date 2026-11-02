@@ -3,7 +3,7 @@
 <div class="topbar">
   <div class="wrap topbar-in">
     <span class="topbar-text">{{ d.topbar }}</span>
-    <a class="topbar-call" href="tel:{{ b.phone }}"><span class="topbar-label">{{ t.topbar_call }} <b class="topbar-name">{{ b.sales.name }}</b></span> <span class="ltr">{{ b.phone_display }}</span></a>
+    <a class="topbar-call" href="tel:{{ b.phone }}"><span class="topbar-label">{{ b.sales.label }}: <b class="topbar-name">{{ b.sales.name }}</b></span> <span class="ltr">{{ b.phone_display }}</span></a>
   </div>
 </div>
 <header class="hdr" id="hdr">
@@ -13,7 +13,7 @@
         <img class="on-light" src="{{ root }}assets/img/logo-color-sm.png" alt="" width="46" height="50">
         <img class="on-dark" src="{{ root }}assets/img/logo-beige-sm.png" alt="" width="46" height="50">
       </span>
-      <span class="brand-name"><b>{{ b.name }}</b><small class="brand-sales">{{ b.sales.label }}: <span>{{ b.sales.name }}</span></small></span>
+      <span class="brand-name"><b>{{ b.name }}</b></span>
     </a>
     <nav class="nav" aria-label="{{ t.nav_aria }}">
       {% for n in d.nav %}<a href="{{ anchor(n.id) }}" data-section="{{ n.id }}">{{ n.label }}</a>

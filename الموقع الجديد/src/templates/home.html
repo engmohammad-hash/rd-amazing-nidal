@@ -86,7 +86,13 @@
         <h3>{{ s.name }}</h3>
         <ul class="svc-items">{% for it in s['items'] %}<li>{{ it.name }}</li>{% endfor %}</ul>
         {% if s.get('note') %}<p class="svc-note">{{ ic.icon('star') }}<span>{{ s.note }}</span></p>{% endif %}
-        <span class="svc-foot"><span>{{ t.catalog.browse }}</span>{{ ic.icon('arrow') }}</span>
+        {# a glimpse of the section: two of its products clear, the third half clear and half veiled, with the invitation on the veil #}
+        <span class="svc-pics" aria-hidden="true">
+          {% for it in s['items'][:3] %}{% set p = pic(it.img[0]) %}
+          {% if loop.last %}<span class="svc-pic svc-pic-more"><img src="{{ p.xs }}" alt="" width="360" height="270" loading="lazy" decoding="async"><img class="svc-pic-veil" src="{{ p.xs }}" alt="" width="360" height="270" loading="lazy" decoding="async"><span class="svc-pic-label">{{ t.catalog.preview }}</span></span>
+          {% else %}<span class="svc-pic"><img src="{{ p.xs }}" alt="" width="360" height="270" loading="lazy" decoding="async"></span>{% endif %}
+          {% endfor %}
+        </span>
       </a>
       {% endfor %}
     </div>
@@ -237,7 +243,7 @@
       <li class="rv" style="--i: 0"><a href="mailto:{{ b.email }}">{{ ic.icon('mail') }}<span class="ltr">{{ b.email }}</span></a></li>
       <li class="rv" style="--i: 1"><a href="https://www.instagram.com/{{ b.instagram }}/" target="_blank" rel="noopener">{{ ic.icon('ig') }}<span class="ltr">@{{ b.instagram }}</span></a></li>
       {# TikTok: its place is ready; it becomes a link once business.tiktok has the account's address #}
-      <li class="rv" style="--i: 2">{% if b.tiktok %}<a href="{{ b.tiktok }}" target="_blank" rel="noopener">{{ ic.icon('tiktok') }}<span>{{ t.tiktok }}</span></a>{% else %}<span class="contact-hours">{{ ic.icon('tiktok') }}<span>{{ t.tiktok }}</span></span>{% endif %}</li>
+      <li class="rv" style="--i: 2">{% if b.tiktok %}<a href="{{ b.tiktok }}" target="_blank" rel="noopener">{{ ic.icon('tiktok') }}<span class="ltr">@{{ b.tiktok.split('@')[-1] }}</span></a>{% else %}<span class="contact-hours">{{ ic.icon('tiktok') }}<span>{{ t.tiktok }}</span></span>{% endif %}</li>
       <li class="rv" style="--i: 3"><a href="{{ b.maps }}" target="_blank" rel="noopener">{{ ic.icon('pin') }}<span>{{ b.city }}{{ '، ' if lang == 'ar' else ', ' }}{{ b.region }}</span></a></li>
       <li class="rv contact-wide" style="--i: 4"><span class="contact-hours">{{ ic.icon('clock') }}<span>{{ b.hours.label }}</span></span></li>
     </ul>

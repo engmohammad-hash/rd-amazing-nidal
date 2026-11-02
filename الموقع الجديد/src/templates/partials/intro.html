@@ -16,6 +16,8 @@
         <span class="intro-name">{{ b.name }}</span>
         <span class="intro-tag">{{ t.intro_tag }}</span>
         <span class="intro-bar"><i></i></span>
+        <span class="intro-motto">{{ t.intro_motto }}</span>
+        <span class="intro-sales"><small>{{ t.intro_sales }}</small> {{ b.sales.name }}</span>
       </div>
     </div>
   </div>
@@ -26,7 +28,7 @@
   var d = document, r = d.documentElement, el = d.getElementById('intro');
   if (!/(^|\s)intro-on(\s|$)/.test(r.className)) { el.parentNode.removeChild(el); return; }
   // long enough for the logo and the name to arrive; then it opens once the page beneath is ready, and never later than MAX
-  var t0 = Date.now(), MIN = 2400, MAX = 5500;
+  var t0 = Date.now(), MIN = 3200, MAX = 6000;
   if (/[?&]intro=hold\b/.test(location.search)) MIN = MAX = 1e9;   // stays shut, to look at it closely
   var ready = function () {
     if (d.readyState === 'loading') return false;

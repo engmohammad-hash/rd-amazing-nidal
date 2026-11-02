@@ -115,7 +115,23 @@ def pic(key, root):
             MISSING.add(f"{folder}/{name}{suffix}.jpg")
     url = f"{root}assets/img/{folder}/{name}"
     return {"key": key, "full": url + ".jpg", "md": url + ("-md.jpg" if kind == "photo" else ".jpg"), "thumb": url + "-thumb.jpg",
+            "xs": url + "-xs.jpg",
             "abs": BASE + f"assets/img/{folder}/{name}.jpg"}
+
+
+# the three small pictures on each section's card on the home page (its first three products' first pictures):
+# 360 x 270 copies, made once beside the full picture, so sixteen cards of them stay light on a slow line
+def card_pics(data):
+    from PIL import ImageOps
+    for s in data["services"]:
+        for it in s["items"][:3]:
+            kind, name = it["img"][0].split("/", 1)
+            full = SRC / "static" / "img" / PIC_DIRS[kind] / (name + ".jpg")
+            xs = full.with_name(name + "-xs.jpg")
+            if xs.exists() or not full.exists():
+                continue
+            im = ImageOps.fit(Image.open(full).convert("RGB"), (360, 270), Image.LANCZOS)
+            im.save(xs, quality=76, optimize=True, progressive=True)
 
 
 def jsonld(*nodes):
@@ -289,6 +305,7 @@ def write_meta(sites):
 if __name__ == "__main__":
     OUT.mkdir(exist_ok=True)
     PAGES = []
+    card_pics(load("site.ar.json"))
     VERSION = copy_assets()
     sites = {code: Site(code, data, t) for code, data, t in LANGS}
     for s in sites.values():

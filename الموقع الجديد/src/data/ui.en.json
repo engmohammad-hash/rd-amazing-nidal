@@ -19,10 +19,11 @@
   "wa_float_msg": "Hello RD Amazing, I have a question.",
   "quote_btn": "Get a quote",
   "quote_msg": "Hello RD Amazing, I would like a quote for printing.",
-  "topbar_call": "To order:",
   "tiktok": "TikTok",
   "stats_aria": "RD Amazing in numbers",
   "intro_tag": "Design · Print · Luxury packaging",
+  "intro_motto": "From the press… straight to you",
+  "intro_sales": "Sales:",
 
   "hero": { "browse": "Browse services", "call": "Call us" },
 
@@ -38,6 +39,7 @@
   "catalog": {
       "count": "{n} products",
       "browse": "View products",
+      "preview": "Browse products",
       "order": "Order now",
       "see": "See our {name}",
       "order_msg": "Hello RD Amazing 🌷\nI would like to order “{name}” from your {section} section.\nCould you send me the details and prices? Thank you.",
