@@ -112,6 +112,15 @@
     "title": ["Our clients", "and partners"],
     "lead": "Cafés, restaurants, clinics and companies that trust us with their print."
   },
+  "gallery": {
+      "title": "Our work",
+      "lead": "Photos of pieces we have printed and packed for our clients.",
+      "more": "See more of our work",
+      "meta_title": "Our work | {name}",
+      "meta_desc": "A gallery of work by Roaat Design Printing in Dammam: luxury boxes, bags, stickers, signs and print.",
+      "end": "Like one? We will make yours",
+      "back": "Back to home"
+  },
   "works": {
     "eyebrow": "04 / Our work",
     "title": ["Samples", "of our work"],

@@ -1,0 +1,34 @@
+{% extends "base.html" %}
+{% import "partials/icons.html" as ic %}
+{# Our work: only the photos, each whole in its own shape, in columns like a pinned board; any one opens large in the
+   lightbox (site.js), and its name shows on it as the pointer passes. #}
+{% set g = t.gallery %}
+{% block main %}
+<section class="page-band">
+  <div class="wrap">
+    <nav class="crumbs" aria-label="{{ t.shop.crumb_home }}"><a href="{{ home }}">{{ t.shop.crumb_home }}</a><span aria-hidden="true">/</span><span aria-current="page">{{ g.title }}</span></nav>
+    <h1>{{ g.title }}</h1>
+    <p>{{ g.lead }}</p>
+  </div>
+</section>
+
+<section class="section gallery-sec" aria-label="{{ g.title }}">
+  <div class="wrap">
+    <div class="gallery">
+      {% for w in d.gallery %}{% set p = pic(w.img) %}
+      <a class="g-item rv" href="{{ p.full }}" data-lightbox data-caption="{{ w.title }}" aria-label="{{ t.js.lightbox }}: {{ w.title }}" style="--i: {{ loop.index0 % 3 }}">
+        <img src="{{ p.w }}" alt="{{ w.title }}"{% if p.w_size %} width="{{ p.w_size[0] }}" height="{{ p.w_size[1] }}"{% endif %} {% if loop.index > 6 %}loading="lazy" {% endif %}decoding="async">
+        <span class="g-cap"><span>{{ w.title }}</span><b class="ltr">{{ '%02d' % loop.index }}</b></span>
+      </a>
+      {% endfor %}
+    </div>
+    <div class="gallery-end rv">
+      <p>{{ g.end }}</p>
+      <div class="gallery-actions">
+        <a class="btn btn-fill" href="{{ wa(t.quote_msg) }}" target="_blank" rel="noopener">{% include "partials/wa-icon.svg" %} {{ t.quote_btn }}</a>
+        <a class="btn btn-line" href="{{ home }}">{{ g.back }}</a>
+      </div>
+    </div>
+  </div>
+</section>
+{% endblock %}

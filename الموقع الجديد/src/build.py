@@ -106,6 +106,15 @@ PIC_DIRS = {"photo": "photos", "shop": "shop", "p": "products"}
 MISSING = set()
 
 
+def whole_size(base):
+    """width and height of a photo's whole, uncropped copy (the works page), or None when it has none"""
+    f = base.with_name(base.name + "-w.jpg")
+    if not f.exists():
+        return None
+    with Image.open(f) as im:
+        return im.size
+
+
 def pic(key, root):
     kind, name = key.split("/", 1)
     folder = PIC_DIRS[kind]
@@ -115,7 +124,7 @@ def pic(key, root):
             MISSING.add(f"{folder}/{name}{suffix}.jpg")
     url = f"{root}assets/img/{folder}/{name}"
     return {"key": key, "full": url + ".jpg", "md": url + ("-md.jpg" if kind == "photo" else ".jpg"), "thumb": url + "-thumb.jpg",
-            "xs": url + "-xs.jpg",
+            "xs": url + "-xs.jpg", "w": url + "-w.jpg", "w_size": whole_size(base),
             "abs": BASE + f"assets/img/{folder}/{name}.jpg"}
 
 
@@ -196,6 +205,7 @@ class Site:
             "t": t, "lang": t["lang"], "dir": t["dir"], "b": self.b, "d": self.data, "credit": self.data["credit"],
             "root": root, "home": home, "path": full, "version": VERSION, "wa": wa, "template": template, "hero_lqip": HERO_LQIP,
             "shop": self.data["shop"], "shop_link": root + self.prefix + "shop/", "shop_json": self.shop_json(root),
+            "works_link": root + self.prefix + "works/",
             # where a section's or a product's page is, from any page; and its pictures as seen from this page
             "svc_link": lambda sid, pid=None, base=root + self.prefix: f"{base}services/{sid}/" + (f"{pid}/" if pid else ""),
             "pic": lambda key, r=root: pic(key, r),
@@ -230,6 +240,13 @@ class Site:
                     {"@type": "ListItem", "position": i + 1, "url": f"{shop_url}?p={p['id']}", "name": p["name"],
                      "image": BASE + f"assets/img/shop/{p['img'][0]}.jpg"}
                     for i, p in enumerate(self.data["shop"]["products"])]}),
+        })
+        g, works_url = t["gallery"], BASE + self.prefix + "works/"
+        self.render("works.html", "works/", {
+            "title": fill(g["meta_title"], **names), "description": g["meta_desc"],
+            "jsonld": jsonld(self.crumbs((g["title"], "works/")), {
+                "@type": "ImageGallery", "name": g["title"], "url": works_url, "about": {"@id": ORG_ID},
+                "image": [{"@type": "ImageObject", "contentUrl": pic(w["img"], "")["abs"], "name": w["title"]} for w in self.data["gallery"]]}),
         })
         self.build_services(names)
         if self.code == "ar":   # GitHub Pages has a single 404 page for the whole site

@@ -46,7 +46,7 @@
 {% include "partials/footer.html" %}
 <a class="wa-float{% if has_hero is defined %} away{% endif %}" href="{{ wa(t.wa_float_msg) }}" target="_blank" rel="noopener" aria-label="{{ t.wa_float }}">{% include "partials/wa-icon.svg" %}</a>
 {# the gold ring round it fills as the reader goes down the page #}
-<button class="to-top" id="to-top" type="button" aria-label="{{ t.to_top }}" tabindex="-1"><svg class="to-top-ring" viewBox="0 0 60 60" aria-hidden="true"><circle class="track" cx="30" cy="30" r="28" pathLength="1"/><circle class="bar" cx="30" cy="30" r="28" pathLength="1"/></svg>{{ ic.icon('up') }}</button>
+<button class="to-top" id="to-top" type="button" aria-label="{{ t.to_top }}" tabindex="-1"><svg class="to-top-ring" viewBox="0 0 60 60" aria-hidden="true"><circle class="track" cx="30" cy="30" r="28.5" pathLength="1"/><circle class="bar" cx="30" cy="30" r="28.5" pathLength="1"/></svg>{{ ic.icon('up') }}</button>
 {% include "partials/shop-ui.html" %}
 <script>window.__T = {{ t.js | tojson }};</script>
 <script src="{{ root }}assets/js/site.js?v={{ version }}" defer></script>

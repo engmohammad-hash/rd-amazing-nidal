@@ -2,6 +2,7 @@
   src/static/img/photos/<n>.jpg        the whole photo, at most 1600 px on its long side (opens in the lightbox)
   src/static/img/photos/<n>-md.jpg     a 1200 x 900 crop around what matters in it (the large picture on a product page)
   src/static/img/photos/<n>-thumb.jpg  the same crop at 720 x 540 (cards and galleries)
+  src/static/img/photos/<n>-w.jpg      the whole photo, uncropped, 760 px wide (the works page, where each keeps its shape)
 
 usage: python -I tools/photos.py "<folder of photos>"
 """
@@ -26,4 +27,7 @@ for f in sorted(src.glob("*.jpg"), key=lambda p: int(p.stem)):
     for name, size, q in (("md", (wide, wide * 3 // 4), 84), ("thumb", (720, 540), 82)):
         crop = ImageOps.fit(im, size, Image.LANCZOS, centering=(.5, FOCUS.get(n, .5)))
         crop.save(OUT / f"{n}-{name}.jpg", "JPEG", quality=q, optimize=True, progressive=True)
+    whole = im.copy()
+    whole.thumbnail((760, 2000), Image.LANCZOS)
+    whole.save(OUT / f"{n}-w.jpg", "JPEG", quality=80, optimize=True, progressive=True)
     print(n, im.size, "->", full.size)
