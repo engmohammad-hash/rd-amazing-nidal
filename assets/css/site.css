@@ -143,9 +143,6 @@ html[data-theme="dark"] .hdr .on-dark { display: block; }
 .brand-name b, .brand-name small { overflow: hidden; white-space: nowrap; text-overflow: ellipsis; }
 .brand-name b { font: 700 1.06rem/1.3 var(--font-head); }
 .brand-name small { font-size: .74rem; color: var(--text-faint); }
-/* the sales manager's name under the shop's, as on his business card */
-.brand-sales { font: 500 .76rem/1.4 var(--font-head) !important; color: var(--text-soft) !important; white-space: nowrap; }
-.brand-sales span { color: var(--accent); font-weight: 600; }
 .nav { display: flex; gap: .15rem; margin-inline-start: auto; }
 .nav a { position: relative; padding: .55rem .8rem; border-radius: 10px; font: 500 .93rem/1.2 var(--font-head); color: var(--text-soft); white-space: nowrap; transition: color .2s; }
 /* seven links: a little closer together on narrower laptops, and the menu button below 1300px, so the shop's name is never cut */
@@ -295,6 +292,26 @@ html[data-theme="dark"] { --foil: linear-gradient(100deg, #D9B97F 0%, #E4C690 34
 .svc-foot { display: flex; align-items: center; justify-content: space-between; gap: .6rem; margin-top: auto; padding-top: 1rem; border-top: 1px solid var(--line); font: 600 .92rem/1.2 var(--font-head); }
 .svc-foot svg { width: 18px; height: 18px; flex: none; transition: translate .3s var(--ease); }
 .svc:hover .svc-foot svg { translate: -3px -3px; }
+/* a glimpse of the section on its card: two products clear, the third half clear and half veiled under the invitation.
+   It sits just above the card's foot, so the pictures line up across a row whatever the length of the lists */
+.svc-pics { display: grid; grid-template-columns: 1fr 1fr 2.35fr; gap: 7px; height: clamp(68px, 5.4vw, 84px); margin-top: auto; }
+.svc-pic { position: relative; overflow: hidden; border-radius: 10px; background: var(--line); }
+.svc-pic::after { content: ""; position: absolute; inset: 0; border-radius: inherit; box-shadow: inset 0 0 0 1px var(--line); transition: box-shadow .4s; pointer-events: none; }
+.svc:hover .svc-pic::after { box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--gold) 55%, transparent); }
+.svc-pic img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; transition: transform .8s var(--ease); }
+.svc:hover .svc-pic img { transform: scale(1.06); }
+.svc-pic-more .svc-pic-veil {
+  filter: blur(7px) saturate(1.15) brightness(.9); transform: scale(1.2);
+  -webkit-mask-image: linear-gradient(to left, transparent 32%, #000 52%); mask-image: linear-gradient(to left, transparent 32%, #000 52%);
+}
+[dir="ltr"] .svc-pic-more .svc-pic-veil { -webkit-mask-image: linear-gradient(to right, transparent 32%, #000 52%); mask-image: linear-gradient(to right, transparent 32%, #000 52%); }
+.svc:hover .svc-pic-more .svc-pic-veil { transform: scale(1.26); }
+.svc-pic-label {
+  position: absolute; inset-block: 0; inset-inline-end: 0; width: 60%; display: grid; place-items: center; padding: 0 .3rem; text-align: center;
+  background: linear-gradient(to left, rgba(42, 0, 22, .58), rgba(42, 0, 22, .1)); color: #F8EEDC;
+  font: 700 .74rem/1.4 var(--font-head); text-shadow: 0 1px 8px rgba(20, 0, 10, .55); letter-spacing: .01em;
+}
+[dir="ltr"] .svc-pic-label { background: linear-gradient(to right, rgba(42, 0, 22, .58), rgba(42, 0, 22, .1)); }
 /* gold on the cards: a warm light follows the pointer, a band of foil sweeps across on hover (and once as each card
    arrives, for phones), the number turns to gold leaf and the edge takes a gold line */
 .svc, .svc:hover { --glow: rgba(201, 169, 124, .17); background-image: radial-gradient(280px circle at var(--mx, 50%) var(--my, -60%), var(--glow), transparent 70%); }
@@ -629,7 +646,6 @@ html:not([data-theme="dark"]) .to-top-ring .bar { stroke: #C99A55; }
   .brand-mark { width: 40px; height: 44px; }
   .brand-name b { font-size: .98rem; }
   .brand-name small { display: none; }
-  .brand-name .brand-sales { display: block; font-size: .66rem !important; }
   .call-btn { width: 46px; padding: 0; justify-content: center; }
   .call-btn span { display: none; }
   .contact-cards, .foot-grid, .c-grid { grid-template-columns: 1fr; }
@@ -649,6 +665,8 @@ html:not([data-theme="dark"]) .to-top-ring .bar { stroke: #C99A55; }
   .work figcaption b { display: none; }
   .svc-grid { grid-template-columns: 1fr; }
   .svc { padding: 1.35rem 1.3rem 1.1rem; }
+  .svc-pics { height: 88px; }
+  .svc-pic-label { font-size: .84rem; }
   .pd-gallery.n3 { grid-template-columns: 1fr 1fr; grid-template-rows: auto; }
   .pd-gallery.n3 .pd-shot:first-child { grid-row: auto; grid-column: 1 / -1; }
   .pd-gallery.n3 .pd-shot:not(:first-child) img { position: static; aspect-ratio: 4 / 3; }
@@ -664,7 +682,6 @@ html:not([data-theme="dark"]) .to-top-ring .bar { stroke: #C99A55; }
   .brand { gap: .5rem; }
   .brand-mark { width: 34px; height: 38px; }
   .brand-name b { font-size: .9rem; }
-  .brand-name .brand-sales { font-size: .6rem !important; }
   .hdr-shop .icon-btn { height: 40px; min-width: 40px; }
   .menu-btn, .call-btn { width: 42px; height: 42px; }
 }
@@ -674,7 +691,6 @@ html:not([data-theme="dark"]) .to-top-ring .bar { stroke: #C99A55; }
 @media (max-width: 340px) {
   .brand-mark { width: 30px; height: 34px; }
   .brand-name b { font-size: .84rem; }
-  .brand-name .brand-sales { font-size: .56rem !important; }
 }
 /* tall screens get the tall cut: its pictures at the top, the copy at the bottom on the shade */
 @media (max-aspect-ratio: 4/5) {
@@ -1039,6 +1055,20 @@ html.intro-on .intro { pointer-events: auto; animation: intro-failsafe .01s 9s f
 }
 [lang="en"] .intro-tag { letter-spacing: .3em; text-transform: uppercase; font-size: clamp(.62rem, 1.8vw, .76rem); }
 @keyframes intro-tag { to { opacity: 1; transform: none; } }
+/* the shop's motto between two gold diamonds, and the sales manager's name in foil beneath it */
+.intro-motto {
+  display: flex; align-items: center; gap: .8em; margin-top: clamp(16px, 2.8vh, 24px);
+  font: 600 clamp(.95rem, 3.4vw, 1.22rem)/1.5 var(--font-head); color: #F3E6CC; letter-spacing: .01em;
+  opacity: 0; transform: translateY(8px); animation: intro-tag .8s var(--ease) 1.65s forwards;
+}
+.intro-motto::before, .intro-motto::after { content: ""; width: 7px; height: 7px; flex: none; transform: rotate(45deg); background: #E4C690; box-shadow: 0 0 8px rgba(228, 198, 144, .55); }
+.intro-sales {
+  margin-top: clamp(10px, 1.8vh, 16px); font: 700 clamp(1.05rem, 3.8vw, 1.42rem)/1.4 var(--font-head);
+  background: linear-gradient(100deg, #D9B97F 0%, #E4C690 38%, #FFF6DE 50%, #E4C690 62%, #D9B97F 100%) 0 0 / 300% 100%;
+  -webkit-background-clip: text; background-clip: text; color: transparent;
+  opacity: 0; transform: translateY(8px); animation: intro-tag .8s var(--ease) 2s forwards;
+}
+.intro-sales small { font: 500 .72em/1 var(--font-head); -webkit-text-fill-color: rgba(234, 220, 194, .72); margin-inline-end: .25em; }
 .intro-bar { position: relative; width: 150px; height: 1px; margin-top: clamp(22px, 4vh, 34px); background: rgba(228, 198, 144, .18); overflow: hidden; }
 .intro-bar i { position: absolute; inset: 0; background: linear-gradient(90deg, transparent, #E4C690 30%, #FFF3D6 50%, #E4C690 70%, transparent); transform: scaleX(0); animation: intro-bar 2.1s cubic-bezier(.4, 0, .2, 1) .2s forwards; }
 @keyframes intro-bar { to { transform: scaleX(1); } }
