@@ -210,6 +210,58 @@
     paint();
   }
 
+  /* ---------- opening hours: today's row, and whether the shop is open now, always by the shop's own clock in Dammam ---------- */
+  var hoursBox = doc.querySelector('.hours');
+  if (hoursBox) {
+    var HD = JSON.parse(hoursBox.querySelector('.hours-data').textContent), HT = HD.t;
+    var nowBox = hoursBox.querySelector('.hours-now'), DAY_MIN = 1440;
+    var toMin = function (s) { return parseInt(s.slice(0, 2), 10) * 60 + parseInt(s.slice(3), 10); };
+    var timeText = function (mins) {
+      var h = Math.floor(mins / 60) % 24, m = mins % 60;
+      var txt = String(h % 12 || 12) + (m ? ':' + (m < 10 ? '0' : '') + m : '');
+      if (HD.lang === 'ar') txt = txt.replace(/\d/g, function (d) { return '٠١٢٣٤٥٦٧٨٩'[d]; });
+      return txt + ' ' + (h >= 12 ? HT.pm : HT.am);
+    };
+    var shopNow = function () {
+      var p = {};
+      new Intl.DateTimeFormat('en-US', { timeZone: 'Asia/Riyadh', weekday: 'short', hour: '2-digit', minute: '2-digit', hourCycle: 'h23' })
+        .formatToParts(new Date()).forEach(function (x) { p[x.type] = x.value; });
+      return { day: ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'].indexOf(p.weekday), mins: (parseInt(p.hour, 10) % 24) * 60 + parseInt(p.minute, 10) };
+    };
+    var spansOf = function (d) { return HD.week[String((d + 7) % 7)] || []; };
+    var paintHours = function () {
+      var now = shopNow(), openUntil = -1;
+      // a span that runs past midnight still counts from the day it began
+      spansOf(now.day).forEach(function (s) {
+        var a = toMin(s[0]), b = toMin(s[1]); if (b <= a) b += DAY_MIN;
+        if (now.mins >= a && now.mins < b) openUntil = b;
+      });
+      spansOf(now.day - 1).forEach(function (s) {
+        var a = toMin(s[0]), b = toMin(s[1]);
+        if (b <= a && now.mins < b) openUntil = b;
+      });
+      var cls = 'closed', head = HT.closed_now, sub = '';
+      if (openUntil >= 0) {
+        var soon = openUntil - now.mins <= 60;
+        cls = soon ? 'soon' : 'open'; head = HT.open_now;
+        sub = (soon ? HT.closes_soon : HT.closes_at).replace('{time}', timeText(openUntil % DAY_MIN));
+      } else {
+        // the next opening: later today, or the next day that opens at all
+        for (var n = 0; n < 8 && !sub; n++) {
+          var spans = spansOf(now.day + n).map(function (s) { return toMin(s[0]); }).filter(function (a) { return n > 0 || a > now.mins; }).sort(function (x, y) { return x - y; });
+          if (spans.length) sub = HT.opens_at.replace('{day}', n === 0 ? HT.today : n === 1 ? HT.tomorrow : HT.days[(now.day + n) % 7]).replace('{time}', timeText(spans[0]));
+        }
+      }
+      nowBox.className = 'hours-now ' + cls;
+      nowBox.querySelector('b').textContent = head;
+      nowBox.querySelector('small').textContent = sub;
+      nowBox.hidden = false;
+      hoursBox.querySelectorAll('li[data-day]').forEach(function (li) { li.classList.toggle('is-today', Number(li.dataset.day) === now.day); });
+    };
+    paintHours();
+    setInterval(paintHours, 60000);
+  }
+
   /* ---------- lightbox for our work ---------- */
   var items = [].slice.call(doc.querySelectorAll('[data-lightbox]'));
   if (items.length) {
