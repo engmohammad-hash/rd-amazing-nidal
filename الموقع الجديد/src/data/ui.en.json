@@ -138,10 +138,33 @@
   },
   "cta": {
     "eyebrow": "Orders and quotes",
-    "title": "Talk to our sales manager, Nidal Abu Al-Majd",
     "text": "Tell us the product, quantity and size, and we will reply with a quote.",
     "wa": "Get a quote on WhatsApp",
     "or_call": "or call us directly"
+  },
+  "visit": {
+      "map_title": "Find us on the map",
+      "map_open": "Open in Google Maps",
+      "hours_title": "Opening hours",
+      "today": "today",
+      "tomorrow": "tomorrow",
+      "closed": "Closed",
+      "open_now": "Open now",
+      "closed_now": "Closed now",
+      "closes_at": "Closes at {time}",
+      "closes_soon": "Closing soon, at {time}",
+      "opens_at": "Opens {day} at {time}",
+      "days": [
+          "Sunday",
+          "Monday",
+          "Tuesday",
+          "Wednesday",
+          "Thursday",
+          "Friday",
+          "Saturday"
+      ],
+      "am": "am",
+      "pm": "pm"
   },
   "foot": {
     "vision": "Supporting Saudi Vision 2030",

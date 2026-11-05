@@ -234,7 +234,7 @@
     <div class="cta rv">
       <div class="cta-text">
         <p class="cta-eyebrow">{{ t.cta.eyebrow }}</p>
-        <h2 id="contact-title">{{ t.cta.title }}</h2>
+        <h2 id="contact-title"><span class="cta-role">{{ b.sales.label }}</span><span class="cta-name">{{ b.sales.name }}</span></h2>
         <p>{{ t.cta.text }}</p>
       </div>
       <div class="cta-actions">
@@ -247,9 +247,26 @@
       <li class="rv" style="--i: 1"><a href="https://www.instagram.com/{{ b.instagram }}/" target="_blank" rel="noopener">{{ ic.icon('ig') }}<span class="ltr">@{{ b.instagram }}</span></a></li>
       {# TikTok: its place is ready; it becomes a link once business.tiktok has the account's address #}
       <li class="rv" style="--i: 2">{% if b.tiktok %}<a href="{{ b.tiktok }}" target="_blank" rel="noopener">{{ ic.icon('tiktok') }}<span class="ltr">@{{ b.tiktok.split('@')[-1] }}</span></a>{% else %}<span class="contact-hours">{{ ic.icon('tiktok') }}<span>{{ t.tiktok }}</span></span>{% endif %}</li>
-      <li class="rv" style="--i: 3"><a href="{{ b.maps }}" target="_blank" rel="noopener">{{ ic.icon('pin') }}<span>{{ b.city }}{{ '، ' if lang == 'ar' else ', ' }}{{ b.region }}</span></a></li>
-      <li class="rv contact-wide" style="--i: 4"><span class="contact-hours">{{ ic.icon('clock') }}<span>{{ b.hours.label }}</span></span></li>
     </ul>
+    {# where to find us: a map to move around in, not only a link, and the week's hours with whether we are open right now #}
+    <div class="visit">
+      <div class="visit-map rv">
+        <iframe src="{{ b.map_embed }}&hl={{ lang }}" title="{{ t.visit.map_title }}" loading="lazy" referrerpolicy="no-referrer-when-downgrade" allowfullscreen></iframe>
+        <a class="visit-open" href="{{ b.maps }}" target="_blank" rel="noopener">{{ ic.icon('pin') }}<span>{{ t.visit.map_open }}</span></a>
+      </div>
+      <div class="hours rv" style="--i: 1">
+        <div class="hours-head">
+          <h3>{{ ic.icon('clock') }} {{ t.visit.hours_title }}</h3>
+          <p class="hours-now" hidden><i></i><b></b> <small></small></p>
+        </div>
+        <ul class="hours-list">
+          {% for row in hours_rows %}<li data-day="{{ row.day }}"{% if row.closed %} class="is-closed"{% endif %}><span>{{ row.name }}</span><b>{{ row.text }}</b></li>
+          {% endfor %}
+        </ul>
+        <p class="hours-place">{{ ic.icon('pin') }}<span>{{ b.city }}{{ '، ' if lang == 'ar' else ', ' }}{{ b.region }}</span></p>
+        <script type="application/json" class="hours-data">{{ hours_data | safe }}</script>
+      </div>
+    </div>
   </div>
 </section>
 {% endblock %}

@@ -143,6 +143,25 @@ def card_pics(data):
             im.save(xs, quality=76, optimize=True, progressive=True)
 
 
+def time_label(hhmm, visit, lang):
+    """21:00 reads "٩ م" in Arabic and "9 pm" in English; minutes show only when there are some."""
+    h, m = int(hhmm[:2]), int(hhmm[3:])
+    text = str(h % 12 or 12) + (f":{m:02d}" if m else "")
+    if lang == "ar":
+        text = text.translate(str.maketrans("0123456789", "٠١٢٣٤٥٦٧٨٩"))
+    return f"{text} {visit['pm'] if h >= 12 else visit['am']}"
+
+
+def hours_rows(week, visit, lang):
+    """The week as the page lists it, from Saturday. Day numbers are JavaScript's, 0 for Sunday."""
+    rows = []
+    for day in (6, 0, 1, 2, 3, 4, 5):
+        spans = week[str(day)]
+        text = (" · " if lang == "ar" else ", ").join(f"{time_label(a, visit, lang)} – {time_label(b, visit, lang)}" for a, b in spans)
+        rows.append({"day": day, "name": visit["days"][day], "closed": not spans, "text": text or visit["closed"]})
+    return rows
+
+
 def jsonld(*nodes):
     return json.dumps({"@context": "https://schema.org", "@graph": list(nodes)}, ensure_ascii=False, separators=(",", ":")).replace("</", "<\\/")
 
@@ -206,6 +225,8 @@ class Site:
             "root": root, "home": home, "path": full, "version": VERSION, "wa": wa, "template": template, "hero_lqip": HERO_LQIP,
             "shop": self.data["shop"], "shop_link": root + self.prefix + "shop/", "shop_json": self.shop_json(root),
             "works_link": root + self.prefix + "works/",
+            "hours_rows": hours_rows(self.b["hours"]["week"], t["visit"], t["lang"]),
+            "hours_data": json.dumps({"week": self.b["hours"]["week"], "t": t["visit"], "lang": t["lang"]}, ensure_ascii=False, separators=(",", ":")).replace("</", "<\\/"),
             # where a section's or a product's page is, from any page; and its pictures as seen from this page
             "svc_link": lambda sid, pid=None, base=root + self.prefix: f"{base}services/{sid}/" + (f"{pid}/" if pid else ""),
             "pic": lambda key, r=root: pic(key, r),
